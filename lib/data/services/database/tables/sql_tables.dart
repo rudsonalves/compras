@@ -1,3 +1,10 @@
+final class Tables {
+  Tables._();
+
+  static const String shopping = 'shopping';
+  static const String products = 'products';
+}
+
 final class SqlTables {
   SqlTables._();
 
