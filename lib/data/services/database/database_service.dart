@@ -98,9 +98,14 @@ class DatabaseService {
     String table, {
     Map<String, dynamic>? filter,
     required T Function(Map<String, dynamic>) fromMap,
+    String? orderBy,
+    int limit = 10,
+    int offset = 0,
   }) async {
     try {
       if (_db == null) throw Exception('Database is not initialized');
+
+      final sortBy = orderBy ?? 'created_at ASC';
 
       late final List<Map<String, dynamic>> results;
       if (filter != null) {
@@ -110,6 +115,9 @@ class DatabaseService {
           table,
           where: where,
           whereArgs: whereArgs,
+          orderBy: sortBy,
+          limit: limit,
+          offset: offset,
         );
       } else {
         results = await _db!.query(table);
