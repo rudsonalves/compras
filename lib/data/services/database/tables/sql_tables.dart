@@ -21,12 +21,22 @@ final class SqlTables {
   static const String products = '''
     CREATE TABLE IF NOT EXISTS products (
       id TEXT NOT NULL PRIMARY KEY,
+      shopping_id TEXT NOT NULL,
       name TEXT NOT NULL,
+      description TEXT,
       bar_code TEXT NOT NULL,
       price INTEGER NOT NULL,
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     )''';
+
+  static const String productShoppingIDIndex = '''
+    CREATE INDEX IF NOT EXISTS idx_products_shopping_id 
+      ON products (shopping_id)''';
+
+  static const String productBarCodeIndex = '''
+    CREATE INDEX IF NOT EXISTS idx_products_bar_code 
+      ON products (bar_code)''';
 }
 
 final class ShoppingColumns {
@@ -45,6 +55,7 @@ final class ProductColumns {
 
   static const String id = 'id';
   static const String name = 'name';
+  static const String description = 'description';
   static const String barCode = 'bar_code';
   static const String price = 'price';
   static const String createdAt = 'created_at';

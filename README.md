@@ -4,6 +4,66 @@ A new Flutter project.
 
 # Changelog
 
+## 2025/06/25 home_view - by rudsonalves
+
+### Update Android NDK, integrate shopping & products modules, and apply theming
+
+This commit pins the Android NDK version, registers the shopping repository and adds the products repository interface and stub implementation. Dependency injection is updated to provide the new repositories. The app’s theme system is introduced via `MaterialTheme` and a Google Fonts utility, and the main application and router are wired to use the shopping feature. Finally, build dependencies are aligned in `pubspec.yaml`.
+
+### Modified Files
+
+* **android/app/build.gradle.kts**
+
+  * Hardcoded `ndkVersion` to `"27.0.12077973"` instead of using `flutter.ndkVersion`.
+* **lib/config/dependencies.dart**
+
+  * Imported `IShoppingRepository` and `ShoppingRepository`.
+  * Added provider for `IShoppingRepository` with `ShoppingRepository(database)`.
+* **lib/data/repositories/shopping/shopping\_repository.dart**
+
+  * Changed `shoppingList` getter to return an unmodifiable list.
+  * Removed redundant duplicate initialization check in `insert()`.
+  * Adjusted default `limit` in `fetchAll()` from `9999` and passed it correctly to the database call.
+* **lib/data/services/database/database\_service.dart**
+
+  * In `initialize()`, executed `SqlTables.products` and created indexes for `productShoppingIDIndex` and `productBarCodeIndex`.
+* **lib/data/services/database/tables/sql\_tables.dart**
+
+  * Extended SQL schema: added `shopping_id` and `description` columns to `products` table.
+  * Added `productShoppingIDIndex` and `productBarCodeIndex` definitions.
+* **lib/main\_app.dart**
+
+  * Imported theme and util modules.
+  * Initialized a `brightness` field and selected light/dark theme via `MaterialTheme`.
+* **lib/routing/router.dart**
+
+  * Injected `IShoppingRepository` into `HomeViewModel` via `context.read`.
+* **lib/ui/view/home/home\_view\.dart**
+
+  * Added elevation to the AppBar for visual depth.
+* **lib/ui/view/home/home\_view\_model.dart**
+
+  * Updated `HomeViewModel` to accept `IShoppingRepository`, initialize with a `Command0`, and expose `shopping` getter.
+* **pubspec.yaml**
+
+  * Added `google_fonts: ^6.2.1` dependency.
+
+### New Files
+
+* **lib/data/repositories/products/i\_products\_repository.dart**
+  Defines the `IProductsRepository` interface for product CRUD operations scoped to a shopping list.
+* **lib/data/repositories/products/products\_repository.dart**
+  Provides a stub implementation of `ProductsRepository` with in-memory caching, `initialize`, `insert`, `fetch`, and `fetchAll`; `update` and `delete` methods marked `TODO`.
+* **lib/ui/core/themes/theme.dart**
+  Introduces `MaterialTheme` class with light and dark color schemes (multiple contrast levels) using Material 3 `ColorScheme`.
+* **lib/ui/core/themes/util.dart**
+  Adds `createTextTheme()` helper to combine Google Fonts for body and display text styles.
+
+### Conclusion
+
+All updates are implemented successfully and the new shopping, products, and theming modules are fully wired and ready for further development.
+
+
 ## 2025/06/24 shopping_repository - by rudsonalves
 
 ### Add Makefile, shopping repository, and enhance database service

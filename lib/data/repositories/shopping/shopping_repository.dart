@@ -12,11 +12,11 @@ class ShoppingRepository implements IShoppingRepository {
   ShoppingRepository(this._database);
 
   final Map<String, ShoppingModel> _shopping = {};
+  bool _isInitialized = false;
 
   @override
-  List<ShoppingModel> get shoppingList => _shopping.values.toList();
-
-  bool _isInitialized = false;
+  List<ShoppingModel> get shoppingList =>
+      List<ShoppingModel>.unmodifiable(_shopping.values);
 
   @override
   Future<Result<void>> initialize() async {
@@ -33,10 +33,6 @@ class ShoppingRepository implements IShoppingRepository {
   Future<Result<ShoppingModel>> insert(ShoppingModel shopping) async {
     if (shopping.id != null) {
       return update(shopping);
-    }
-
-    if (_shopping.containsKey(shopping.id)) {
-      return Result.success(_shopping[shopping.id]!);
     }
 
     final result = await _database.insert<ShoppingModel>(
@@ -81,7 +77,7 @@ class ShoppingRepository implements IShoppingRepository {
 
   @override
   Future<Result<List<ShoppingModel>>> fetchAll({
-    int limit = 10,
+    int limit = 9999,
     int offset = 0,
   }) async {
     if (offset == 0) {
@@ -91,7 +87,7 @@ class ShoppingRepository implements IShoppingRepository {
     final result = await _database.fetchAll<ShoppingModel>(
       Tables.shopping,
       fromMap: ShoppingModel.fromMap,
-      limit: 20,
+      limit: limit,
       offset: 0,
     );
 

@@ -19,6 +19,7 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Compras'),
+        elevation: 5,
         centerTitle: true,
       ),
       body: const Center(

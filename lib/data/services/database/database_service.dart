@@ -42,10 +42,10 @@ class DatabaseService {
     final batch = db.batch();
 
     batch.execute(SqlTables.shopping);
-    // batch.execute(SqlTables.sessions);
-    // batch.execute(SqlTables.episodes);
-    // batch.execute(SqlTables.attachments);
-    // batch.execute(SqlTables.aiSummaries);
+    batch.execute(SqlTables.products);
+
+    batch.execute(SqlTables.productShoppingIDIndex);
+    batch.execute(SqlTables.productBarCodeIndex);
 
     await batch.commit();
   }
