@@ -4,6 +4,69 @@ A new Flutter project.
 
 # Changelog
 
+## 2025/06/25 home_view-01 - by rudsonalves
+
+### Add core theming, dimensions, fonts, and common UI components
+
+This commit introduces a centralized design system and a suite of reusable UI components. It adds responsive dimension and font abstractions, integrates Google Fonts and Material Symbols, and provides commonly used widgets (buttons, dialogs, form fields, controllers, and utilities). The router import order is also cleaned up to align with provider conventions.
+
+### Modified Files
+
+* **lib/routing/router.dart**
+
+  * Moved `provider` import up to group with other package imports.
+* **pubspec.yaml**
+
+  * Added `material_symbols_icons: ^4.2815.1` and `intl: ^0.20.2` dependencies for icons and date formatting.
+
+### New Files
+
+* **lib/ui/core/themes/dimens.dart**
+  Defines `Dimens` abstraction for mobile and desktop paddings, spacing, and border radii.
+* **lib/ui/core/themes/fonts.dart**
+  Declares `FontsTheme` and `AppFontsStyle` for responsive text styles using custom font families.
+* **lib/ui/core/themes/util.dart**
+  Adds `createTextTheme()` helper to merge Google Fonts into `TextTheme`.
+* **lib/ui/core/ui/buttons/big\_button.dart**
+  Reusable large button with loading state and icon support.
+* **lib/ui/core/ui/buttons/icon\_back\_button.dart**
+  Standard back button using Material Symbols.
+* **lib/ui/core/ui/dialogs/app\_snack\_bar.dart**
+  Bottom snack bar helpers for success and error messages.
+* **lib/ui/core/ui/dialogs/botton\_sheet\_message.dart.dart**
+  Modal bottom sheet component with customizable content and actions.
+* **lib/ui/core/ui/dialogs/simple\_dialog.dart**
+  Alert dialog wrapper with rich text support.
+* **lib/ui/core/ui/dismissibles/dismissible\_card.dart**
+  Dismissible card widget for edit and delete actions.
+* **lib/ui/core/ui/dismissibles/dismissible\_container.dart**
+  Styled background container for dismissible widgets.
+* **lib/ui/core/ui/editing\_controllers/currency\_editing\_controller.dart**
+  Text controller that masks and parses currency input.
+* **lib/ui/core/ui/editing\_controllers/masked\_editing\_controller.dart**
+  Generic mask controller for text fields.
+* **lib/ui/core/ui/form\_fields/basic\_form\_field.dart**
+  Styled `TextFormField` wrapper with label, icons, and validation.
+* **lib/ui/core/ui/form\_fields/date\_form\_field.dart**
+  Date picker form field with formatted input.
+* **lib/ui/core/ui/form\_fields/enum\_form\_field.dart**
+  `FormField` implementation for selecting `Enum` values via toggle buttons.
+* **lib/ui/core/ui/form\_fields/widgets/toggle\_buttons\_text.dart**
+  Helper widget for labeled toggle buttons with selection indicator.
+* **lib/ui/core/ui/texts/parse\_rich\_text.dart**
+  Parses markdown-like `*` and `**` syntax in strings and prepends icons for list items.
+* **lib/utils/extensions/date\_time\_extensions.dart**
+  Date formatting and mapping extension methods.
+* **lib/utils/extensions/string\_extentions.dart**
+  String helpers for digit extraction and date validation.
+* **lib/utils/validates/generic\_validations.dart**
+  Common validation rules for names, numbers, dates, and phone numbers.
+
+### Conclusion
+
+All new theming layers and UI building blocks are in place, providing a consistent and flexible foundation for the app’s interface.
+
+
 ## 2025/06/25 home_view - by rudsonalves
 
 ### Update Android NDK, integrate shopping & products modules, and apply theming
