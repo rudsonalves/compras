@@ -1,8 +1,8 @@
-import 'package:compras/ui/core/themes/theme.dart';
-import 'package:compras/ui/core/themes/util.dart';
+import '/ui/core/themes/theme.dart';
+import '/ui/core/themes/util.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:compras/routing/router.dart';
+import '/routing/router.dart';
 import 'package:flutter/material.dart';
 
 class MainApp extends StatefulWidget {

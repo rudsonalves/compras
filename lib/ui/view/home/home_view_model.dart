@@ -1,6 +1,6 @@
-import 'package:compras/data/repositories/shopping/i_shopping_repository.dart';
-import 'package:compras/domain/models/shopping_model.dart';
-import 'package:compras/utils/command.dart';
+import '/data/repositories/shopping/i_shopping_repository.dart';
+import '/domain/models/shopping/shopping_model.dart';
+import '/utils/command.dart';
 
 class HomeViewModel {
   final IShoppingRepository _shoppingRepository;

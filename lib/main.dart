@@ -1,5 +1,5 @@
-import 'package:compras/config/dependencies.dart';
-import 'package:compras/main_app.dart';
+import '/config/dependencies.dart';
+import '/main_app.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

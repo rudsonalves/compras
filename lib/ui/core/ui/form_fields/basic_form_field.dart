@@ -73,6 +73,12 @@ class _BasicFormFieldState extends State<BasicFormField> {
   Widget build(BuildContext context) {
     final Dimens dimens = Dimens.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final border =
+        widget.border ??
+        OutlineInputBorder(
+          borderRadius: dimens.borderRadius,
+          borderSide: BorderSide(color: colorScheme.onPrimary),
+        );
 
     return TextFormField(
       autovalidateMode: autoValidate,
@@ -97,12 +103,7 @@ class _BasicFormFieldState extends State<BasicFormField> {
         labelText: widget.labelText,
         hintText: widget.hintText,
         floatingLabelBehavior: widget.floatingLabelBehavior,
-        border:
-            widget.border ??
-            OutlineInputBorder(
-              borderRadius: dimens.borderRadius,
-              borderSide: BorderSide(color: colorScheme.onPrimary),
-            ),
+        border: border,
         suffixIcon: Icon(
           widget.suffixIconData,
           color: widget.iconColor ?? colorScheme.primary,

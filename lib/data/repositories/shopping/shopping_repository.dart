@@ -1,10 +1,11 @@
 import 'dart:developer';
 
-import 'package:compras/data/repositories/shopping/i_shopping_repository.dart';
-import 'package:compras/data/services/database/database_service.dart';
-import 'package:compras/data/services/database/tables/sql_tables.dart';
-import 'package:compras/domain/models/shopping_model.dart';
-import 'package:compras/utils/result.dart';
+import '/data/repositories/shopping/i_shopping_repository.dart';
+import '/data/services/database/database_service.dart';
+import '/data/services/database/tables/sql_tables.dart';
+import '/domain/dto/shopping/shopping_dto.dart';
+import '/domain/models/shopping/shopping_model.dart';
+import '/utils/result.dart';
 
 class ShoppingRepository implements IShoppingRepository {
   final DatabaseService _database;
@@ -30,21 +31,17 @@ class ShoppingRepository implements IShoppingRepository {
   }
 
   @override
-  Future<Result<ShoppingModel>> insert(ShoppingModel shopping) async {
-    if (shopping.id != null) {
-      return update(shopping);
-    }
-
+  Future<Result<ShoppingModel>> insert(ShoppingDto dto) async {
     final result = await _database.insert<ShoppingModel>(
       Tables.shopping,
-      shopping.toMap(),
+      dto.toJson(),
     );
 
     switch (result) {
       case Success(:final value):
-        final newShopping = shopping.copyWith(id: value);
-        _shopping[newShopping.id!] = newShopping;
-        return Result.success(newShopping);
+        final shopping = ShoppingModel.fromDto(value, dto);
+        _shopping[shopping.id] = shopping;
+        return Result.success(shopping);
 
       case Failure(:final error):
         log('Error inserting shopping: $error');
@@ -61,7 +58,7 @@ class ShoppingRepository implements IShoppingRepository {
     final result = await _database.fetch<ShoppingModel>(
       Tables.shopping,
       id: id,
-      fromMap: ShoppingModel.fromMap,
+      fromMap: ShoppingModel.fromJson,
     );
 
     switch (result) {
@@ -77,7 +74,7 @@ class ShoppingRepository implements IShoppingRepository {
 
   @override
   Future<Result<List<ShoppingModel>>> fetchAll({
-    int limit = 9999,
+    int limit = 20,
     int offset = 0,
   }) async {
     if (offset == 0) {
@@ -86,7 +83,7 @@ class ShoppingRepository implements IShoppingRepository {
 
     final result = await _database.fetchAll<ShoppingModel>(
       Tables.shopping,
-      fromMap: ShoppingModel.fromMap,
+      fromMap: ShoppingModel.fromJson,
       limit: limit,
       offset: 0,
     );
@@ -94,7 +91,7 @@ class ShoppingRepository implements IShoppingRepository {
     switch (result) {
       case Success(:final value):
         for (var shopping in value) {
-          _shopping[shopping.id!] = shopping;
+          _shopping[shopping.id] = shopping;
         }
         return Result.success(value);
 
@@ -106,18 +103,14 @@ class ShoppingRepository implements IShoppingRepository {
 
   @override
   Future<Result<ShoppingModel>> update(ShoppingModel shopping) async {
-    if (shopping.id == null) {
-      return insert(shopping);
-    }
-
     final result = await _database.update<ShoppingModel>(
       Tables.shopping,
-      map: shopping.toMap(),
+      map: shopping.toJson(),
     );
 
     switch (result) {
       case Success():
-        _shopping[shopping.id!] = shopping;
+        _shopping[shopping.id] = shopping;
         return Result.success(shopping);
 
       case Failure(:final error):

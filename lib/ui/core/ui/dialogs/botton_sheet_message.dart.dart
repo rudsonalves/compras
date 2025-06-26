@@ -3,21 +3,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '/ui/core/ui/buttons/button_signature.dart';
 import '/ui/core/ui/texts/parse_rich_text.dart';
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/themes/fonts.dart';
-
-class ButtonSignature<T> {
-  final String label;
-  final IconData? iconData;
-  final T Function()? onPressed;
-
-  ButtonSignature({
-    required this.label,
-    this.iconData,
-    required this.onPressed,
-  });
-}
 
 class BottonSheetMessage<T> extends StatefulWidget {
   final String title;

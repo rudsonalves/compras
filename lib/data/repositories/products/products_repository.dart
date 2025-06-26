@@ -1,10 +1,11 @@
 import 'dart:developer';
 
-import 'package:compras/data/repositories/products/i_products_repository.dart';
-import 'package:compras/data/services/database/database_service.dart';
-import 'package:compras/data/services/database/tables/sql_tables.dart';
-import 'package:compras/domain/models/product_model.dart';
-import 'package:compras/utils/result.dart';
+import '/data/repositories/products/i_products_repository.dart';
+import '/data/services/database/database_service.dart';
+import '/data/services/database/tables/sql_tables.dart';
+import '/domain/dto/product/product_dto.dart';
+import '/domain/models/product/product_model.dart';
+import '/utils/result.dart';
 
 class ProductsRepository implements IProductsRepository {
   final DatabaseService _databaseService;
@@ -13,46 +14,33 @@ class ProductsRepository implements IProductsRepository {
     : _databaseService = databaseService;
 
   final Map<String, ProductModel> _products = {};
-  String? _shoppingId;
+  bool _isInitialized = false;
 
   @override
   List<ProductModel> get productList =>
       List<ProductModel>.unmodifiable(_products.values);
 
   @override
-  Future<Result<void>> initialize(String shoppingId) async {
-    if (_shoppingId != null || _shoppingId == shoppingId) {
-      return Result.success(null);
-    }
+  Future<Result<void>> initialize() async {
+    if (_isInitialized) return Result.success(null);
 
-    final result = await fetchAll(shoppingId);
+    _isInitialized = true;
 
-    switch (result) {
-      case Success():
-        return Result.success(null);
-
-      case Failure(:final error):
-        log('Error initializing products: $error');
-        return Result.failure(error);
-    }
+    return Result.success(null);
   }
 
   @override
-  Future<Result<ProductModel>> insert(ProductModel product) async {
-    if (product.id != null) {
-      return update(product);
-    }
-
+  Future<Result<ProductModel>> insert(ProductDto dto) async {
     final result = await _databaseService.insert<ProductModel>(
       Tables.products,
-      product.toMap(),
+      dto.toJson(),
     );
 
     switch (result) {
-      case Success(:final value):
-        final newProduct = product.copyWith(id: value);
-        _products[newProduct.id!] = newProduct;
-        return Result.success(newProduct);
+      case Success(value: final id):
+        final product = ProductModel.fromDto(id, dto);
+        _products[product.id] = product;
+        return Result.success(product);
 
       case Failure(:final error):
         log('Error inserting product: $error');
@@ -69,7 +57,7 @@ class ProductsRepository implements IProductsRepository {
     final result = await _databaseService.fetch<ProductModel>(
       Tables.products,
       id: id,
-      fromMap: ProductModel.fromMap,
+      fromMap: ProductModel.fromJson,
     );
 
     switch (result) {
@@ -84,21 +72,23 @@ class ProductsRepository implements IProductsRepository {
   }
 
   @override
-  Future<Result<List<ProductModel>>> fetchAll(String shoppingId) async {
+  Future<Result<List<ProductModel>>> fetchAll({
+    int limit = 9999,
+    int offset = 0,
+  }) async {
     _products.clear();
-
-    _shoppingId = shoppingId;
 
     final result = await _databaseService.fetchAll<ProductModel>(
       Tables.products,
-      filter: {'shopping_id': shoppingId},
-      fromMap: ProductModel.fromMap,
+      fromMap: ProductModel.fromJson,
+      limit: limit,
+      offset: offset,
     );
 
     switch (result) {
       case Success(:final value):
         for (var product in value) {
-          _products[product.id!] = product;
+          _products[product.id] = product;
         }
         return Result.success(value);
 
@@ -109,14 +99,38 @@ class ProductsRepository implements IProductsRepository {
   }
 
   @override
-  Future<Result<ProductModel>> update(ProductModel product) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<Result<ProductModel>> update(ProductModel product) async {
+    final result = await _databaseService.update<ProductModel>(
+      Tables.products,
+      map: product.toJson(),
+    );
+
+    switch (result) {
+      case Success():
+        _products[product.id] = product;
+        return Result.success(product);
+
+      case Failure(:final error):
+        log('Error updating product: $error');
+        return Result.failure(error);
+    }
   }
 
   @override
-  Future<Result<void>> delete(String id) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<Result<void>> delete(String id) async {
+    final result = await _databaseService.delete<ProductModel>(
+      Tables.products,
+      id: id,
+    );
+
+    switch (result) {
+      case Success():
+        _products.remove(id);
+        return Result.success(null);
+
+      case Failure(:final error):
+        log('Error deleting product: $error');
+        return Result.failure(error);
+    }
   }
 }

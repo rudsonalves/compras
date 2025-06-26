@@ -4,6 +4,79 @@ A new Flutter project.
 
 # Changelog
 
+## 2025/06/26 home_view-02 - by rudsonalves
+
+### Refactor repository structure to use DTOs, Freezed models, and absolute imports; enhance UI components and update linting
+
+
+This commit restructures the data layer by introducing `*Dto` classes and migrating existing models to Freezed, streamlines repository interfaces and implementations, and standardizes import paths to absolute references. It also adds UI helpers (button signatures and bottom sheet dialogs), updates lint rules, and refines theme dimensions. The `.gitignore` and analysis options are adjusted, and a Draw\.io class diagram is added under `docs/`.
+
+### Modified Files
+
+* **`.gitignore`**
+
+  * Added `*.bkp` pattern to exclude backup files.
+* **`analysis_options.yaml`**
+
+  * Ignored `invalid_annotation_target` analyzer error.
+* **`lib/config/dependencies.dart`**
+
+  * Switched to absolute imports for repository and service files.
+* **`lib/data/repositories/products/i_products_repository.dart`**
+
+  * Updated method signatures to accept `ProductDto` and removed shoppingId parameter.
+* **`lib/data/repositories/products/products_repository.dart`**
+
+  * Introduced `_isInitialized` flag, adapted `insert`, `fetchAll`, `update`, and `delete` to use DTO-to-model mapping and Freezed `fromJson`.
+* **`lib/data/repositories/shopping/i_shopping_repository.dart`**
+
+  * Changed `insert` to accept `ShoppingDto`.
+* **`lib/data/repositories/shopping/shopping_repository.dart`**
+
+  * Refactored `insert`, `fetchAll`, and `update` to use DTOs and Freezed mapping; adjusted default fetch limit.
+* **`lib/main.dart`**, **`lib/main_app.dart`**, **`lib/routing/router.dart`**
+
+  * Converted all package imports to absolute (`/…`) paths.
+* **`lib/ui/core/themes/dimens.dart`**
+
+  * Increased `spacingVertical` from `6.0` to `12.0`.
+* **`lib/ui/core/ui/form_fields/basic_form_field.dart`**
+
+  * Extracted `border` definition into a variable and reused in `InputDecoration`.
+* **`lib/ui/view/home/home_view.dart`**
+
+  * Imported new dialog and form-field widgets; added `_newShopping` method to show a bottom sheet for creating purchases.
+
+### New Files
+
+* **`docs/Diagrama_de_Classes.drawio`**
+  Draw\.io class diagram illustrating the domain entities, DTOs, repositories, services, and view models.
+* **`lib/domain/dto/product/product_dto.dart`**, **`.freezed.dart`**, **`.g.dart`**
+  Defines `ProductDto` with factory constructors for creation and JSON serialization.
+* **`lib/domain/dto/shopping/shopping_dto.dart`**, **`.freezed.dart`**, **`.g.dart`**
+  Defines `ShoppingDto` analogously for shopping records.
+* **`lib/domain/enums/enums.dart`**
+  Introduces `ShoppingType` enum with localized labels.
+* **`lib/domain/models/item/item_model.dart`**, **`.freezed.dart`**, **`.g.dart`**
+  New `ItemModel` Freezed class with default quantity.
+* **`lib/domain/models/product/product_model.dart`**, **`.freezed.dart`**, **`.g.dart`**
+  Freezed-based `ProductModel` with `fromDto` and `fromJson` factories.
+* **`lib/domain/models/shopping/shopping_model.dart`**, **`.freezed.dart`**, **`.g.dart`**
+  Freezed-based `ShoppingModel` mirroring the DTO and domain logic.
+* **`lib/ui/core/ui/buttons/button_signature.dart`**
+  Generic `ButtonSignature` class to unify button definitions in dialogs.
+* **`lib/ui/core/ui/dialogs/bottom_sheet_dialog.dart`**
+  Reusable bottom sheet dialog widget accepting a title, body content, and button signatures.
+
+### Assets and Test Data
+
+* **Draw\.io diagram** under `docs/Diagrama_de_Classes.drawio`
+
+### Conclusion
+
+All layers have been refactored to use DTOs and Freezed models with consistent import paths. New UI components and lint settings are in place, and the system builds and runs as expected.
+
+
 ## 2025/06/25 home_view-01 - by rudsonalves
 
 ### Add core theming, dimensions, fonts, and common UI components

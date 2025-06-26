@@ -1,5 +1,8 @@
-import 'package:compras/ui/view/home/home_view_model.dart';
 import 'package:flutter/material.dart';
+
+import '/ui/core/ui/dialogs/bottom_sheet_dialog.dart';
+import '/ui/core/ui/form_fields/basic_form_field.dart';
+import '/ui/view/home/home_view_model.dart';
 
 class HomeView extends StatefulWidget {
   final HomeViewModel viewModel;
@@ -26,9 +29,26 @@ class _HomeViewState extends State<HomeView> {
         child: Text('Nenhuma compra cadastrada'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: _newShopping,
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  void _newShopping() {
+    BottonSheetDialog.show(
+      context,
+      title: 'Nova compra',
+      body: [
+        BasicFormField(
+          labelText: 'Nome',
+          hintText: 'Digite o nome da compra',
+        ),
+        BasicFormField(
+          labelText: 'Descrição',
+          hintText: 'Digite a descrição da compra',
+        ),
+      ],
     );
   }
 }
