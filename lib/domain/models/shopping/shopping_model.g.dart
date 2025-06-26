@@ -13,8 +13,12 @@ _ShoppingModel _$ShoppingModelFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String,
       type: $enumDecode(_$ShoppingTypeEnumMap, json['type']),
       totalPrice: (json['total_price'] as num).toInt(),
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$ShoppingModelToJson(_ShoppingModel instance) =>
@@ -24,8 +28,8 @@ Map<String, dynamic> _$ShoppingModelToJson(_ShoppingModel instance) =>
       'description': instance.description,
       'type': _$ShoppingTypeEnumMap[instance.type]!,
       'total_price': instance.totalPrice,
-      'created_at': instance.createdAt.toIso8601String(),
-      'updated_at': instance.updatedAt.toIso8601String(),
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
     };
 
 const _$ShoppingTypeEnumMap = {

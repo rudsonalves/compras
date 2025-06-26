@@ -16,8 +16,8 @@ abstract class ShoppingModel with _$ShoppingModel {
     required String description,
     required ShoppingType type,
     @JsonKey(name: 'total_price') required int totalPrice,
-    @JsonKey(name: 'created_at') required DateTime createdAt,
-    @JsonKey(name: 'updated_at') required DateTime updatedAt,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ShoppingModel;
 
   /// Helper factory to initialize a new purchase with current timestamps

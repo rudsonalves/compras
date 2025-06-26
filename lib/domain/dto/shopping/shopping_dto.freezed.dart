@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ShoppingDto {
 
- String get name; String get description; ShoppingType get type;@JsonKey(name: 'total_price') int get totalPrice;@JsonKey(name: 'created_at') DateTime get createdAt;@JsonKey(name: 'updated_at') DateTime get updatedAt;
+ String get name; String get description; ShoppingType get type;@JsonKey(name: 'total_price') int get totalPrice;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt;
 /// Create a copy of ShoppingDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $ShoppingDtoCopyWith<$Res>  {
   factory $ShoppingDtoCopyWith(ShoppingDto value, $Res Function(ShoppingDto) _then) = _$ShoppingDtoCopyWithImpl;
 @useResult
 $Res call({
- String name, String description, ShoppingType type,@JsonKey(name: 'total_price') int totalPrice,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'updated_at') DateTime updatedAt
+ String name, String description, ShoppingType type,@JsonKey(name: 'total_price') int totalPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 
@@ -66,15 +66,15 @@ class _$ShoppingDtoCopyWithImpl<$Res>
 
 /// Create a copy of ShoppingDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? description = null,Object? type = null,Object? totalPrice = null,Object? createdAt = null,Object? updatedAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? description = null,Object? type = null,Object? totalPrice = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as ShoppingType,totalPrice: null == totalPrice ? _self.totalPrice : totalPrice // ignore: cast_nullable_to_non_nullable
-as int,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as int,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -85,15 +85,15 @@ as DateTime,
 @JsonSerializable()
 
 class _ShoppingDto implements ShoppingDto {
-  const _ShoppingDto({required this.name, required this.description, required this.type, @JsonKey(name: 'total_price') required this.totalPrice, @JsonKey(name: 'created_at') required this.createdAt, @JsonKey(name: 'updated_at') required this.updatedAt});
+  const _ShoppingDto({required this.name, required this.description, required this.type, @JsonKey(name: 'total_price') this.totalPrice = 0, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt});
   factory _ShoppingDto.fromJson(Map<String, dynamic> json) => _$ShoppingDtoFromJson(json);
 
 @override final  String name;
 @override final  String description;
 @override final  ShoppingType type;
 @override@JsonKey(name: 'total_price') final  int totalPrice;
-@override@JsonKey(name: 'created_at') final  DateTime createdAt;
-@override@JsonKey(name: 'updated_at') final  DateTime updatedAt;
+@override@JsonKey(name: 'created_at') final  DateTime? createdAt;
+@override@JsonKey(name: 'updated_at') final  DateTime? updatedAt;
 
 /// Create a copy of ShoppingDto
 /// with the given fields replaced by the non-null parameter values.
@@ -128,7 +128,7 @@ abstract mixin class _$ShoppingDtoCopyWith<$Res> implements $ShoppingDtoCopyWith
   factory _$ShoppingDtoCopyWith(_ShoppingDto value, $Res Function(_ShoppingDto) _then) = __$ShoppingDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String description, ShoppingType type,@JsonKey(name: 'total_price') int totalPrice,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'updated_at') DateTime updatedAt
+ String name, String description, ShoppingType type,@JsonKey(name: 'total_price') int totalPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 
@@ -145,15 +145,15 @@ class __$ShoppingDtoCopyWithImpl<$Res>
 
 /// Create a copy of ShoppingDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? description = null,Object? type = null,Object? totalPrice = null,Object? createdAt = null,Object? updatedAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? description = null,Object? type = null,Object? totalPrice = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_ShoppingDto(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as ShoppingType,totalPrice: null == totalPrice ? _self.totalPrice : totalPrice // ignore: cast_nullable_to_non_nullable
-as int,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as int,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 

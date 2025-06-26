@@ -1,7 +1,7 @@
+import 'package:compras/routing/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import '/ui/core/ui/dialogs/bottom_sheet_dialog.dart';
-import '/ui/core/ui/form_fields/basic_form_field.dart';
 import '/ui/view/home/home_view_model.dart';
 
 class HomeView extends StatefulWidget {
@@ -36,19 +36,6 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _newShopping() {
-    BottonSheetDialog.show(
-      context,
-      title: 'Nova compra',
-      body: [
-        BasicFormField(
-          labelText: 'Nome',
-          hintText: 'Digite o nome da compra',
-        ),
-        BasicFormField(
-          labelText: 'Descrição',
-          hintText: 'Digite a descrição da compra',
-        ),
-      ],
-    );
+    context.push(Routes.newShopping.path);
   }
 }

@@ -12,8 +12,8 @@ abstract class ProductDto with _$ProductDto {
     required String name,
     required String description,
     @JsonKey(name: 'bar_code') required String barCode,
-    @JsonKey(name: 'created_at') required DateTime createdAt,
-    @JsonKey(name: 'updated_at') required DateTime updatedAt,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ProductDto;
 
   factory ProductDto.create({

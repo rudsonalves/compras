@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '/ui/core/themes/dimens.dart';
-
 class BasicFormField extends StatefulWidget {
   final String? labelText;
   final String? hintText;
@@ -71,14 +69,14 @@ class _BasicFormFieldState extends State<BasicFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final Dimens dimens = Dimens.of(context);
+    // final Dimens dimens = Dimens.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final border =
-        widget.border ??
-        OutlineInputBorder(
-          borderRadius: dimens.borderRadius,
-          borderSide: BorderSide(color: colorScheme.onPrimary),
-        );
+    final border = widget.border;
+    //  ??
+    // OutlineInputBorder(
+    //   borderRadius: dimens.borderRadius,
+    //   borderSide: BorderSide(color: colorScheme.onPrimary),
+    // );
 
     return TextFormField(
       autovalidateMode: autoValidate,
@@ -104,14 +102,18 @@ class _BasicFormFieldState extends State<BasicFormField> {
         hintText: widget.hintText,
         floatingLabelBehavior: widget.floatingLabelBehavior,
         border: border,
-        suffixIcon: Icon(
-          widget.suffixIconData,
-          color: widget.iconColor ?? colorScheme.primary,
-        ),
-        prefixIcon: Icon(
-          widget.prefixIconData,
-          color: widget.iconColor ?? colorScheme.primary,
-        ),
+        suffixIcon: widget.suffixIconData == null
+            ? null
+            : Icon(
+                widget.suffixIconData,
+                color: widget.iconColor ?? colorScheme.primary,
+              ),
+        prefixIcon: widget.prefixIconData == null
+            ? null
+            : Icon(
+                widget.prefixIconData,
+                color: widget.iconColor ?? colorScheme.primary,
+              ),
       ),
     );
   }

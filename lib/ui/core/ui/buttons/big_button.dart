@@ -27,7 +27,7 @@ class BigButton extends StatefulWidget {
 
 class _BigButtonState extends State<BigButton> {
   Widget _bigButtonIcon() {
-    final colorScheme = Theme.of(context).colorScheme;
+    // final colorScheme = Theme.of(context).colorScheme;
 
     return widget.isRunning
         ? const SizedBox(
@@ -38,7 +38,7 @@ class _BigButtonState extends State<BigButton> {
         : Icon(
             widget.iconData,
             size: 24,
-            color: widget.onPressed != null ? colorScheme.secondary : null,
+            // color: widget.onPressed != null ? colorScheme.secondary : null,
           );
   }
 

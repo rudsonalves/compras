@@ -13,5 +13,8 @@ Future<List<SingleChildWidget>> dependencies() async {
     Provider<IShoppingRepository>(
       create: (ctx) => ShoppingRepository(database),
     ),
+    Provider<IShoppingRepository>(
+      create: (context) => ShoppingRepository(database),
+    ),
   ];
 }

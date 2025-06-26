@@ -10,9 +10,9 @@ abstract class ShoppingDto with _$ShoppingDto {
     required String name,
     required String description,
     required ShoppingType type,
-    @JsonKey(name: 'total_price') required int totalPrice,
-    @JsonKey(name: 'created_at') required DateTime createdAt,
-    @JsonKey(name: 'updated_at') required DateTime updatedAt,
+    @Default(0) @JsonKey(name: 'total_price') int totalPrice,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ShoppingDto;
 
   factory ShoppingDto.create({

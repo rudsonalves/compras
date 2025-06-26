@@ -4,6 +4,93 @@ A new Flutter project.
 
 # Changelog
 
+## 2025/06/26 home_view-04 - by rudsonalves
+
+### Add nullable timestamps, default values, NewShopping feature, and build runner command
+
+These changes enhance data handling by making `createdAt`/`updatedAt` fields nullable and providing default values, streamline development with a new `run_build_runner` target, and introduce a complete “New Shopping” flow. UI components, routing, and theming adjustments ensure consistency and usability across the app.
+
+### Modified Files
+
+* **Makefile**
+
+  * appended a `run_build_runner` target to watch code generation
+* **docs/Diagrama\_de\_Classes.drawio**
+
+  * adjusted geometry coordinates and updated swimlane labels for consistency
+* **lib/config/dependencies.dart**
+
+  * removed duplicate `IShoppingRepository` provider registration
+* **lib/domain/dto/product/product\_dto.dart**
+
+  * changed `createdAt`/`updatedAt` to nullable
+* **lib/domain/dto/product/product\_dto.freezed.dart**
+
+  * updated copyWith and constructor signatures to accept nullable timestamps
+* **lib/domain/dto/product/product\_dto.g.dart**
+
+  * added null checks when parsing/serializing JSON dates
+* **lib/domain/dto/shopping/shopping\_dto.dart**
+
+  * introduced default `totalPrice` of 0 and made timestamps nullable
+* **lib/domain/dto/shopping/shopping\_dto.freezed.dart**
+
+  * adjusted generated code for default value and nullable fields
+* **lib/domain/dto/shopping/shopping\_dto.g.dart**
+
+  * support null JSON timestamps and default `total_price`
+* **lib/domain/models/product/product\_model.dart**
+
+  * made `createdAt`/`updatedAt` nullable
+* **lib/domain/models/product/product\_model.freezed.dart**
+
+  * updated generated code to handle nullable timestamps
+* **lib/domain/models/product/product\_model.g.dart**
+
+  * added null checks in JSON parsing/serialization
+* **lib/domain/models/shopping/shopping\_model.dart**
+
+  * made `createdAt`/`updatedAt` nullable
+* **lib/domain/models/shopping/shopping\_model.freezed.dart**
+
+  * updated generated code for nullable timestamps
+* **lib/domain/models/shopping/shopping\_model.g.dart**
+
+  * handle optional JSON date fields
+* **lib/routing/router.dart**
+
+  * imported and registered `NewShopping` route
+* **lib/routing/routes.dart**
+
+  * added `newShopping` route constant
+* **lib/ui/core/themes/dimens.dart**
+
+  * increased `spacingVertical` from 12.0 to 18.0
+* **lib/ui/core/ui/buttons/big\_button.dart**
+
+  * commented out unused `colorScheme` reference
+* **lib/ui/core/ui/form\_fields/basic\_form\_field.dart**
+
+  * removed unused import and commented out default border logic
+* **lib/ui/core/ui/form\_fields/enum\_form\_field.dart**
+
+  * introduced `EnumFormLayout` enum and added layout–dependent rendering (`Wrap`, `Row`)
+* **lib/ui/view/home/home\_view\.dart**
+
+  * simplified new-shopping action to use `context.push` with GoRouter
+
+### New Files
+
+* **lib/ui/view/new\_shoppint/new\_shopping.dart**
+  Provides the UI scaffolding and form for creating a new shopping entry, including validation and feedback.
+* **lib/ui/view/new\_shoppint/new\_shopping\_view\_model.dart**
+  Implements the view model for shopping creation, orchestrating repository calls and handling success/error logging.
+
+### Conclusion
+
+All changes implemented successfully and the New Shopping feature is fully functional.
+
+
 ## 2025/06/26 home_view-03 - by rudsonalves
 
 ### Add ItemsRepository and item table support; unify database APIs and adjust repository imports
