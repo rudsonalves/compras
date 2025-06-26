@@ -8,10 +8,9 @@ import '/domain/models/product/product_model.dart';
 import '/utils/result.dart';
 
 class ProductsRepository implements IProductsRepository {
-  final DatabaseService _databaseService;
+  final DatabaseService _dbService;
 
-  ProductsRepository(DatabaseService databaseService)
-    : _databaseService = databaseService;
+  ProductsRepository(this._dbService);
 
   final Map<String, ProductModel> _products = {};
   bool _isInitialized = false;
@@ -31,7 +30,7 @@ class ProductsRepository implements IProductsRepository {
 
   @override
   Future<Result<ProductModel>> insert(ProductDto dto) async {
-    final result = await _databaseService.insert<ProductModel>(
+    final result = await _dbService.insert<ProductDto>(
       Tables.products,
       dto.toJson(),
     );
@@ -54,7 +53,7 @@ class ProductsRepository implements IProductsRepository {
       return Result.success(_products[id]!);
     }
 
-    final result = await _databaseService.fetch<ProductModel>(
+    final result = await _dbService.fetchById<ProductModel>(
       Tables.products,
       id: id,
       fromMap: ProductModel.fromJson,
@@ -73,12 +72,12 @@ class ProductsRepository implements IProductsRepository {
 
   @override
   Future<Result<List<ProductModel>>> fetchAll({
-    int limit = 9999,
+    int limit = 20,
     int offset = 0,
   }) async {
     _products.clear();
 
-    final result = await _databaseService.fetchAll<ProductModel>(
+    final result = await _dbService.fetchAll<ProductModel>(
       Tables.products,
       fromMap: ProductModel.fromJson,
       limit: limit,
@@ -100,7 +99,7 @@ class ProductsRepository implements IProductsRepository {
 
   @override
   Future<Result<ProductModel>> update(ProductModel product) async {
-    final result = await _databaseService.update<ProductModel>(
+    final result = await _dbService.update<ProductModel>(
       Tables.products,
       map: product.toJson(),
     );
@@ -118,7 +117,7 @@ class ProductsRepository implements IProductsRepository {
 
   @override
   Future<Result<void>> delete(String id) async {
-    final result = await _databaseService.delete<ProductModel>(
+    final result = await _dbService.delete<ProductModel>(
       Tables.products,
       id: id,
     );

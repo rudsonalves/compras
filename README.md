@@ -4,6 +4,52 @@ A new Flutter project.
 
 # Changelog
 
+## 2025/06/26 home_view-03 - by rudsonalves
+
+### Add ItemsRepository and item table support; unify database APIs and adjust repository imports
+
+### Introduction
+
+This commit introduces a new `IItemsRepository` interface and its `ItemsRepository` implementation to manage shopping items. The database service gains `fetchByFilter`, `updateWhere`, and `deleteWhere` methods; SQL table definitions now include an `items` table with appropriate columns and primary keys. Repository constructors are standardized to use a single `_dbService` instance, and import ordering is aligned. Freezed annotation import is repositioned in the shopping model.
+
+### Modified Files
+
+* **`lib/data/repositories/products/products_repository.dart`**
+
+  * Renamed `_databaseService` to `_dbService` and updated constructor parameter.
+  * Switched to `insert<ProductDto>` and `fetchById`/`fetchAll`/`update`/`delete` methods on `_dbService`.
+* **`lib/data/repositories/shopping/shopping_repository.dart`**
+
+  * Renamed `_database` to `_dbService` and updated constructor.
+  * Standardized initialization to await `fetchAll` and handle success/failure cases.
+  * Swapped to `insert<ShoppingDto>` and `fetchById`/`fetchAll`/`update`/`delete` on `_dbService`.
+* **`lib/data/services/database/database_service.dart`**
+
+  * Added `fetchByFilter`, `updateWhere`, and `deleteWhere` methods for filtered operations.
+  * Adjusted `fetchAll` signature to accept nullable `limit` and `offset`.
+  * Executed `SqlTables.items` creation during initialization.
+* **`lib/data/services/database/tables/sql_tables.dart`**
+
+  * Extended `Tables` constants with `items`.
+  * Expanded `SqlTables` to define `items` table SQL (with composite primary key).
+  * Replaced `productShoppingIDIndex` with `productNameIndex` for product name lookups.
+  * Updated `ShoppingColumns` and `ProductColumns` to reflect renamed fields.
+* **`lib/domain/models/shopping/shopping_model.dart`**
+
+  * Moved `freezed_annotation` import above DTO import for consistency.
+
+### New Files
+
+* **`lib/data/repositories/items/i_items_repository.dart`**
+  Defines the `IItemsRepository` interface with CRUD and initialization methods for `ItemModel`.
+* **`lib/data/repositories/items/items_repository.dart`**
+  Implements `IItemsRepository`, managing an in-memory map of `ItemModel` instances and persisting via the enhanced `DatabaseService`.
+
+### Conclusion
+
+With item support fully integrated and database operations unified, the data layer is now more robust and consistent. The system compiles and item management functions are ready for testing.
+
+
 ## 2025/06/26 home_view-02 - by rudsonalves
 
 ### Refactor repository structure to use DTOs, Freezed models, and absolute imports; enhance UI components and update linting

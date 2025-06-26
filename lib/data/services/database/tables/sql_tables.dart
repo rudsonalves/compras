@@ -3,40 +3,7 @@ final class Tables {
 
   static const String shopping = 'shopping';
   static const String products = 'products';
-}
-
-final class SqlTables {
-  SqlTables._();
-
-  static const String shopping = '''
-    CREATE TABLE IF NOT EXISTS shopping (
-      id TEXT NOT NULL PRIMARY KEY,
-      name TEXT NOT NULL,
-      description TEXT NOT NULL,
-      price INTEGER NOT NULL,
-      created_at TEXT NOT NULL,
-      updated_at TEXT NOT NULL
-    )''';
-
-  static const String products = '''
-    CREATE TABLE IF NOT EXISTS products (
-      id TEXT NOT NULL PRIMARY KEY,
-      shopping_id TEXT NOT NULL,
-      name TEXT NOT NULL,
-      description TEXT,
-      bar_code TEXT NOT NULL,
-      price INTEGER NOT NULL,
-      created_at TEXT NOT NULL,
-      updated_at TEXT NOT NULL
-    )''';
-
-  static const String productShoppingIDIndex = '''
-    CREATE INDEX IF NOT EXISTS idx_products_shopping_id 
-      ON products (shopping_id)''';
-
-  static const String productBarCodeIndex = '''
-    CREATE INDEX IF NOT EXISTS idx_products_bar_code 
-      ON products (bar_code)''';
+  static const String items = 'items';
 }
 
 final class ShoppingColumns {
@@ -45,7 +12,8 @@ final class ShoppingColumns {
   static const String id = 'id';
   static const String name = 'name';
   static const String description = 'description';
-  static const String price = 'price';
+  static const String type = 'type';
+  static const String totalPrice = 'total_price';
   static const String createdAt = 'created_at';
   static const String updatedAt = 'updated_at';
 }
@@ -57,7 +25,60 @@ final class ProductColumns {
   static const String name = 'name';
   static const String description = 'description';
   static const String barCode = 'bar_code';
-  static const String price = 'price';
   static const String createdAt = 'created_at';
   static const String updatedAt = 'updated_at';
+}
+
+final class ItemColumns {
+  ItemColumns._();
+
+  static const String shoppingId = 'shopping_id';
+  static const String productId = 'product_id';
+  static const String prince = 'prince';
+  static const String quantity = 'quantity';
+}
+
+final class SqlTables {
+  SqlTables._();
+
+  static const String shopping =
+      '''
+    CREATE TABLE IF NOT EXISTS ${Tables.shopping} (
+      ${ShoppingColumns.id} TEXT NOT NULL PRIMARY KEY,
+      ${ShoppingColumns.name} TEXT NOT NULL,
+      ${ShoppingColumns.description} TEXT NOT NULL,
+      ${ShoppingColumns.type} TEXT NOT NULL,
+      ${ShoppingColumns.totalPrice} INTEGER NOT NULL,
+      ${ShoppingColumns.createdAt} TEXT NOT NULL,
+      ${ShoppingColumns.updatedAt} TEXT NOT NULL
+    )''';
+
+  static const String products =
+      '''
+    CREATE TABLE IF NOT EXISTS ${Tables.products} (
+      ${ProductColumns.id} TEXT NOT NULL PRIMARY KEY,
+      ${ProductColumns.name} TEXT NOT NULL,
+      ${ProductColumns.description} TEXT,
+      ${ProductColumns.barCode} TEXT NOT NULL,
+      ${ProductColumns.createdAt} TEXT NOT NULL,
+      ${ProductColumns.updatedAt} TEXT NOT NULL
+    )''';
+
+  static const String items =
+      '''
+    CREATE TABLE IF NOT EXISTS ${Tables.items} (
+      ${ItemColumns.shoppingId} TEXT NOT NULL,
+      ${ItemColumns.productId} TEXT NOT NULL,
+      ${ItemColumns.prince} INTEGER NOT NULL,
+      ${ItemColumns.quantity} INTEGER NOT NULL,
+      PRIMARY KEY (${ItemColumns.shoppingId}, ${ItemColumns.productId})
+    )''';
+
+  static const String productNameIndex = '''
+    CREATE INDEX IF NOT EXISTS idx_products_name 
+      ON ${Tables.products} (${ProductColumns.name})''';
+
+  static const String productBarCodeIndex = '''
+    CREATE INDEX IF NOT EXISTS idx_products_bar_code 
+      ON ${Tables.products} (${ProductColumns.barCode})''';
 }

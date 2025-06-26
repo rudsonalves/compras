@@ -8,9 +8,9 @@ import '/domain/models/shopping/shopping_model.dart';
 import '/utils/result.dart';
 
 class ShoppingRepository implements IShoppingRepository {
-  final DatabaseService _database;
+  final DatabaseService _dbService;
 
-  ShoppingRepository(this._database);
+  ShoppingRepository(this._dbService);
 
   final Map<String, ShoppingModel> _shopping = {};
   bool _isInitialized = false;
@@ -25,21 +25,29 @@ class ShoppingRepository implements IShoppingRepository {
 
     _isInitialized = true;
 
-    await fetchAll();
+    final result = await fetchAll();
 
-    return Result.success(null);
+    switch (result) {
+      case Success():
+        log('Shoppings initialized');
+        return Result.success(null);
+
+      case Failure(:final error):
+        log('Error fetching shoppings: $error');
+        return Result.failure(error);
+    }
   }
 
   @override
   Future<Result<ShoppingModel>> insert(ShoppingDto dto) async {
-    final result = await _database.insert<ShoppingModel>(
+    final result = await _dbService.insert<ShoppingDto>(
       Tables.shopping,
       dto.toJson(),
     );
 
     switch (result) {
-      case Success(:final value):
-        final shopping = ShoppingModel.fromDto(value, dto);
+      case Success(value: final id):
+        final shopping = ShoppingModel.fromDto(id, dto);
         _shopping[shopping.id] = shopping;
         return Result.success(shopping);
 
@@ -55,7 +63,7 @@ class ShoppingRepository implements IShoppingRepository {
       return Result.success(_shopping[id]!);
     }
 
-    final result = await _database.fetch<ShoppingModel>(
+    final result = await _dbService.fetchById<ShoppingModel>(
       Tables.shopping,
       id: id,
       fromMap: ShoppingModel.fromJson,
@@ -81,7 +89,7 @@ class ShoppingRepository implements IShoppingRepository {
       _shopping.clear();
     }
 
-    final result = await _database.fetchAll<ShoppingModel>(
+    final result = await _dbService.fetchAll<ShoppingModel>(
       Tables.shopping,
       fromMap: ShoppingModel.fromJson,
       limit: limit,
@@ -103,7 +111,7 @@ class ShoppingRepository implements IShoppingRepository {
 
   @override
   Future<Result<ShoppingModel>> update(ShoppingModel shopping) async {
-    final result = await _database.update<ShoppingModel>(
+    final result = await _dbService.update<ShoppingModel>(
       Tables.shopping,
       map: shopping.toJson(),
     );
@@ -121,7 +129,7 @@ class ShoppingRepository implements IShoppingRepository {
 
   @override
   Future<Result<void>> delete(String id) async {
-    final result = await _database.delete<ShoppingModel>(
+    final result = await _dbService.delete<ShoppingModel>(
       Tables.shopping,
       id: id,
     );

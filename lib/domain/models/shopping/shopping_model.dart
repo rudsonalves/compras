@@ -1,6 +1,7 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '/domain/dto/shopping/shopping_dto.dart';
 import '/domain/enums/enums.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'shopping_model.freezed.dart';
 part 'shopping_model.g.dart';
