@@ -4,11 +4,7 @@ Esta aplicação é uma antiga demanda de minha Ex (Jeani Daniela Bortolini) par
 
 A ideia do aplicativo é registrar os itens comprados e o valor total da compra. Verificar as alterações nos preços dos produtos e de suas compras mensais.
 
-A aplicação será implementada com a arquitetura proposta pelo time do Flutter MVVM, em três camadas básicas:
-
-- **Data Layer**: camada para os *repositories* e *services*.
-- **Domain Layer**: camada para os *models* e *user-cases*.
-- **Ui Layer**: camada para os *view-models* e *views*.
+A aplicação será implementada com a arquitetura proposta pelo time do Flutter MVVM.
 
 ## Diagrama de Classes
 
