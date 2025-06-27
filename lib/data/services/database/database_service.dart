@@ -42,10 +42,11 @@ class DatabaseService {
     final batch = db.batch();
 
     batch.execute(SqlTables.shopping);
-    // batch.execute(SqlTables.sessions);
-    // batch.execute(SqlTables.episodes);
-    // batch.execute(SqlTables.attachments);
-    // batch.execute(SqlTables.aiSummaries);
+    batch.execute(SqlTables.products);
+    batch.execute(SqlTables.items);
+
+    batch.execute(SqlTables.productNameIndex);
+    batch.execute(SqlTables.productBarCodeIndex);
 
     await batch.commit();
   }
@@ -66,7 +67,7 @@ class DatabaseService {
     if (_db != null) await _db!.close();
   }
 
-  Future<Result<T>> fetch<T>(
+  Future<Result<T>> fetchById<T>(
     String table, {
     required String id,
     required T Function(Map<String, dynamic>) fromMap,
@@ -94,13 +95,48 @@ class DatabaseService {
     }
   }
 
+  Future<Result<T>> fetchByFilter<T>(
+    String table, {
+    required T Function(Map<String, dynamic>) fromMap,
+    required Map<String, dynamic> filter,
+    String? orderBy,
+    bool forceRemote = false,
+  }) async {
+    try {
+      if (_db == null) throw Exception('Database is not initialized');
+
+      final whereFilter = filter.keys.map((key) => '$key = ?').join(' AND ');
+      final whereArgs = filter.values.toList();
+
+      final List<Map<String, dynamic>> results = await _db!.query(
+        table,
+        where: whereFilter,
+        whereArgs: whereArgs,
+        orderBy: orderBy,
+      );
+
+      if (results.isEmpty) {
+        throw Exception('No record found with filter: $filter');
+      }
+
+      return Result.success(fromMap(results.first));
+    } on Exception catch (err, stack) {
+      log(
+        'DatabeseService.fetch: $err',
+        error: err,
+        stackTrace: stack,
+      );
+      return Result.failure(err);
+    }
+  }
+
   Future<Result<List<T>>> fetchAll<T>(
     String table, {
     Map<String, dynamic>? filter,
     required T Function(Map<String, dynamic>) fromMap,
     String? orderBy,
-    int limit = 10,
-    int offset = 0,
+    int? limit,
+    int? offset,
   }) async {
     try {
       if (_db == null) throw Exception('Database is not initialized');
@@ -219,6 +255,37 @@ class DatabaseService {
     }
   }
 
+  Future<Result<void>> updateWhere<T>(
+    String table, {
+    required Map<String, dynamic> map,
+    required Map<String, dynamic> filter,
+  }) async {
+    try {
+      if (_db == null) throw Exception('Database is not initialized');
+
+      final filterWhere = filter.keys.map((key) => '$key = ?').join(' AND ');
+      final filterArgs = filter.values.toList();
+
+      final int count = await _db!.update(
+        table,
+        map,
+        where: filterWhere,
+        whereArgs: filterArgs,
+      );
+
+      if (count == 0) throw Exception('No record found with filter: $filter');
+
+      return Result.success(null);
+    } on Exception catch (err, stack) {
+      log(
+        'DatabeseService.update: $err',
+        error: err,
+        stackTrace: stack,
+      );
+      return Result.failure(err);
+    }
+  }
+
   Future<Result<void>> delete<T>(
     String table, {
     required String id,
@@ -233,6 +300,35 @@ class DatabaseService {
       );
 
       if (count == 0) throw Exception('No record found with id: $id');
+
+      return Result.success(null);
+    } on Exception catch (err, stack) {
+      log(
+        'DatabaseService.delete: $err',
+        error: err,
+        stackTrace: stack,
+      );
+      return Result.failure(err);
+    }
+  }
+
+  Future<Result<void>> deleteWhere<T>(
+    String table, {
+    required Map<String, dynamic> filter,
+  }) async {
+    try {
+      if (_db == null) throw Exception('Database is not initialized');
+
+      final filterWhere = filter.keys.map((key) => '$key = ?').join(' AND ');
+      final filterArgs = filter.values.toList();
+
+      final int count = await _db!.delete(
+        table,
+        where: filterWhere,
+        whereArgs: filterArgs,
+      );
+
+      if (count == 0) throw Exception('No record found with filter: $filter');
 
       return Result.success(null);
     } on Exception catch (err, stack) {

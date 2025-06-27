@@ -1,4 +1,4 @@
-import 'package:compras/utils/result.dart';
+import '/utils/result.dart';
 import 'package:flutter/material.dart';
 
 typedef CommandAction0<Output> = Future<Result<Output>> Function();

@@ -38,3 +38,6 @@ update_splash:
 
 update_launcher_icons:
 	flutter pub run flutter_launcher_icons
+
+run_build_runner:
+	dart run build_runner watch -d
