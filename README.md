@@ -49,6 +49,8 @@ Para a implementação são pevistos os dois ramos principais na arquitetura:
 
 A ideia é que as compras sejam geristradas e que os itens lançados possam ter seus preços anteriores apresentados durante a inserção, para fim de comparação e levantamento de sua inflação de preços durante a compra.
 
+Para mais detalhes da arquitetura veja o texto em [ARCHITETURE.md](ARCHITECTURE.md) e a documentalção do Flutter Team.
+
 # Changelog
 
 ## 2025/06/27 structural_adjustments-01 - by rudsonalves
