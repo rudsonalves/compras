@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ItemModel {
 
-@JsonKey(name: 'shopping_id') String get shoppingId;@JsonKey(name: 'product_id') String get productId; int get prince; int get quantity;
+@JsonKey(name: 'shopping_id') String get shoppingId;@JsonKey(name: 'product_id') String get productId;@JsonKey(name: 'is_unit_price') bool get isUnitPrice;@JsonKey(name: 'unit_price') int get unitPrince; int get quantity;@JsonKey(name: 'created_at') DateTime? get createdAt;
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $ItemModelCopyWith<ItemModel> get copyWith => _$ItemModelCopyWithImpl<ItemModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemModel&&(identical(other.shoppingId, shoppingId) || other.shoppingId == shoppingId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.prince, prince) || other.prince == prince)&&(identical(other.quantity, quantity) || other.quantity == quantity));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemModel&&(identical(other.shoppingId, shoppingId) || other.shoppingId == shoppingId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.isUnitPrice, isUnitPrice) || other.isUnitPrice == isUnitPrice)&&(identical(other.unitPrince, unitPrince) || other.unitPrince == unitPrince)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,shoppingId,productId,prince,quantity);
+int get hashCode => Object.hash(runtimeType,shoppingId,productId,isUnitPrice,unitPrince,quantity,createdAt);
 
 @override
 String toString() {
-  return 'ItemModel(shoppingId: $shoppingId, productId: $productId, prince: $prince, quantity: $quantity)';
+  return 'ItemModel(shoppingId: $shoppingId, productId: $productId, isUnitPrice: $isUnitPrice, unitPrince: $unitPrince, quantity: $quantity, createdAt: $createdAt)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $ItemModelCopyWith<$Res>  {
   factory $ItemModelCopyWith(ItemModel value, $Res Function(ItemModel) _then) = _$ItemModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String productId, int prince, int quantity
+@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String productId,@JsonKey(name: 'is_unit_price') bool isUnitPrice,@JsonKey(name: 'unit_price') int unitPrince, int quantity,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -66,13 +66,15 @@ class _$ItemModelCopyWithImpl<$Res>
 
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? shoppingId = null,Object? productId = null,Object? prince = null,Object? quantity = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? shoppingId = null,Object? productId = null,Object? isUnitPrice = null,Object? unitPrince = null,Object? quantity = null,Object? createdAt = freezed,}) {
   return _then(_self.copyWith(
 shoppingId: null == shoppingId ? _self.shoppingId : shoppingId // ignore: cast_nullable_to_non_nullable
 as String,productId: null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
-as String,prince: null == prince ? _self.prince : prince // ignore: cast_nullable_to_non_nullable
+as String,isUnitPrice: null == isUnitPrice ? _self.isUnitPrice : isUnitPrice // ignore: cast_nullable_to_non_nullable
+as bool,unitPrince: null == unitPrince ? _self.unitPrince : unitPrince // ignore: cast_nullable_to_non_nullable
 as int,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
-as int,
+as int,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -83,13 +85,15 @@ as int,
 @JsonSerializable()
 
 class _ItemModel implements ItemModel {
-  const _ItemModel({@JsonKey(name: 'shopping_id') required this.shoppingId, @JsonKey(name: 'product_id') required this.productId, required this.prince, this.quantity = 1});
+  const _ItemModel({@JsonKey(name: 'shopping_id') required this.shoppingId, @JsonKey(name: 'product_id') required this.productId, @JsonKey(name: 'is_unit_price') this.isUnitPrice = true, @JsonKey(name: 'unit_price') required this.unitPrince, this.quantity = 1, @JsonKey(name: 'created_at') this.createdAt});
   factory _ItemModel.fromJson(Map<String, dynamic> json) => _$ItemModelFromJson(json);
 
 @override@JsonKey(name: 'shopping_id') final  String shoppingId;
 @override@JsonKey(name: 'product_id') final  String productId;
-@override final  int prince;
+@override@JsonKey(name: 'is_unit_price') final  bool isUnitPrice;
+@override@JsonKey(name: 'unit_price') final  int unitPrince;
 @override@JsonKey() final  int quantity;
+@override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
@@ -104,16 +108,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemModel&&(identical(other.shoppingId, shoppingId) || other.shoppingId == shoppingId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.prince, prince) || other.prince == prince)&&(identical(other.quantity, quantity) || other.quantity == quantity));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemModel&&(identical(other.shoppingId, shoppingId) || other.shoppingId == shoppingId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.isUnitPrice, isUnitPrice) || other.isUnitPrice == isUnitPrice)&&(identical(other.unitPrince, unitPrince) || other.unitPrince == unitPrince)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,shoppingId,productId,prince,quantity);
+int get hashCode => Object.hash(runtimeType,shoppingId,productId,isUnitPrice,unitPrince,quantity,createdAt);
 
 @override
 String toString() {
-  return 'ItemModel(shoppingId: $shoppingId, productId: $productId, prince: $prince, quantity: $quantity)';
+  return 'ItemModel(shoppingId: $shoppingId, productId: $productId, isUnitPrice: $isUnitPrice, unitPrince: $unitPrince, quantity: $quantity, createdAt: $createdAt)';
 }
 
 
@@ -124,7 +128,7 @@ abstract mixin class _$ItemModelCopyWith<$Res> implements $ItemModelCopyWith<$Re
   factory _$ItemModelCopyWith(_ItemModel value, $Res Function(_ItemModel) _then) = __$ItemModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String productId, int prince, int quantity
+@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String productId,@JsonKey(name: 'is_unit_price') bool isUnitPrice,@JsonKey(name: 'unit_price') int unitPrince, int quantity,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -141,13 +145,15 @@ class __$ItemModelCopyWithImpl<$Res>
 
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? shoppingId = null,Object? productId = null,Object? prince = null,Object? quantity = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? shoppingId = null,Object? productId = null,Object? isUnitPrice = null,Object? unitPrince = null,Object? quantity = null,Object? createdAt = freezed,}) {
   return _then(_ItemModel(
 shoppingId: null == shoppingId ? _self.shoppingId : shoppingId // ignore: cast_nullable_to_non_nullable
 as String,productId: null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
-as String,prince: null == prince ? _self.prince : prince // ignore: cast_nullable_to_non_nullable
+as String,isUnitPrice: null == isUnitPrice ? _self.isUnitPrice : isUnitPrice // ignore: cast_nullable_to_non_nullable
+as bool,unitPrince: null == unitPrince ? _self.unitPrince : unitPrince // ignore: cast_nullable_to_non_nullable
 as int,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
-as int,
+as int,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 

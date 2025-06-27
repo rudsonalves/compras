@@ -8,9 +8,29 @@ abstract class ItemModel with _$ItemModel {
   const factory ItemModel({
     @JsonKey(name: 'shopping_id') required String shoppingId,
     @JsonKey(name: 'product_id') required String productId,
-    required int prince,
+    @Default(true) @JsonKey(name: 'is_unit_price') bool isUnitPrice,
+    @JsonKey(name: 'unit_price') required int unitPrince,
     @Default(1) int quantity,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _ItemModel;
+
+  factory ItemModel.create({
+    required String shoppingId,
+    required String productId,
+    bool isUnitPrice = true,
+    required int unitPrince,
+    int quantity = 1,
+  }) {
+    final now = DateTime.now();
+    return ItemModel(
+      shoppingId: shoppingId,
+      productId: productId,
+      isUnitPrice: isUnitPrice,
+      unitPrince: unitPrince,
+      quantity: quantity,
+      createdAt: now,
+    );
+  }
 
   factory ItemModel.fromJson(Map<String, dynamic> json) =>
       _$ItemModelFromJson(json);

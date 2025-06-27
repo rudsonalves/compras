@@ -4,6 +4,7 @@ final class Tables {
   static const String shopping = 'shopping';
   static const String products = 'products';
   static const String items = 'items';
+  static const String lastPrice = 'last_price';
 }
 
 final class ShoppingColumns {
@@ -25,6 +26,7 @@ final class ProductColumns {
   static const String name = 'name';
   static const String description = 'description';
   static const String barCode = 'bar_code';
+  static const String isUnitPrice = 'is_unit_price';
   static const String createdAt = 'created_at';
   static const String updatedAt = 'updated_at';
 }
@@ -34,8 +36,20 @@ final class ItemColumns {
 
   static const String shoppingId = 'shopping_id';
   static const String productId = 'product_id';
-  static const String prince = 'prince';
+  static const String isUnitPrice = 'is_unit_price';
+  static const String unitPrince = 'unit_price';
   static const String quantity = 'quantity';
+  static const String createdAt = 'created_at';
+}
+
+final class LastPriceColumns {
+  LastPriceColumns._();
+
+  static const String id = 'id';
+  static const String productId = 'product_id';
+  static const String isUnitPrice = 'is_unit_price';
+  static const String lastUnitPrice = 'last_unit_price';
+  static const String createdAt = 'created_at';
 }
 
 final class SqlTables {
@@ -60,6 +74,7 @@ final class SqlTables {
       ${ProductColumns.name} TEXT NOT NULL,
       ${ProductColumns.description} TEXT,
       ${ProductColumns.barCode} TEXT NOT NULL,
+      ${ItemColumns.isUnitPrice} BOOLEAN DEFAULT true NOT NULL,
       ${ProductColumns.createdAt} TEXT NOT NULL,
       ${ProductColumns.updatedAt} TEXT NOT NULL
     )''';
@@ -69,9 +84,21 @@ final class SqlTables {
     CREATE TABLE IF NOT EXISTS ${Tables.items} (
       ${ItemColumns.shoppingId} TEXT NOT NULL,
       ${ItemColumns.productId} TEXT NOT NULL,
-      ${ItemColumns.prince} INTEGER NOT NULL,
-      ${ItemColumns.quantity} INTEGER NOT NULL,
+      ${ItemColumns.isUnitPrice} BOOLEAN DEFAULT true NOT NULL,
+      ${ItemColumns.unitPrince} INTEGER NOT NULL,
+      ${ItemColumns.quantity} INTEGER DEFAULT 1 NOT NULL,
+      ${ItemColumns.createdAt} TEXT NOT NULL,
       PRIMARY KEY (${ItemColumns.shoppingId}, ${ItemColumns.productId})
+    )''';
+
+  static const String lastPrices =
+      '''
+    CREATE TABLE IF NOT EXISTS ${Tables.lastPrice} (
+      ${LastPriceColumns.id} TEXT NOT NULL PRIMARY KEY,
+      ${LastPriceColumns.productId} TEXT NOT NULL,
+      ${LastPriceColumns.isUnitPrice} BOOLEAN DEFAULT true NOT NULL,
+      ${LastPriceColumns.lastUnitPrice} INTEGER NOT NULL,
+      ${LastPriceColumns.createdAt} TEXT NOT NULL
     )''';
 
   static const String productNameIndex = '''
@@ -81,4 +108,8 @@ final class SqlTables {
   static const String productBarCodeIndex = '''
     CREATE INDEX IF NOT EXISTS idx_products_bar_code 
       ON ${Tables.products} (${ProductColumns.barCode})''';
+
+  static const String lastPriceIndex = '''
+    CREATE INDEX IF NOT EXISTS idx_last_price_product_id 
+      ON ${Tables.lastPrice} (${LastPriceColumns.productId})''';
 }

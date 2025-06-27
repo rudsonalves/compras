@@ -12,6 +12,7 @@ abstract class ProductDto with _$ProductDto {
     required String name,
     required String description,
     @JsonKey(name: 'bar_code') required String barCode,
+    @Default(true) @JsonKey(name: 'is_unit_price') bool isUnitPrice,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ProductDto;
@@ -20,6 +21,7 @@ abstract class ProductDto with _$ProductDto {
     required String name,
     required String description,
     required String barCode,
+    bool isUnitPrice = true,
   }) {
     final now = DateTime.now();
 
@@ -27,6 +29,7 @@ abstract class ProductDto with _$ProductDto {
       name: name,
       description: description,
       barCode: barCode,
+      isUnitPrice: isUnitPrice,
       createdAt: now,
       updatedAt: now,
     );
