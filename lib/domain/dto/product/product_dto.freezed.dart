@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProductDto implements DiagnosticableTreeMixin {
 
- String get name; String get description;@JsonKey(name: 'bar_code') String get barCode;@JsonKey(name: 'is_unit_price') bool get isUnitPrice;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt;
+ String get name; String get description;@JsonKey(name: 'bar_code') String get barCode;@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) bool get isUnitPrice;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt;
 /// Create a copy of ProductDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -55,7 +55,7 @@ abstract mixin class $ProductDtoCopyWith<$Res>  {
   factory $ProductDtoCopyWith(ProductDto value, $Res Function(ProductDto) _then) = _$ProductDtoCopyWithImpl;
 @useResult
 $Res call({
- String name, String description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'is_unit_price') bool isUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ String name, String description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) bool isUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 
@@ -91,13 +91,13 @@ as DateTime?,
 @JsonSerializable()
 
 class _ProductDto extends ProductDto with DiagnosticableTreeMixin {
-  const _ProductDto({required this.name, required this.description, @JsonKey(name: 'bar_code') required this.barCode, @JsonKey(name: 'is_unit_price') this.isUnitPrice = true, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt}): super._();
+  const _ProductDto({required this.name, required this.description, @JsonKey(name: 'bar_code') required this.barCode, @JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) this.isUnitPrice = true, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt}): super._();
   factory _ProductDto.fromJson(Map<String, dynamic> json) => _$ProductDtoFromJson(json);
 
 @override final  String name;
 @override final  String description;
 @override@JsonKey(name: 'bar_code') final  String barCode;
-@override@JsonKey(name: 'is_unit_price') final  bool isUnitPrice;
+@override@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) final  bool isUnitPrice;
 @override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 @override@JsonKey(name: 'updated_at') final  DateTime? updatedAt;
 
@@ -140,7 +140,7 @@ abstract mixin class _$ProductDtoCopyWith<$Res> implements $ProductDtoCopyWith<$
   factory _$ProductDtoCopyWith(_ProductDto value, $Res Function(_ProductDto) _then) = __$ProductDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'is_unit_price') bool isUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ String name, String description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) bool isUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 

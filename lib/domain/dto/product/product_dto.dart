@@ -1,3 +1,4 @@
+import 'package:compras/domain/models/sqlite_helpers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -12,7 +13,13 @@ abstract class ProductDto with _$ProductDto {
     required String name,
     required String description,
     @JsonKey(name: 'bar_code') required String barCode,
-    @Default(true) @JsonKey(name: 'is_unit_price') bool isUnitPrice,
+    @Default(true)
+    @JsonKey(
+      name: 'is_unit_price',
+      fromJson: SqliteHelpers.intToBool,
+      toJson: SqliteHelpers.boolToInt,
+    )
+    bool isUnitPrice,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ProductDto;

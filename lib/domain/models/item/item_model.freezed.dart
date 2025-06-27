@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ItemModel {
 
-@JsonKey(name: 'shopping_id') String get shoppingId;@JsonKey(name: 'product_id') String get productId;@JsonKey(name: 'is_unit_price') bool get isUnitPrice;@JsonKey(name: 'unit_price') int get unitPrince; int get quantity;@JsonKey(name: 'created_at') DateTime? get createdAt;
+@JsonKey(name: 'shopping_id') String get shoppingId;@JsonKey(name: 'product_id') String get productId;@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) bool get isUnitPrice;@JsonKey(name: 'unit_price') int get unitPrince; int get quantity;@JsonKey(name: 'created_at') DateTime? get createdAt;
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $ItemModelCopyWith<$Res>  {
   factory $ItemModelCopyWith(ItemModel value, $Res Function(ItemModel) _then) = _$ItemModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String productId,@JsonKey(name: 'is_unit_price') bool isUnitPrice,@JsonKey(name: 'unit_price') int unitPrince, int quantity,@JsonKey(name: 'created_at') DateTime? createdAt
+@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String productId,@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) bool isUnitPrice,@JsonKey(name: 'unit_price') int unitPrince, int quantity,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -85,12 +85,12 @@ as DateTime?,
 @JsonSerializable()
 
 class _ItemModel implements ItemModel {
-  const _ItemModel({@JsonKey(name: 'shopping_id') required this.shoppingId, @JsonKey(name: 'product_id') required this.productId, @JsonKey(name: 'is_unit_price') this.isUnitPrice = true, @JsonKey(name: 'unit_price') required this.unitPrince, this.quantity = 1, @JsonKey(name: 'created_at') this.createdAt});
+  const _ItemModel({@JsonKey(name: 'shopping_id') required this.shoppingId, @JsonKey(name: 'product_id') required this.productId, @JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) this.isUnitPrice = true, @JsonKey(name: 'unit_price') required this.unitPrince, this.quantity = 1, @JsonKey(name: 'created_at') this.createdAt});
   factory _ItemModel.fromJson(Map<String, dynamic> json) => _$ItemModelFromJson(json);
 
 @override@JsonKey(name: 'shopping_id') final  String shoppingId;
 @override@JsonKey(name: 'product_id') final  String productId;
-@override@JsonKey(name: 'is_unit_price') final  bool isUnitPrice;
+@override@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) final  bool isUnitPrice;
 @override@JsonKey(name: 'unit_price') final  int unitPrince;
 @override@JsonKey() final  int quantity;
 @override@JsonKey(name: 'created_at') final  DateTime? createdAt;
@@ -128,7 +128,7 @@ abstract mixin class _$ItemModelCopyWith<$Res> implements $ItemModelCopyWith<$Re
   factory _$ItemModelCopyWith(_ItemModel value, $Res Function(_ItemModel) _then) = __$ItemModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String productId,@JsonKey(name: 'is_unit_price') bool isUnitPrice,@JsonKey(name: 'unit_price') int unitPrince, int quantity,@JsonKey(name: 'created_at') DateTime? createdAt
+@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String productId,@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) bool isUnitPrice,@JsonKey(name: 'unit_price') int unitPrince, int quantity,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 

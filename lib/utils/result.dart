@@ -6,6 +6,9 @@ sealed class Result<T> {
 
   factory Result.success(T value) = Success._;
   factory Result.failure(Exception error) = Failure._;
+
+  get isSuccess => this is Success;
+  get isFailure => this is Failure;
 }
 
 final class Success<T> extends Result<T> {

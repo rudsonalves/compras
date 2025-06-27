@@ -1,3 +1,4 @@
+import 'package:compras/domain/models/sqlite_helpers.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'item_model.freezed.dart';
@@ -8,7 +9,13 @@ abstract class ItemModel with _$ItemModel {
   const factory ItemModel({
     @JsonKey(name: 'shopping_id') required String shoppingId,
     @JsonKey(name: 'product_id') required String productId,
-    @Default(true) @JsonKey(name: 'is_unit_price') bool isUnitPrice,
+    @Default(true)
+    @JsonKey(
+      name: 'is_unit_price',
+      fromJson: SqliteHelpers.intToBool,
+      toJson: SqliteHelpers.boolToInt,
+    )
+    bool isUnitPrice,
     @JsonKey(name: 'unit_price') required int unitPrince,
     @Default(1) int quantity,
     @JsonKey(name: 'created_at') DateTime? createdAt,

@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LastPriceModel {
 
- String get id;@JsonKey(name: 'product_id') String get productId;@JsonKey(name: 'is_unit_price') bool get isUnitPrice;@JsonKey(name: 'last_unit_price') int get lastUnitPrice;@JsonKey(name: 'created_at') DateTime? get createdAt;
+ String get id;@JsonKey(name: 'product_id') String get productId;@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) bool get isUnitPrice;@JsonKey(name: 'last_unit_price') int get lastUnitPrice;@JsonKey(name: 'created_at') DateTime? get createdAt;
 /// Create a copy of LastPriceModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $LastPriceModelCopyWith<$Res>  {
   factory $LastPriceModelCopyWith(LastPriceModel value, $Res Function(LastPriceModel) _then) = _$LastPriceModelCopyWithImpl;
 @useResult
 $Res call({
- String id,@JsonKey(name: 'product_id') String productId,@JsonKey(name: 'is_unit_price') bool isUnitPrice,@JsonKey(name: 'last_unit_price') int lastUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt
+ String id,@JsonKey(name: 'product_id') String productId,@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) bool isUnitPrice,@JsonKey(name: 'last_unit_price') int lastUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -84,12 +84,12 @@ as DateTime?,
 @JsonSerializable()
 
 class _LastPriceModel extends LastPriceModel {
-  const _LastPriceModel({required this.id, @JsonKey(name: 'product_id') required this.productId, @JsonKey(name: 'is_unit_price') this.isUnitPrice = true, @JsonKey(name: 'last_unit_price') required this.lastUnitPrice, @JsonKey(name: 'created_at') this.createdAt}): super._();
+  const _LastPriceModel({required this.id, @JsonKey(name: 'product_id') required this.productId, @JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) this.isUnitPrice = true, @JsonKey(name: 'last_unit_price') required this.lastUnitPrice, @JsonKey(name: 'created_at') this.createdAt}): super._();
   factory _LastPriceModel.fromJson(Map<String, dynamic> json) => _$LastPriceModelFromJson(json);
 
 @override final  String id;
 @override@JsonKey(name: 'product_id') final  String productId;
-@override@JsonKey(name: 'is_unit_price') final  bool isUnitPrice;
+@override@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) final  bool isUnitPrice;
 @override@JsonKey(name: 'last_unit_price') final  int lastUnitPrice;
 @override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 
@@ -126,7 +126,7 @@ abstract mixin class _$LastPriceModelCopyWith<$Res> implements $LastPriceModelCo
   factory _$LastPriceModelCopyWith(_LastPriceModel value, $Res Function(_LastPriceModel) _then) = __$LastPriceModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id,@JsonKey(name: 'product_id') String productId,@JsonKey(name: 'is_unit_price') bool isUnitPrice,@JsonKey(name: 'last_unit_price') int lastUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt
+ String id,@JsonKey(name: 'product_id') String productId,@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) bool isUnitPrice,@JsonKey(name: 'last_unit_price') int lastUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 

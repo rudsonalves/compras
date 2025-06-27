@@ -18,6 +18,7 @@ class ItemsRepository implements IItemsRepository {
   @override
   List<ItemModel> get itemsList => List.unmodifiable(_items.values);
 
+  @override
   int totalPrice() => _items.values.fold(
     0,
     (total, item) => total + item.unitPrince * item.quantity,

@@ -53,6 +53,84 @@ Para mais detalhes da arquitetura veja o texto em [ARCHITETURE.md](ARCHITECTURE.
 
 # Changelog
 
+## 2025/06/27 last_price_repository-01 - by rudsonalves
+
+### Extend SQLite boolean handling and add LastPrice repository/tests
+
+This commit refines SQLite integer-to-boolean conversion via a new `SqliteHelpers` utility, updates schema columns for `is_unit_price` fields, and integrates a full-featured LastPrice repository with corresponding interfaces and unit tests. Repository interfaces for items now include `totalPrice()`, and the shared `Result` class gains success/failure flags.
+
+### Modified Files
+
+* **docs/Diagrama\_de\_Classes.drawio**
+
+  * Updated internal diagram dimensions to match the latest class revisions.
+
+* **docs/images/Diagrama\_de\_Classes.png**, **docs/images/MVVM.png**
+
+  * Replaced with refreshed exports reflecting updated column and model changes.
+
+* **lib/data/repositories/items/i\_items\_repository.dart**
+
+  * Added `totalPrice()` signature to the items repository interface.
+
+* **lib/data/repositories/items/items\_repository.dart**
+
+  * Implemented `@override totalPrice()` annotation for consistency.
+
+* **lib/data/services/database/tables/sql\_tables.dart**
+
+  * Changed DDL default types for `is_unit_price` from BOOLEAN to INTEGER (0/1).
+
+* **lib/domain/dto/last\_price/last\_price\_dto.dart**
+
+  * Introduced `fromJson`/`toJson` converters (`SqliteHelpers`) on `isUnitPrice` key.
+
+* **lib/domain/dto/product/product\_dto.dart**
+
+  * Applied same integer-to-boolean converters to `ProductDto.isUnitPrice`.
+
+* **lib/domain/models/item/item\_model.dart**
+
+  * Added JSON converters on `ItemModel.isUnitPrice`.
+
+* **lib/domain/models/last\_price/last\_price\_model.dart**
+
+  * Applied converters to `LastPriceModel.isUnitPrice`.
+
+* **lib/domain/models/product/product\_model.dart**
+
+  * Integrated converters on `ProductModel.isUnitPrice`.
+
+* **lib/utils/result.dart**
+
+  * Introduced `isSuccess` and `isFailure` getters to simplify result checking.
+
+* **pubspec.yaml**
+
+  * Added `sqflite_common_ffi` dependency for desktop testing and `path_provider`.
+
+### New Files
+
+* **lib/domain/models/sqlite\_helpers.dart**
+  Utility class for converting between Dart `bool` and SQLite integer (0/1).
+
+* **lib/data/repositories/last\_price/i\_last\_price\_repository.dart**
+  Repository interface defining CRUD operations for last-price entries.
+
+* **lib/data/repositories/last\_price/last\_price\_repository.dart**
+  Concrete implementation managing in-memory cache and database persistence of last-price records.
+
+* **test/data/repositories/products/products\_repository\_test.dart**
+  Integration tests for `ProductsRepository` using in-memory SQLite via `sqflite_common_ffi`.
+
+* **test/data/repositories/shopping/shopping\_repository\_test.dart**
+  Integration tests for `ShoppingRepository` with desktop SQLite support.
+
+### Conclusion
+
+All changes for integer-based boolean handling and the new LastPrice feature are in place, and comprehensive tests confirm full functionality.
+
+
 ## 2025/06/27 structural_adjustments-01 - by rudsonalves
 
 ### Add last-price tracking and unit-price support across data models

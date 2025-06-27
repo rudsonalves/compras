@@ -14,9 +14,9 @@ part of 'product_model.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$ProductModel implements DiagnosticableTreeMixin {
+mixin _$ProductModel {
 
- String get id; String get name; String get description;@JsonKey(name: 'bar_code') String get barCode;@JsonKey(name: 'is_unit_price') bool get isUnitPrice;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt;
+ String get id; String get name; String get description;@JsonKey(name: 'bar_code') String get barCode;@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) bool get isUnitPrice;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt;
 /// Create a copy of ProductModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,12 +26,6 @@ $ProductModelCopyWith<ProductModel> get copyWith => _$ProductModelCopyWithImpl<P
   /// Serializes this ProductModel to a JSON map.
   Map<String, dynamic> toJson();
 
-@override
-void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-    ..add(DiagnosticsProperty('type', 'ProductModel'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('description', description))..add(DiagnosticsProperty('barCode', barCode))..add(DiagnosticsProperty('isUnitPrice', isUnitPrice))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
-}
 
 @override
 bool operator ==(Object other) {
@@ -43,7 +37,7 @@ bool operator ==(Object other) {
 int get hashCode => Object.hash(runtimeType,id,name,description,barCode,isUnitPrice,createdAt,updatedAt);
 
 @override
-String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+String toString() {
   return 'ProductModel(id: $id, name: $name, description: $description, barCode: $barCode, isUnitPrice: $isUnitPrice, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
@@ -55,7 +49,7 @@ abstract mixin class $ProductModelCopyWith<$Res>  {
   factory $ProductModelCopyWith(ProductModel value, $Res Function(ProductModel) _then) = _$ProductModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'is_unit_price') bool isUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ String id, String name, String description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) bool isUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 
@@ -91,15 +85,15 @@ as DateTime?,
 /// @nodoc
 @JsonSerializable()
 
-class _ProductModel extends ProductModel with DiagnosticableTreeMixin {
-  const _ProductModel({required this.id, required this.name, required this.description, @JsonKey(name: 'bar_code') required this.barCode, @JsonKey(name: 'is_unit_price') this.isUnitPrice = true, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt}): super._();
+class _ProductModel extends ProductModel {
+  const _ProductModel({required this.id, required this.name, required this.description, @JsonKey(name: 'bar_code') required this.barCode, @JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) this.isUnitPrice = true, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt}): super._();
   factory _ProductModel.fromJson(Map<String, dynamic> json) => _$ProductModelFromJson(json);
 
 @override final  String id;
 @override final  String name;
 @override final  String description;
 @override@JsonKey(name: 'bar_code') final  String barCode;
-@override@JsonKey(name: 'is_unit_price') final  bool isUnitPrice;
+@override@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) final  bool isUnitPrice;
 @override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 @override@JsonKey(name: 'updated_at') final  DateTime? updatedAt;
 
@@ -113,12 +107,6 @@ _$ProductModelCopyWith<_ProductModel> get copyWith => __$ProductModelCopyWithImp
 Map<String, dynamic> toJson() {
   return _$ProductModelToJson(this, );
 }
-@override
-void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-    ..add(DiagnosticsProperty('type', 'ProductModel'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('description', description))..add(DiagnosticsProperty('barCode', barCode))..add(DiagnosticsProperty('isUnitPrice', isUnitPrice))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
-}
 
 @override
 bool operator ==(Object other) {
@@ -130,7 +118,7 @@ bool operator ==(Object other) {
 int get hashCode => Object.hash(runtimeType,id,name,description,barCode,isUnitPrice,createdAt,updatedAt);
 
 @override
-String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+String toString() {
   return 'ProductModel(id: $id, name: $name, description: $description, barCode: $barCode, isUnitPrice: $isUnitPrice, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
@@ -142,7 +130,7 @@ abstract mixin class _$ProductModelCopyWith<$Res> implements $ProductModelCopyWi
   factory _$ProductModelCopyWith(_ProductModel value, $Res Function(_ProductModel) _then) = __$ProductModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'is_unit_price') bool isUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ String id, String name, String description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'is_unit_price', fromJson: SqliteHelpers.intToBool, toJson: SqliteHelpers.boolToInt) bool isUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 

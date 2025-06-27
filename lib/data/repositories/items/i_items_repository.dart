@@ -4,6 +4,8 @@ import '/utils/result.dart';
 abstract class IItemsRepository {
   List<ItemModel> get itemsList;
 
+  int totalPrice();
+
   Future<Result<void>> initialize(String shoppingId);
 
   Future<Result<ItemModel>> insert(ItemModel item);

@@ -74,7 +74,7 @@ final class SqlTables {
       ${ProductColumns.name} TEXT NOT NULL,
       ${ProductColumns.description} TEXT,
       ${ProductColumns.barCode} TEXT NOT NULL,
-      ${ItemColumns.isUnitPrice} BOOLEAN DEFAULT true NOT NULL,
+      ${ItemColumns.isUnitPrice} INTEGER DEFAULT 1 NOT NULL,
       ${ProductColumns.createdAt} TEXT NOT NULL,
       ${ProductColumns.updatedAt} TEXT NOT NULL
     )''';
@@ -84,7 +84,7 @@ final class SqlTables {
     CREATE TABLE IF NOT EXISTS ${Tables.items} (
       ${ItemColumns.shoppingId} TEXT NOT NULL,
       ${ItemColumns.productId} TEXT NOT NULL,
-      ${ItemColumns.isUnitPrice} BOOLEAN DEFAULT true NOT NULL,
+      ${ItemColumns.isUnitPrice} INTEGER DEFAULT 1 NOT NULL,
       ${ItemColumns.unitPrince} INTEGER NOT NULL,
       ${ItemColumns.quantity} INTEGER DEFAULT 1 NOT NULL,
       ${ItemColumns.createdAt} TEXT NOT NULL,
@@ -96,7 +96,7 @@ final class SqlTables {
     CREATE TABLE IF NOT EXISTS ${Tables.lastPrice} (
       ${LastPriceColumns.id} TEXT NOT NULL PRIMARY KEY,
       ${LastPriceColumns.productId} TEXT NOT NULL,
-      ${LastPriceColumns.isUnitPrice} BOOLEAN DEFAULT true NOT NULL,
+      ${LastPriceColumns.isUnitPrice} INTEGER DEFAULT 1 NOT NULL,
       ${LastPriceColumns.lastUnitPrice} INTEGER NOT NULL,
       ${LastPriceColumns.createdAt} TEXT NOT NULL
     )''';
