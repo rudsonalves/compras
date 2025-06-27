@@ -1,33 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product_model.dart';
+part of 'last_price_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_ProductModel _$ProductModelFromJson(Map<String, dynamic> json) =>
-    _ProductModel(
+_LastPriceModel _$LastPriceModelFromJson(Map<String, dynamic> json) =>
+    _LastPriceModel(
       id: json['id'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      barCode: json['bar_code'] as String,
+      productId: json['product_id'] as String,
       isUnitPrice: json['is_unit_price'] as bool? ?? true,
+      lastUnitPrice: (json['last_unit_price'] as num).toInt(),
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] == null
-          ? null
-          : DateTime.parse(json['updated_at'] as String),
     );
 
-Map<String, dynamic> _$ProductModelToJson(_ProductModel instance) =>
+Map<String, dynamic> _$LastPriceModelToJson(_LastPriceModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'name': instance.name,
-      'description': instance.description,
-      'bar_code': instance.barCode,
+      'product_id': instance.productId,
       'is_unit_price': instance.isUnitPrice,
+      'last_unit_price': instance.lastUnitPrice,
       'created_at': instance.createdAt?.toIso8601String(),
-      'updated_at': instance.updatedAt?.toIso8601String(),
     };

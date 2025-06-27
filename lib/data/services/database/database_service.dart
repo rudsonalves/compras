@@ -41,12 +41,15 @@ class DatabaseService {
 
     final batch = db.batch();
 
+    // Tables
     batch.execute(SqlTables.shopping);
     batch.execute(SqlTables.products);
     batch.execute(SqlTables.items);
-
+    batch.execute(SqlTables.lastPrices);
+    // Indexes
     batch.execute(SqlTables.productNameIndex);
     batch.execute(SqlTables.productBarCodeIndex);
+    batch.execute(SqlTables.lastPriceIndex);
 
     await batch.commit();
   }

@@ -20,7 +20,7 @@ class ItemsRepository implements IItemsRepository {
 
   int totalPrice() => _items.values.fold(
     0,
-    (total, item) => total + item.prince * item.quantity,
+    (total, item) => total + item.unitPrince * item.quantity,
   );
 
   @override
