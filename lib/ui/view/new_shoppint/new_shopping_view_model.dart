@@ -21,8 +21,6 @@ class NewShoppingViewModel {
   Future<Result<ShoppingModel>> _saving(ShoppingDto dto) async {
     final result = await _shoppingRepository.insert(dto);
 
-    await Future.delayed(Duration(seconds: 2));
-
     switch (result) {
       case Success(value: final model):
         log('Shopping saved: $model');

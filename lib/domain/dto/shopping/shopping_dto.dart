@@ -19,7 +19,7 @@ abstract class ShoppingDto with _$ShoppingDto {
     required String name,
     required String description,
     required ShoppingType type,
-    required int totalPrice,
+    int totalPrice = 0,
   }) {
     final now = DateTime.now();
     return ShoppingDto(

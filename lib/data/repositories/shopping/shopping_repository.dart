@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
+
 import '/data/repositories/shopping/i_shopping_repository.dart';
 import '/data/services/database/database_service.dart';
 import '/data/services/database/tables/sql_tables.dart';
@@ -7,7 +9,7 @@ import '/domain/dto/shopping/shopping_dto.dart';
 import '/domain/models/shopping/shopping_model.dart';
 import '/utils/result.dart';
 
-class ShoppingRepository implements IShoppingRepository {
+class ShoppingRepository extends ChangeNotifier implements IShoppingRepository {
   final DatabaseService _dbService;
 
   ShoppingRepository(this._dbService);
@@ -49,6 +51,7 @@ class ShoppingRepository implements IShoppingRepository {
       case Success(value: final id):
         final shopping = ShoppingModel.fromDto(id, dto);
         _shopping[shopping.id] = shopping;
+        notifyListeners();
         return Result.success(shopping);
 
       case Failure(:final error):
@@ -72,6 +75,7 @@ class ShoppingRepository implements IShoppingRepository {
     switch (result) {
       case Success(:final value):
         _shopping[id] = value;
+        notifyListeners();
         return Result.success(value);
 
       case Failure(:final error):
@@ -101,6 +105,7 @@ class ShoppingRepository implements IShoppingRepository {
         for (var shopping in value) {
           _shopping[shopping.id] = shopping;
         }
+        notifyListeners();
         return Result.success(value);
 
       case Failure(:final error):
@@ -119,6 +124,7 @@ class ShoppingRepository implements IShoppingRepository {
     switch (result) {
       case Success():
         _shopping[shopping.id] = shopping;
+        notifyListeners();
         return Result.success(shopping);
 
       case Failure(:final error):
@@ -137,6 +143,7 @@ class ShoppingRepository implements IShoppingRepository {
     switch (result) {
       case Success():
         _shopping.remove(id);
+        notifyListeners();
         return Result.success(null);
 
       case Failure(:final error):

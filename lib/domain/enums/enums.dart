@@ -1,9 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
+
 enum ShoppingType {
-  supermarket('Supermercado'),
-  pharmacy('Farmácia'),
-  groceryStore('Mercearia'),
-  other('Outro');
+  supermarket('Supermercado', Symbols.local_grocery_store_rounded),
+  pharmacy('Farmácia', Symbols.local_pharmacy_rounded),
+  groceryStore('Mercearia', Symbols.local_grocery_store_rounded),
+  other('Outro', Symbols.other_houses_rounded);
 
   final String label;
-  const ShoppingType(this.label);
+  final IconData iconData;
+  const ShoppingType(this.label, this.iconData);
 }

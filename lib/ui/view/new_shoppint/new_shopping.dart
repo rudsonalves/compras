@@ -132,7 +132,7 @@ class _NewShoppingState extends State<NewShopping> {
       return;
     }
 
-    final dto = ShoppingDto(
+    final dto = ShoppingDto.create(
       name: _namecontroller.text,
       description: _descriptionController.text,
       type: _type,
