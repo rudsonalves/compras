@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
-
 import '/data/repositories/shopping/i_shopping_repository.dart';
 import '/data/services/database/database_service.dart';
 import '/data/services/database/tables/sql_tables.dart';
@@ -9,7 +7,7 @@ import '/domain/dto/shopping/shopping_dto.dart';
 import '/domain/models/shopping/shopping_model.dart';
 import '/utils/result.dart';
 
-class ShoppingRepository extends ChangeNotifier implements IShoppingRepository {
+class ShoppingRepository extends IShoppingRepository {
   final DatabaseService _dbService;
 
   ShoppingRepository(this._dbService);

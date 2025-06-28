@@ -1,11 +1,11 @@
-import 'package:compras/ui/core/ui/buttons/button_signature.dart';
-import 'package:compras/ui/core/ui/dialogs/app_snack_bar.dart';
-import 'package:compras/ui/core/ui/dialogs/botton_sheet_message.dart.dart';
-import 'package:compras/utils/result.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '/ui/core/ui/buttons/button_signature.dart';
+import '/ui/core/ui/dialogs/app_snack_bar.dart';
+import '/ui/core/ui/dialogs/botton_sheet_message.dart.dart';
+import '/utils/result.dart';
 import '/ui/view/home/widgets/shopping_list_tile.dart';
 import '/domain/models/shopping/shopping_model.dart';
 import '/routing/routes.dart';
@@ -92,12 +92,12 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _newShopping() {
-    context.push(Routes.newShopping.path);
+    context.push(Routes.editShopping.path);
   }
 
   void _openShopping(ShoppingModel shopping) {
     debugPrint('Open: ${shopping.name}');
-    // context.push(Routes.newShopping.path, extra: shopping);
+    context.push(Routes.shopping.path, extra: shopping);
   }
 
   void _editShopping(ShoppingModel shopping) {

@@ -7,10 +7,10 @@ import '/domain/dto/shopping/shopping_dto.dart';
 import '/domain/models/shopping/shopping_model.dart';
 import '/utils/command.dart';
 
-class NewShoppingViewModel {
+class EditShoppingViewModel {
   final IShoppingRepository _shoppingRepository;
 
-  NewShoppingViewModel({
+  EditShoppingViewModel({
     required IShoppingRepository shoppingRepository,
   }) : _shoppingRepository = shoppingRepository {
     saving = Command1<ShoppingModel, ShoppingDto>(_saving);

@@ -5,27 +5,27 @@ import '/ui/core/ui/dialogs/app_snack_bar.dart';
 import '/utils/result.dart';
 import '/domain/dto/shopping/shopping_dto.dart';
 import '/ui/core/ui/buttons/big_button.dart';
-import '/ui/view/new_shoppint/new_shopping_view_model.dart';
+import 'edit_shopping_view_model.dart';
 import '/utils/validates/generic_validations.dart';
 import '/domain/enums/enums.dart';
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/ui/form_fields/basic_form_field.dart';
 import '/ui/core/ui/form_fields/enum_form_field.dart';
 
-class NewShopping extends StatefulWidget {
-  final NewShoppingViewModel viewModel;
+class EditShoppingView extends StatefulWidget {
+  final EditShoppingViewModel viewModel;
 
-  const NewShopping({
+  const EditShoppingView({
     super.key,
     required this.viewModel,
   });
 
   @override
-  State<NewShopping> createState() => _NewShoppingState();
+  State<EditShoppingView> createState() => _EditShoppingViewState();
 }
 
-class _NewShoppingState extends State<NewShopping> {
-  late final NewShoppingViewModel _viewModel;
+class _EditShoppingViewState extends State<EditShoppingView> {
+  late final EditShoppingViewModel _viewModel;
 
   final _formKey = GlobalKey<FormState>();
   final _namecontroller = TextEditingController();

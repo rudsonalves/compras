@@ -1,3 +1,4 @@
+import 'package:compras/data/repositories/shopping/i_shopping_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart' show SingleChildWidget;
 
@@ -23,7 +24,7 @@ Future<List<SingleChildWidget>> dependencies() async {
       dispose: (_, manager) => manager.close(),
     ),
     Provider<DatabaseService>(create: (_) => dbService),
-    ChangeNotifierProvider<ShoppingRepository>(
+    ChangeNotifierProvider<IShoppingRepository>(
       create: (_) => ShoppingRepository(dbService),
     ),
     Provider<IProductsRepository>(

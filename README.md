@@ -53,6 +53,65 @@ Para mais detalhes da arquitetura veja o texto em [ARCHITETURE.md](ARCHITECTURE.
 
 # Changelog
 
+## 2025/06/28 last_price_repository-03 - by rudsonalves
+
+### Refactor Shopping flow to use IShoppingRepository and introduce edit route
+
+This commit abstracts `ShoppingRepository` behind the `IShoppingRepository` interface, updates DI and routing to use the new interface type, and renames the “new shopping” feature into a unified edit flow with dedicated views and view models. Navigation paths and provider registrations now reflect the interface contract.
+
+### Modified Files
+
+* **lib/config/dependencies.dart**
+
+  * Imported `IShoppingRepository` and registered it with `ChangeNotifierProvider<IShoppingRepository>` instead of concrete `ShoppingRepository`.
+
+* **lib/data/repositories/shopping/i\_shopping\_repository.dart**
+
+  * Extended `ChangeNotifier` in `IShoppingRepository` to support UI listeners.
+
+* **lib/data/repositories/shopping/shopping\_repository.dart**
+
+  * Removed `ChangeNotifier` mixin and `implements`; now extends `IShoppingRepository`.
+
+* **lib/routing/router.dart**
+
+  * Swapped `ShoppingRepository` references for `IShoppingRepository` in builders.
+  * Renamed `newShopping` route to `editShopping` and added a `shopping` detail route.
+  * Adjusted route imports and added `ShoppingView` entry.
+
+* **lib/routing/routes.dart**
+
+  * Renamed `new_shopping` to `editShopping` (`/edit-shopping`) and added `shopping` (`/shopping`) path.
+
+* **lib/ui/view/home/home\_view\.dart**
+
+  * Tweaked import order.
+  * Updated `_newShopping` to push `editShopping` route.
+  * Updated `_openShopping` to push new `shopping` route with extra model.
+
+* **lib/ui/view/home/home\_view\_model.dart**
+
+  * Changed type of `_shoppingRepository` parameter from concrete to `IShoppingRepository`.
+
+### New Files
+
+* **lib/ui/view/home/edit\_shopping/edit\_shopping\_view\.dart**
+  Renamed and refactored from `new_shopping.dart` to handle both creation and editing flows.
+
+* **lib/ui/view/home/edit\_shopping/edit\_shopping\_view\_model.dart**
+  Renamed view model to `EditShoppingViewModel` matching the updated view.
+
+* **lib/ui/view/home/shopping/shopping\_view\.dart**
+  New detail screen displaying a single `ShoppingModel`.
+
+* **lib/ui/view/home/shopping/shopping\_view\_model.dart**
+  Placeholder view model for the new `ShoppingView`.
+
+### Conclusion
+
+The shopping creation and editing flows now share a unified interface via `IShoppingRepository`, and routing has been updated to support both listing and detail views. The refactor aligns DI, routing, and UI layers under the new interface abstraction.
+
+
 ## 2025/06/28 last_price_repository-02 - by rudsonalves
 
 ### Introduce DatabaseManager, DI updates, and refactor DatabaseService
