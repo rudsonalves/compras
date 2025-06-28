@@ -53,6 +53,53 @@ Para mais detalhes da arquitetura veja o texto em [ARCHITETURE.md](ARCHITECTURE.
 
 # Changelog
 
+## 2025/06/28 last_price_repository-02 - by rudsonalves
+
+### Introduce DatabaseManager, DI updates, and refactor DatabaseService
+
+This commit centralizes database initialization into a new `DatabaseManager` class, refactors `DatabaseService` to consume a managed `Database` instance, and updates dependency injection to provide the new manager and service. Repository providers and integration tests are adjusted accordingly.
+
+### Modified Files
+
+* **lib/config/dependencies.dart**
+
+  * Replaced direct `DatabaseService.initialize` with `DatabaseManager` and injected both manager and service.
+  * Registered `IProductsRepository`, `IItemsRepository`, and `ILastPriceRepository` alongside existing `ShoppingRepository`.
+
+* **lib/data/services/database/database\_service.dart**
+
+  * Removed internal initialization logic; now accepts a pre-initialized `Database` instance.
+  * All `_db` references replaced with the injected `_database` field.
+
+* **lib/data/services/database/tables/sql\_tables.dart**
+
+  * Added foreign key constraints to `items` and `lastPrices` tables for cascading deletes.
+
+* **lib/domain/models/last\_price/last\_price\_model.dart**
+
+  * Corrected import order to prioritize DTO and helper imports after annotations.
+
+* **test/data/repositories/products/products\_repository\_test.dart**
+
+  * Switched to use `DatabaseManager` for setup and teardown instead of manual `DatabaseService` init/close.
+
+* **test/data/repositories/shopping/shopping\_repository\_test.dart**
+
+  * Updated to initialize `DatabaseService` via `DatabaseManager` and close manager in `tearDown`.
+
+### New Files
+
+* **lib/data/services/database/database\_manager.dart**
+  Manages SQLite database lifecycle: creation, configuration (foreign keys), upgrades/downgrades, and closing.
+
+* **lib/data/services/database/tables/sql\_configurations.dart**
+  Defines database name, version, and PRAGMA statements for configuration.
+
+### Conclusion
+
+Database initialization is now unified under `DatabaseManager`, DI graph updated, and tests adapted—ensuring consistent database handling across the app.
+
+
 ## 2025/06/27 last_price_repository-01 - by rudsonalves
 
 ### Extend SQLite boolean handling and add LastPrice repository/tests

@@ -1,19 +1,39 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart' show SingleChildWidget;
 
-import '/data/repositories/shopping/shopping_repository.dart';
+import '/data/repositories/items/i_items_repository.dart';
+import '/data/repositories/items/items_repository.dart';
+import '/data/repositories/last_price/i_last_price_repository.dart';
+import '/data/repositories/last_price/last_price_repository.dart';
+import '/data/repositories/products/i_products_repository.dart';
+import '/data/repositories/products/products_repository.dart';
 import '/data/services/database/database_service.dart';
+import '/data/repositories/shopping/shopping_repository.dart';
+import '/data/services/database/database_manager.dart';
 
 Future<List<SingleChildWidget>> dependencies() async {
-  final database = DatabaseService();
-  await database.initialize('compras.db');
+  final dbManager = DatabaseManager();
+  final dbService = DatabaseService(
+    await dbManager.initialize('compras.db'),
+  );
 
   return <SingleChildWidget>[
-    ChangeNotifierProvider<ShoppingRepository>(
-      create: (_) => ShoppingRepository(database),
+    Provider<DatabaseManager>(
+      create: (_) => dbManager,
+      dispose: (_, manager) => manager.close(),
     ),
-    // Provider<IShoppingRepository>(
-    //   create: (ctx) => ctx.read<ShoppingRepository>(),
-    // ),
+    Provider<DatabaseService>(create: (_) => dbService),
+    ChangeNotifierProvider<ShoppingRepository>(
+      create: (_) => ShoppingRepository(dbService),
+    ),
+    Provider<IProductsRepository>(
+      create: (_) => ProductsRepository(dbService),
+    ),
+    Provider<IItemsRepository>(
+      create: (_) => ItemsRepository(dbService),
+    ),
+    Provider<ILastPriceRepository>(
+      create: (_) => LastPriceRepository(dbService),
+    ),
   ];
 }

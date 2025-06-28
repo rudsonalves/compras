@@ -1,6 +1,7 @@
-import 'package:compras/domain/dto/last_price/last_price_dto.dart';
-import 'package:compras/domain/models/sqlite_helpers.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '/domain/dto/last_price/last_price_dto.dart';
+import '/domain/models/sqlite_helpers.dart';
 
 part 'last_price_model.freezed.dart';
 part 'last_price_model.g.dart';

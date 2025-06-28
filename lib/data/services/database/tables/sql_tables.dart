@@ -88,7 +88,13 @@ final class SqlTables {
       ${ItemColumns.unitPrince} INTEGER NOT NULL,
       ${ItemColumns.quantity} INTEGER DEFAULT 1 NOT NULL,
       ${ItemColumns.createdAt} TEXT NOT NULL,
-      PRIMARY KEY (${ItemColumns.shoppingId}, ${ItemColumns.productId})
+      PRIMARY KEY (${ItemColumns.shoppingId}, ${ItemColumns.productId}),
+      FOREIGN KEY (${ItemColumns.shoppingId}) 
+        REFERENCES ${Tables.shopping} (${ShoppingColumns.id})
+        ON DELETE CASCADE,
+      FOREIGN KEY (${ItemColumns.productId}) 
+        REFERENCES ${Tables.products} (${ProductColumns.id})
+        ON DELETE CASCADE
     )''';
 
   static const String lastPrices =
@@ -98,7 +104,10 @@ final class SqlTables {
       ${LastPriceColumns.productId} TEXT NOT NULL,
       ${LastPriceColumns.isUnitPrice} INTEGER DEFAULT 1 NOT NULL,
       ${LastPriceColumns.lastUnitPrice} INTEGER NOT NULL,
-      ${LastPriceColumns.createdAt} TEXT NOT NULL
+      ${LastPriceColumns.createdAt} TEXT NOT NULL,
+      FOREIGN KEY (${LastPriceColumns.productId}) 
+        REFERENCES ${Tables.products} (${ProductColumns.id})
+        ON DELETE CASCADE
     )''';
 
   static const String productNameIndex = '''

@@ -1,4 +1,5 @@
 import 'package:compras/data/repositories/shopping/shopping_repository.dart';
+import 'package:compras/data/services/database/database_manager.dart';
 import 'package:compras/data/services/database/database_service.dart';
 import 'package:compras/domain/dto/shopping/shopping_dto.dart';
 import 'package:compras/domain/enums/enums.dart';
@@ -9,6 +10,7 @@ import 'dart:io';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
+  late DatabaseManager dbManager;
   late DatabaseService dbService;
   late ShoppingRepository repo;
 
@@ -27,15 +29,15 @@ void main() {
       await deleteDatabase(dbPath);
     }
 
-    dbService = DatabaseService();
-    await dbService.initialize(dbPath);
+    dbManager = DatabaseManager();
+    dbService = DatabaseService(await dbManager.initialize(dbPath));
 
     repo = ShoppingRepository(dbService);
     await repo.initialize();
   });
 
   tearDown(() async {
-    await dbService.close();
+    await dbManager.close();
   });
 
   test('Insert Shopping', () async {
