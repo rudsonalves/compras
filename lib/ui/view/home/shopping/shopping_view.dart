@@ -31,6 +31,18 @@ class _ShoppingViewState extends State<ShoppingView> {
           icon: Icon(Symbols.arrow_back_ios_new_rounded),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Symbols.add_rounded),
+      ),
+      body: ListenableBuilder(
+        listenable: widget.viewModel.cartNotifier,
+        builder: (context, _) {
+          return Center(
+            child: Text(widget.shopping.name),
+          );
+        },
+      ),
     );
   }
 }

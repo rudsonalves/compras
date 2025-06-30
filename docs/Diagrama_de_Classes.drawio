@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.1.1 Chrome/132.0.6834.210 Electron/34.3.3 Safari/537.36" version="26.1.1">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="1936" dy="1064" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2336" pageHeight="1654" math="0" shadow="0">
+    <mxGraphModel dx="1434" dy="870" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2336" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -361,13 +361,13 @@
             <mxPoint x="920" y="120" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="3fTQXvPOQ3stO39uD6o4-61" value="ItemsRepository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;shadow=1;" parent="SM7ea6qoSSTbtUkmd5gZ-38" vertex="1">
+        <mxCell id="3fTQXvPOQ3stO39uD6o4-61" value="CartItemsRepository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;shadow=1;" parent="SM7ea6qoSSTbtUkmd5gZ-38" vertex="1">
           <mxGeometry x="640" y="240" width="140" height="60" as="geometry" />
         </mxCell>
         <mxCell id="3fTQXvPOQ3stO39uD6o4-65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fillColor=#e1d5e7;strokeColor=#9673a6;startArrow=classic;startFill=1;strokeWidth=2;shadow=1;" parent="SM7ea6qoSSTbtUkmd5gZ-38" source="3fTQXvPOQ3stO39uD6o4-63" target="3fTQXvPOQ3stO39uD6o4-58" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="3fTQXvPOQ3stO39uD6o4-63" value="ShoppingUserCase" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;shadow=1;" parent="SM7ea6qoSSTbtUkmd5gZ-38" vertex="1">
+        <mxCell id="3fTQXvPOQ3stO39uD6o4-63" value="ShoppingCartUserCase" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;shadow=1;" parent="SM7ea6qoSSTbtUkmd5gZ-38" vertex="1">
           <mxGeometry x="430" y="240" width="140" height="60" as="geometry" />
         </mxCell>
         <mxCell id="3fTQXvPOQ3stO39uD6o4-64" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;strokeWidth=2;fillColor=#d5e8d4;strokeColor=#82b366;entryX=1;entryY=0.5;entryDx=0;entryDy=0;shadow=1;" parent="SM7ea6qoSSTbtUkmd5gZ-38" source="3fTQXvPOQ3stO39uD6o4-61" target="3fTQXvPOQ3stO39uD6o4-63" edge="1">

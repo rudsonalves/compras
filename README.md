@@ -53,6 +53,87 @@ Para mais detalhes da arquitetura veja o texto em [ARCHITETURE.md](ARCHITECTURE.
 
 # Changelog
 
+## 2025/06/30 last_price_repository-04 - by rudsonalves
+
+### Rename item repository to cart repository and integrate shopping cart user case
+
+This commit refactors the item repository into a cart-specific implementation with ChangeNotifier support, updates dependency injection and routing to use the new `ShoppingCartUserCase`, and enhances the edit and shopping views to handle both create and update workflows. The `ShoppingModel` default `totalPrice` is adjusted to 0, and the class diagram is updated to reflect the renamed components. UI and view models are wired to the new use case for a cohesive shopping cart flow.
+
+### Alterations
+
+* **docs/Diagrama\_de\_Classes.drawio**
+
+  * Update mxGraphModel `dx` and `dy` values for layout adjustment.
+  * Rename diagram shapes: `ItemsRepository` → `CartItemsRepository` and `ShoppingUserCase` → `ShoppingCartUserCase`.
+
+* **lib/config/dependencies.dart**
+
+  * Replace imports of `i_items_repository.dart`/`items_repository.dart` with `i_cart_items_repository.dart`/`cart_items_repository.dart`.
+  * Update provider registration to use `ICartItemsRepository` and `CartItemsRepository`.
+
+* **lib/data/repositories/items/cart\_items\_repository.dart** (formerly `items_repository.dart`)
+
+  * Rename class to `CartItemsRepository`, implement `ICartItemsRepository`, and mix in `ChangeNotifier`.
+  * Add `notifyListeners()` calls after each mutation of `_items`.
+  * Update constructor signature to `CartItemsRepository`.
+
+* **lib/data/repositories/items/i\_cart\_items\_repository.dart** (formerly `i_items_repository.dart`)
+
+  * Rename abstract class to `ICartItemsRepository` extending `ChangeNotifier`.
+
+* **lib/data/repositories/shopping/shopping\_repository.dart**
+
+  * Mix in `ChangeNotifier` on `ShoppingRepository`.
+  * Import `package:flutter/material.dart` to support listener notifications.
+
+* **lib/domain/models/shopping/shopping\_model.dart**
+
+  * Change `totalPrice` to use `@Default(0)` and remove `required`.
+  * Provide default value `0` in the factory constructor.
+
+* **lib/routing/router.dart**
+
+  * Add imports for `ICartItemsRepository`, `IProductsRepository`, `ILastPriceRepository`, and `ShoppingCartUserCase`.
+  * Modify `EditShopping` route builder to accept a `ShoppingModel` via `state.extra`.
+  * Wire `ShoppingCartUserCase` into `ShoppingViewModel` builder for the shopping route.
+
+* **lib/ui/view/home/edit\_shopping/edit\_shopping\_view\.dart**
+
+  * Import `ShoppingModel` and add optional `shopping` parameter to `EditShoppingView`.
+  * Introduce `_isEditing` flag and `_initializeForm()` to prefill fields when editing.
+  * Adjust AppBar title, button label, and icon based on mode.
+  * Listen to both `saving` and new `update` commands and execute update flow when editing.
+
+* **lib/ui/view/home/edit\_shopping/edit\_shopping\_view\_model.dart**
+
+  * Add `update` `Command1<ShoppingModel, ShoppingModel>` for record updates.
+  * Implement `_update()` method calling `shoppingRepository.update()` and logging the result.
+
+* **lib/ui/view/home/home\_view\.dart**
+
+  * Rename `_newShopping()` to `_addShopping()` and update `floatingActionButton.onPressed`.
+  * Enable edit navigation by calling `context.push(Routes.editShopping.path, extra: shopping)` in `_editShopping()`.
+
+* **lib/ui/view/home/shopping/shopping\_view\.dart**
+
+  * Add a `FloatingActionButton` placeholder for future cart actions.
+  * Wrap body in `ListenableBuilder` listening to `viewModel.cartNotifier` to react to cart changes.
+
+* **lib/ui/view/home/shopping/shopping\_view\_model.dart**
+
+  * Implement `ShoppingViewModel` to depend on `ShoppingCartUserCase`.
+  * Initialize `load` command to invoke `userCase.load()` and expose `cartNotifier`.
+
+### New Files
+
+* **lib/domain/user\_cases/shopping\_cart\_user\_case.dart**
+  Introduce `ShoppingCartUserCase` to coordinate initialization of product, cart items, and last price repositories for a given `ShoppingModel`.
+
+### Conclusion
+
+The refactor is complete and the shopping cart flow is now fully functional.
+
+
 ## 2025/06/28 last_price_repository-03 - by rudsonalves
 
 ### Refactor Shopping flow to use IShoppingRepository and introduce edit route

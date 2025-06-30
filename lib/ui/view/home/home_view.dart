@@ -85,13 +85,13 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _newShopping,
+        onPressed: _addShopping,
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  void _newShopping() {
+  void _addShopping() {
     context.push(Routes.editShopping.path);
   }
 
@@ -102,7 +102,7 @@ class _HomeViewState extends State<HomeView> {
 
   void _editShopping(ShoppingModel shopping) {
     debugPrint('Edit: ${shopping.name}');
-    // context.push(Routes.newShopping.path, extra: shopping);
+    context.push(Routes.editShopping.path, extra: shopping);
   }
 
   Future<bool> _deleteShopping(ShoppingModel shopping) async {

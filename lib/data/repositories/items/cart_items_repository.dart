@@ -1,15 +1,18 @@
 import 'dart:developer';
 
-import '/data/repositories/items/i_items_repository.dart';
+import 'package:flutter/material.dart';
+
+import 'i_cart_items_repository.dart';
 import '/data/services/database/database_service.dart';
 import '/data/services/database/tables/sql_tables.dart';
 import '/domain/models/item/item_model.dart';
 import '/utils/result.dart';
 
-class ItemsRepository implements IItemsRepository {
+class CartItemsRepository extends ChangeNotifier
+    implements ICartItemsRepository {
   final DatabaseService _dbService;
 
-  ItemsRepository(this._dbService);
+  CartItemsRepository(this._dbService);
 
   final Map<String, ItemModel> _items = {}; // indexed by productId
   bool _isInitialized = false;
@@ -58,6 +61,7 @@ class ItemsRepository implements IItemsRepository {
     switch (result) {
       case Success():
         _items[item.productId] = item;
+        notifyListeners();
         return Result.success(item);
 
       case Failure(:final error):
@@ -84,6 +88,7 @@ class ItemsRepository implements IItemsRepository {
     switch (result) {
       case Success(value: final item):
         _items[productId] = item;
+        notifyListeners();
         return Result.success(item);
 
       case Failure(:final error):
@@ -107,6 +112,7 @@ class ItemsRepository implements IItemsRepository {
         for (var item in item) {
           _items[item.productId] = item;
         }
+        notifyListeners();
         return Result.success(null);
 
       case Failure(:final error):
@@ -133,6 +139,7 @@ class ItemsRepository implements IItemsRepository {
     switch (result) {
       case Success():
         _items[item.productId] = item;
+        notifyListeners();
         return Result.success(item);
 
       case Failure(:final error):
@@ -154,6 +161,7 @@ class ItemsRepository implements IItemsRepository {
     switch (result) {
       case Success():
         _items.remove(productId);
+        notifyListeners();
         return Result.success(null);
 
       case Failure(:final error):
