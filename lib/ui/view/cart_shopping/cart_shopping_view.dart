@@ -1,24 +1,26 @@
+import 'package:compras/routing/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '/domain/models/shopping/shopping_model.dart';
-import '/ui/view/home/shopping/shopping_view_model.dart';
+import 'cart_shopping_view_model.dart';
 
-class ShoppingView extends StatefulWidget {
+class CartShoppingView extends StatefulWidget {
   final ShoppingModel shopping;
-  final ShoppingViewModel viewModel;
+  final CartShoppingViewModel viewModel;
 
-  const ShoppingView({
+  const CartShoppingView({
     super.key,
     required this.viewModel,
     required this.shopping,
   });
 
   @override
-  State<ShoppingView> createState() => _ShoppingViewState();
+  State<CartShoppingView> createState() => _CartShoppingViewState();
 }
 
-class _ShoppingViewState extends State<ShoppingView> {
+class _CartShoppingViewState extends State<CartShoppingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +34,7 @@ class _ShoppingViewState extends State<ShoppingView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: _addProductCart,
         child: Icon(Symbols.add_rounded),
       ),
       body: ListenableBuilder(
@@ -44,5 +46,9 @@ class _ShoppingViewState extends State<ShoppingView> {
         },
       ),
     );
+  }
+
+  void _addProductCart() {
+    context.push(Routes.addProductCart.path);
   }
 }

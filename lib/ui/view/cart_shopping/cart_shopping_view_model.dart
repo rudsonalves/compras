@@ -3,10 +3,10 @@ import 'package:compras/data/repositories/items/i_cart_items_repository.dart';
 import '/domain/user_cases/shopping_cart_user_case.dart';
 import '/utils/command.dart';
 
-class ShoppingViewModel {
+class CartShoppingViewModel {
   final ShoppingCartUserCase _userCase;
 
-  ShoppingViewModel(this._userCase) {
+  CartShoppingViewModel(this._userCase) {
     load = Command0<void>(_userCase.load)..execute();
   }
 

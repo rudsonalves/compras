@@ -53,6 +53,58 @@ Para mais detalhes da arquitetura veja o texto em [ARCHITETURE.md](ARCHITECTURE.
 
 # Changelog
 
+## 2025/07/01 last_price_repository-05 - by rudsonalves
+
+### Refactor cart dependencies and implement AddProductCart feature
+
+This commit refactors dependency imports and the shopping cart flow to support a new “Add Product to Cart” feature. It standardizes import paths, replaces the cart items provider with `ChangeNotifierProvider`, and renames existing shopping views and view models to the cart-specific equivalents. A new screen and view model for adding products to the cart have also been added.
+
+### Modified Files
+
+#### `lib/config/dependencies.dart`
+
+* Switched relative imports to absolute imports for repository interfaces and implementations.
+* Replaced `Provider<ICartItemsRepository>` with `ChangeNotifierProvider<ICartItemsRepository>` for cart items.
+
+#### `lib/domain/enums/enums.dart`
+
+* Introduced a new `SaleBy` enum with two values (`byUnit` and `byWeight`) and associated labels.
+
+#### `lib/routing/router.dart`
+
+* Updated imports to include `CartShoppingView`, `CartShoppingViewModel`, `AddProductCartView`, and `AddProductCartViewModel`.
+* Renamed the shopping route builder to return `CartShoppingView` with `CartShoppingViewModel`.
+* Added a new `GoRoute` for the `/add-product-cart` path.
+
+#### `lib/routing/routes.dart`
+
+* Added a new `addProductCart` constant route.
+
+#### `lib/ui/view/cart_shopping/cart_shopping_view.dart`
+
+* Renamed `ShoppingView` to `CartShoppingView`.
+* Updated constructor and state class names accordingly.
+* Changed the floating action button’s callback to navigate to the new add-product-cart route.
+
+#### `lib/ui/view/cart_shopping/cart_shopping_view_model.dart`
+
+* Renamed `ShoppingViewModel` to `CartShoppingViewModel` and updated constructor to match the new class name.
+
+### New Files
+
+#### `lib/ui/view/cart_shopping/add_product_cart/add_product_cart_view.dart`
+
+Defines a stateful form view for adding a product to the cart, including fields for name, description, sale type, price, and quantity, plus a barcode scanner button placeholder.
+
+#### `lib/ui/view/cart_shopping/add_product_cart/add_product_cart_view_model.dart`
+
+Introduces an empty `AddProductCartViewModel` class as the view model for the add-product-cart screen.
+
+### Conclusion
+
+All cart-related dependencies and views have been updated, and the Add Product to Cart feature is now integrated and ready for further development.
+
+
 ## 2025/06/30 last_price_repository-04 - by rudsonalves
 
 ### Rename item repository to cart repository and integrate shopping cart user case

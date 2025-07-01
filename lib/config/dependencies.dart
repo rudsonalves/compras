@@ -1,9 +1,9 @@
-import 'package:compras/data/repositories/shopping/i_shopping_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart' show SingleChildWidget;
 
-import '../data/repositories/items/i_cart_items_repository.dart';
-import '../data/repositories/items/cart_items_repository.dart';
+import '/data/repositories/shopping/i_shopping_repository.dart';
+import '/data/repositories/items/i_cart_items_repository.dart';
+import '/data/repositories/items/cart_items_repository.dart';
 import '/data/repositories/last_price/i_last_price_repository.dart';
 import '/data/repositories/last_price/last_price_repository.dart';
 import '/data/repositories/products/i_products_repository.dart';
@@ -30,7 +30,7 @@ Future<List<SingleChildWidget>> dependencies() async {
     Provider<IProductsRepository>(
       create: (_) => ProductsRepository(dbService),
     ),
-    Provider<ICartItemsRepository>(
+    ChangeNotifierProvider<ICartItemsRepository>(
       create: (_) => CartItemsRepository(dbService),
     ),
     Provider<ILastPriceRepository>(

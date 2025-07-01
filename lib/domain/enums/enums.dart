@@ -11,3 +11,11 @@ enum ShoppingType {
   final IconData iconData;
   const ShoppingType(this.label, this.iconData);
 }
+
+enum SaleBy {
+  byUnit('por Unidade'),
+  byWeight('por Peso');
+
+  final String label;
+  const SaleBy(this.label);
+}
