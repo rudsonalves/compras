@@ -1,6 +1,7 @@
-import 'package:compras/domain/enums/enums.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '/domain/enums/enums.dart';
 
 part 'product_dto.freezed.dart';
 part 'product_dto.g.dart';

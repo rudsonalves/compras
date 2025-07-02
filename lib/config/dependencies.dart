@@ -1,3 +1,5 @@
+import 'package:compras/data/repositories/category/category_repository.dart';
+import 'package:compras/data/repositories/category/i_category_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart' show SingleChildWidget;
 
@@ -36,5 +38,6 @@ Future<List<SingleChildWidget>> dependencies() async {
     Provider<ILastPriceRepository>(
       create: (_) => LastPriceRepository(dbService),
     ),
+    Provider<ICategoryRepository>(create: (_) => CategoryRepository(dbService)),
   ];
 }

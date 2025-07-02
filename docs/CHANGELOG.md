@@ -2,6 +2,54 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/02 last_price_repository-07 - by rudsonalves
+
+### Implement category management layer and enrich DatabaseService documentation
+
+This commit introduces a new category management layer by defining the `ICategoryRepository` interface, its `CategoryRepository` implementation, and the `SubCategoryDto`. It also registers the category repository in the dependency graph and enriches the `DatabaseService` with detailed documentation for common CRUD operations.
+
+### Modified Files
+
+* **Makefile**
+
+  * Added `run_build_runner_watch` target for selective build\_runner watching.
+  * Swapped the definitions of `run_build_runner_watch` and `run_build_runner` commands.
+
+* **lib/config/dependencies.dart**
+
+  * Imported `ICategoryRepository` and `CategoryRepository`.
+  * Provided `CategoryRepository(dbService)` under `ICategoryRepository` in the dependency list.
+
+* **lib/data/services/database/database\_service.dart**
+
+  * Added XML-style DartDoc comments for `fetchById`, `fetchByFilter`, `fetchAll`, `insert`, `set`, `update`, `updateWhere`, `delete`, and `deleteWhere`.
+  * Clarified parameter descriptions and return semantics for each CRUD method.
+
+* **lib/domain/dto/product/product\_dto.dart**
+
+  * Adjusted import to use project-root relative path for `SaleBy` enum (`/domain/enums/enums.dart`).
+
+* **lib/domain/models/sub\_category/sub\_category\_model.dart**
+
+  * Imported `SubCategoryDto`.
+  * Added `factory SubCategoryModel.fromDto(String id, SubCategoryDto dto)` for DTO-to-model mapping.
+
+### New Files
+
+* **lib/data/repositories/category/i\_category\_repository.dart**
+  Defines the `ICategoryRepository` interface for fetching, inserting, updating, and deleting categories and subcategories.
+
+* **lib/data/repositories/category/category\_repository.dart**
+  Implements `ICategoryRepository`, managing in-memory caches and delegating CRUD calls to `DatabaseService`.
+
+* **lib/domain/dto/sub\_category/sub\_category\_dto.dart**
+  Freezed DTO class for serializing and deserializing subcategory payloads, with JSON support.
+
+### Conclusion
+
+Category management infrastructure is now in place, and the `DatabaseService` is fully documented for robust data operations.
+
+
 ## 2025/07/02 last_price_repository-06 - by rudsonalves
 
 ### Implement category support, saleBy enums, and enhance cart flow

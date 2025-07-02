@@ -13,6 +13,18 @@ class DatabaseService {
 
   String generateUid() => uuid.v4();
 
+  /// Fetches a single record by its unique identifier from the specified table.
+  ///
+  /// [table] is the name of the database table to query.
+  /// [id] is the unique identifier of the record to fetch.
+  /// [fromMap] is a function that converts a map of key-value pairs into an
+  /// instance of type [T].
+  /// [forceRemote] is a boolean flag that can be used to force fetching from a
+  /// remote source if applicable.
+  ///
+  /// Returns a [Result] containing an instance of type [T] if a matching
+  /// record is found.
+  /// Throws an exception if no record matches the given id.
   Future<Result<T>> fetchById<T>(
     String table, {
     required String id,
@@ -39,6 +51,21 @@ class DatabaseService {
     }
   }
 
+  /// Fetches a single record from the specified table that matches the given
+  /// filter.
+  ///
+  /// [table] is the name of the database table to query.
+  /// [fromMap] is a function that converts a map of key-value pairs into an
+  /// instance of type [T].
+  /// [filter] is a map representing the filter conditions where the keys are
+  /// column names and values are the values to match.
+  /// [orderBy] specifies the column(s) to order the results by, if needed.
+  /// [forceRemote] is a boolean flag that can be used to force fetching from a
+  /// remote source if applicable.
+  ///
+  /// Returns a [Result] containing an instance of type [T] if a matching record
+  /// is found.
+  /// Throws an exception if no record matches the filter conditions.
   Future<Result<T>> fetchByFilter<T>(
     String table, {
     required T Function(Map<String, dynamic>) fromMap,
@@ -72,6 +99,21 @@ class DatabaseService {
     }
   }
 
+  /// Fetches a list of records from the specified table.
+  ///
+  /// [table] is the name of the database table to query.
+  /// [filter] is an optional map of key-value pairs that are used to filter the
+  /// results.
+  /// [fromMap] is a function that converts a map of key-value pairs into an
+  /// instance of type [T].
+  /// [orderBy] is an optional string that specifies the column(s) to order the
+  /// results by.
+  /// [limit] and [offset] are optional parameters that can be used to paginate
+  /// the results.
+  ///
+  /// Returns a [Result] containing a list of instances of type [T] if the query
+  /// is successful.
+  /// Throws an exception if an error occurs while performing the query.
   Future<Result<List<T>>> fetchAll<T>(
     String table, {
     Map<String, dynamic>? filter,
@@ -111,6 +153,15 @@ class DatabaseService {
     }
   }
 
+  /// Inserts a record into the specified table.
+  ///
+  /// [table] is the name of the database table to query.
+  /// [map] is a map of key-value pairs that are used to insert the record.
+  /// The map must not contain an 'id' key.
+  ///
+  /// Returns a [Result] containing the ID of the newly inserted record if the
+  /// query is successful.
+  /// Throws an exception if an error occurs while performing the query.
   Future<Result<String>> insert<T>(
     String table,
     Map<String, dynamic> map,
@@ -136,6 +187,17 @@ class DatabaseService {
     }
   }
 
+  /// Inserts or updates a record in the specified table.
+  ///
+  /// [table] is the name of the database table to query.
+  /// [map] is a map of key-value pairs that are used to insert the record.
+  /// The map must contain an 'id' key.
+  ///
+  /// If the record already exists in the table, it is updated.
+  /// If the record does not exist in the table, it is inserted.
+  ///
+  /// Returns a [Result] containing null if the query is successful.
+  /// Throws an exception if an error occurs while performing the query.
   Future<Result<void>> set<T>(
     String table,
     Map<String, dynamic> map,
@@ -161,6 +223,16 @@ class DatabaseService {
     }
   }
 
+  /// Updates a single record in the specified table.
+  ///
+  /// [table] is the name of the database table to query.
+  /// [map] is a map of key-value pairs that are used to update the record.
+  /// The map must contain an 'id' key.
+  ///
+  /// If the record does not exist in the table, an exception is thrown.
+  ///
+  /// Returns a [Result] containing null if the query is successful.
+  /// Throws an exception if an error occurs while performing the query.
   Future<Result<void>> update<T>(
     String table, {
     required Map<String, dynamic> map,
@@ -189,6 +261,17 @@ class DatabaseService {
     }
   }
 
+  /// Updates multiple records in the specified table.
+  ///
+  /// [table] is the name of the database table to query.
+  /// [map] is a map of key-value pairs that are used to update the records.
+  /// [filter] is a map representing the filter conditions where the keys are
+  /// column names and values are the values to match.
+  ///
+  /// If no records match the filter conditions, an exception is thrown.
+  ///
+  /// Returns a [Result] containing null if the query is successful.
+  /// Throws an exception if an error occurs while performing the query.
   Future<Result<void>> updateWhere<T>(
     String table, {
     required Map<String, dynamic> map,
@@ -218,6 +301,15 @@ class DatabaseService {
     }
   }
 
+  /// Deletes a single record from the specified table.
+  ///
+  /// [table] is the name of the database table to query.
+  /// [id] is the unique identifier of the record to delete.
+  ///
+  /// If no record matches the given id, an exception is thrown.
+  ///
+  /// Returns a [Result] containing null if the query is successful.
+  /// Throws an exception if an error occurs while performing the query.
   Future<Result<void>> delete<T>(
     String table, {
     required String id,
@@ -242,6 +334,15 @@ class DatabaseService {
     }
   }
 
+  /// Deletes multiple records from the specified table.
+  ///
+  /// [table] is the name of the database table to query.
+  /// [filter] is a map of key-value pairs that are used to filter the records.
+  ///
+  /// If no records match the given filter, an exception is thrown.
+  ///
+  /// Returns a [Result] containing null if the query is successful.
+  /// Throws an exception if an error occurs while performing the query.
   Future<Result<void>> deleteWhere<T>(
     String table, {
     required Map<String, dynamic> filter,
