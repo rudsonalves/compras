@@ -1,4 +1,4 @@
-import 'package:compras/domain/models/sqlite_helpers.dart';
+import 'package:compras/domain/enums/enums.dart';
 
 import '/domain/dto/product/product_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -15,13 +15,9 @@ abstract class ProductModel with _$ProductModel {
     required String name,
     required String description,
     @JsonKey(name: 'bar_code') required String barCode,
-    @Default(true)
-    @JsonKey(
-      name: 'is_unit_price',
-      fromJson: SqliteHelpers.intToBool,
-      toJson: SqliteHelpers.boolToInt,
-    )
-    bool isUnitPrice,
+    @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
+    String? category,
+    String? subcategory,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ProductModel;
@@ -31,7 +27,9 @@ abstract class ProductModel with _$ProductModel {
     required String name,
     required String description,
     required String barCode,
-    bool isUnitPrice = true,
+    SaleBy saleBy = SaleBy.unit,
+    String? category,
+    String? subcategory,
   }) {
     final now = DateTime.now();
     return ProductModel(
@@ -39,7 +37,9 @@ abstract class ProductModel with _$ProductModel {
       name: name,
       description: description,
       barCode: barCode,
-      isUnitPrice: isUnitPrice,
+      saleBy: saleBy,
+      category: category,
+      subcategory: subcategory,
       createdAt: now,
       updatedAt: now,
     );
@@ -50,7 +50,9 @@ abstract class ProductModel with _$ProductModel {
     name: dto.name,
     description: dto.description,
     barCode: dto.barCode,
-    isUnitPrice: dto.isUnitPrice,
+    saleBy: dto.saleBy,
+    category: dto.category,
+    subcategory: dto.subcategory,
     createdAt: dto.createdAt,
     updatedAt: dto.updatedAt,
   );

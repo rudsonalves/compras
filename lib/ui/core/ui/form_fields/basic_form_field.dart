@@ -1,3 +1,4 @@
+import 'package:compras/ui/core/themes/dimens.dart';
 import 'package:flutter/material.dart';
 
 class BasicFormField extends StatefulWidget {
@@ -10,7 +11,11 @@ class BasicFormField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final TextInputType? keyboardType;
   final IconData? suffixIconData;
+  final Widget? suffixIcon;
   final IconData? prefixIconData;
+  final Widget? prefixIcon;
+  final String? prefixText;
+  final String? suffixText;
   final Color? iconColor;
   final bool obscureText;
   final void Function(String)? onChanged;
@@ -21,6 +26,7 @@ class BasicFormField extends StatefulWidget {
   final bool readOnly;
   final int? maxLines;
   final int? minLines;
+  final TextAlign textAlign;
 
   const BasicFormField({
     super.key,
@@ -33,7 +39,11 @@ class BasicFormField extends StatefulWidget {
     this.textInputAction = TextInputAction.next,
     this.keyboardType,
     this.suffixIconData,
+    this.suffixIcon,
     this.prefixIconData,
+    this.prefixIcon,
+    this.suffixText,
+    this.prefixText,
     this.iconColor,
     this.obscureText = false,
     this.onChanged,
@@ -44,6 +54,7 @@ class BasicFormField extends StatefulWidget {
     this.readOnly = false,
     this.maxLines = 1,
     this.minLines,
+    this.textAlign = TextAlign.start,
   });
 
   @override
@@ -69,14 +80,34 @@ class _BasicFormFieldState extends State<BasicFormField> {
 
   @override
   Widget build(BuildContext context) {
-    // final Dimens dimens = Dimens.of(context);
+    final Dimens dimens = Dimens.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final border = widget.border;
+    // final border = widget.border;
     //  ??
-    // OutlineInputBorder(
-    //   borderRadius: dimens.borderRadius,
-    //   borderSide: BorderSide(color: colorScheme.onPrimary),
-    // );
+    final border =
+        widget.border ??
+        OutlineInputBorder(
+          borderRadius: dimens.borderRadius,
+          borderSide: BorderSide(color: colorScheme.onPrimary),
+        );
+
+    final suffixIcon =
+        widget.suffixIcon ??
+        (widget.suffixIconData != null
+            ? Icon(
+                widget.suffixIconData,
+                color: widget.iconColor ?? colorScheme.primary,
+              )
+            : null);
+
+    final prefixIcon =
+        widget.prefixIcon ??
+        (widget.prefixIconData != null
+            ? Icon(
+                widget.prefixIconData,
+                color: widget.iconColor ?? colorScheme.primary,
+              )
+            : null);
 
     return TextFormField(
       autovalidateMode: autoValidate,
@@ -92,6 +123,7 @@ class _BasicFormFieldState extends State<BasicFormField> {
       readOnly: widget.readOnly,
       maxLines: widget.maxLines,
       minLines: widget.minLines,
+      textAlign: widget.textAlign,
       onFieldSubmitted: (value) {
         if (widget.nextFocusNode != null) {
           FocusScope.of(context).requestFocus(widget.nextFocusNode);
@@ -102,18 +134,10 @@ class _BasicFormFieldState extends State<BasicFormField> {
         hintText: widget.hintText,
         floatingLabelBehavior: widget.floatingLabelBehavior,
         border: border,
-        suffixIcon: widget.suffixIconData == null
-            ? null
-            : Icon(
-                widget.suffixIconData,
-                color: widget.iconColor ?? colorScheme.primary,
-              ),
-        prefixIcon: widget.prefixIconData == null
-            ? null
-            : Icon(
-                widget.prefixIconData,
-                color: widget.iconColor ?? colorScheme.primary,
-              ),
+        suffixIcon: suffixIcon,
+        prefixIcon: prefixIcon,
+        prefixText: widget.prefixText,
+        suffixText: widget.suffixText,
       ),
     );
   }

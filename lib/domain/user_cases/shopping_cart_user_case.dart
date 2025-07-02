@@ -1,3 +1,5 @@
+import 'package:compras/domain/models/item/item_model.dart';
+
 import '/domain/models/shopping/shopping_model.dart';
 import '/utils/result.dart';
 import '/data/repositories/items/i_cart_items_repository.dart';
@@ -32,6 +34,20 @@ class ShoppingCartUserCase {
     final lastResult = await _lastPriceRepository.initialize();
     if (lastResult.isFailure) return Result.failure(lastResult.error!);
 
+    return Result.success(null);
+  }
+
+  Future<Result<void>> save(ItemModel item) async {
+    // final result = await _cartItemsRepository.insert(item);
+    // if (result.isFailure) return Result.failure(result.error!);
+    await Future.delayed(const Duration(seconds: 2));
+    return Result.success(null);
+  }
+
+  Future<Result<void>> update(ItemModel item) async {
+    // final result = await _cartItemsRepository.update(item);
+    // if (result.isFailure) return Result.failure(result.error!);
+    await Future.delayed(const Duration(seconds: 2));
     return Result.success(null);
   }
 }

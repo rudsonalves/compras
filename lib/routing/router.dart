@@ -1,12 +1,12 @@
-import 'package:compras/data/repositories/items/i_cart_items_repository.dart';
-import 'package:compras/data/repositories/last_price/i_last_price_repository.dart';
-import 'package:compras/data/repositories/products/i_products_repository.dart';
-import 'package:compras/domain/user_cases/shopping_cart_user_case.dart';
-import 'package:compras/ui/view/cart_shopping/add_product_cart/add_product_cart_view.dart';
-import 'package:compras/ui/view/cart_shopping/add_product_cart/add_product_cart_view_model.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '/data/repositories/items/i_cart_items_repository.dart';
+import '/data/repositories/last_price/i_last_price_repository.dart';
+import '/data/repositories/products/i_products_repository.dart';
+import '/domain/user_cases/shopping_cart_user_case.dart';
+import '/ui/view/cart_shopping/add_product_cart/add_product_cart_view.dart';
+import '/ui/view/cart_shopping/add_product_cart/add_product_cart_view_model.dart';
 import '/domain/models/shopping/shopping_model.dart';
 import '/ui/view/home/edit_shopping/edit_shopping_view.dart';
 import '/ui/view/home/edit_shopping/edit_shopping_view_model.dart';
@@ -22,7 +22,7 @@ GoRouter router() => GoRouter(
     GoRoute(
       path: Routes.home.path,
       name: Routes.home.name,
-      builder: (ctx, state) => HomeView(
+      builder: (ctx, _) => HomeView(
         viewModel: HomeViewModel(
           shoppingRepository: ctx.read<IShoppingRepository>(),
         ),
@@ -41,30 +41,50 @@ GoRouter router() => GoRouter(
         );
       },
     ),
-    GoRoute(
-      path: Routes.shopping.path,
-      name: Routes.shopping.name,
-      builder: (ctx, state) {
+    ShellRoute(
+      builder: (ctx, state, child) {
         final shopping = state.extra as ShoppingModel;
-        return CartShoppingView(
+
+        final userCase = ShoppingCartUserCase(
           shopping: shopping,
-          viewModel: CartShoppingViewModel(
-            ShoppingCartUserCase(
-              shopping: shopping,
-              productsRepository: ctx.read<IProductsRepository>(),
-              cartItemsRepository: ctx.read<ICartItemsRepository>(),
-              lastPriceRepository: ctx.read<ILastPriceRepository>(),
-            ),
-          ),
+          productsRepository: ctx.read<IProductsRepository>(),
+          cartItemsRepository: ctx.read<ICartItemsRepository>(),
+          lastPriceRepository: ctx.read<ILastPriceRepository>(),
+        );
+
+        return Provider<ShoppingCartUserCase>.value(
+          value: userCase,
+          builder: (ctx, state) => child,
         );
       },
-    ),
-    GoRoute(
-      path: Routes.addProductCart.path,
-      name: Routes.addProductCart.name,
-      builder: (ctx, state) => AddProductCartView(
-        viewModel: AddProductCartViewModel(),
-      ),
+      routes: [
+        GoRoute(
+          path: Routes.shopping.path,
+          name: Routes.shopping.name,
+          builder: (ctx, state) {
+            final shopping = state.extra as ShoppingModel;
+
+            final userCase = ctx.read<ShoppingCartUserCase>();
+
+            return CartShoppingView(
+              shopping: shopping,
+              viewModel: CartShoppingViewModel(userCase),
+            );
+          },
+          routes: [
+            GoRoute(
+              path: Routes.addProductCart.path,
+              name: Routes.addProductCart.name,
+              builder: (ctx, _) {
+                final userCase = ctx.read<ShoppingCartUserCase>();
+                return AddProductCartView(
+                  viewModel: AddProductCartViewModel(userCase),
+                );
+              },
+            ),
+          ],
+        ),
+      ],
     ),
   ],
 );

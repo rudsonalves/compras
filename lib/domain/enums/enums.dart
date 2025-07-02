@@ -13,8 +13,8 @@ enum ShoppingType {
 }
 
 enum SaleBy {
-  byUnit('por Unidade'),
-  byWeight('por Peso');
+  unit('Unidade'),
+  weight('Peso');
 
   final String label;
   const SaleBy(this.label);

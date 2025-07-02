@@ -49,6 +49,9 @@ class _CartShoppingViewState extends State<CartShoppingView> {
   }
 
   void _addProductCart() {
-    context.push(Routes.addProductCart.path);
+    context.push(
+      '${Routes.shopping.path}/${Routes.addProductCart.path}',
+      extra: widget.shopping,
+    );
   }
 }

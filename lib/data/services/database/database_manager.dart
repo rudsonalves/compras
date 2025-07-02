@@ -1,7 +1,10 @@
 import 'dart:developer';
 
+import 'package:compras/domain/models/category/category_model.dart';
+import 'package:compras/domain/models/sub_category/sub_category_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 import '/data/services/database/tables/sql_configurations.dart';
 import '/data/services/database/tables/sql_tables.dart';
@@ -48,12 +51,18 @@ class DatabaseManager {
     batch.execute(SqlTables.products);
     batch.execute(SqlTables.items);
     batch.execute(SqlTables.lastPrices);
+    batch.execute(SqlTables.categories);
+    batch.execute(SqlTables.subCategories);
     // Indexes
     batch.execute(SqlTables.productNameIndex);
     batch.execute(SqlTables.productBarCodeIndex);
     batch.execute(SqlTables.lastPriceIndex);
+    batch.execute(SqlTables.categoriesIndex);
+    batch.execute(SqlTables.subCategoriesIndex);
 
     await batch.commit();
+
+    await _populateCategoriesTables(db);
   }
 
   void _onUpgrade(Database db, int oldVersion, int newVersion) {
@@ -70,5 +79,38 @@ class DatabaseManager {
 
   Future<void> close() async {
     if (_database != null) await _database!.close();
+  }
+
+  Future<void> _populateCategoriesTables(Database db) async {
+    log('Populating categories tables');
+
+    final uuid = const Uuid();
+
+    for (final categoryName in categories.keys) {
+      final categoryId = uuid.v4();
+      final category = CategoryModel(id: categoryId, name: categoryName);
+
+      await db.insert(
+        Tables.categories,
+        category.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      final subCategoriesNames = categories[categoryName]!;
+
+      for (final subCategoryName in subCategoriesNames) {
+        final subCategoryId = uuid.v4();
+        final subCategory = SubCategoryModel(
+          id: subCategoryId,
+          categoryId: categoryId,
+          name: subCategoryName,
+        );
+        await db.insert(
+          Tables.subCategories,
+          subCategory.toJson(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+    }
   }
 }

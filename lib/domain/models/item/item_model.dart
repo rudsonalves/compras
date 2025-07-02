@@ -1,5 +1,6 @@
-import 'package:compras/domain/models/sqlite_helpers.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '/domain/enums/enums.dart';
 
 part 'item_model.freezed.dart';
 part 'item_model.g.dart';
@@ -9,13 +10,7 @@ abstract class ItemModel with _$ItemModel {
   const factory ItemModel({
     @JsonKey(name: 'shopping_id') required String shoppingId,
     @JsonKey(name: 'product_id') required String productId,
-    @Default(true)
-    @JsonKey(
-      name: 'is_unit_price',
-      fromJson: SqliteHelpers.intToBool,
-      toJson: SqliteHelpers.boolToInt,
-    )
-    bool isUnitPrice,
+    @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
     @JsonKey(name: 'unit_price') required int unitPrince,
     @Default(1) int quantity,
     @JsonKey(name: 'created_at') DateTime? createdAt,
@@ -24,7 +19,7 @@ abstract class ItemModel with _$ItemModel {
   factory ItemModel.create({
     required String shoppingId,
     required String productId,
-    bool isUnitPrice = true,
+    SaleBy saleBy = SaleBy.unit,
     required int unitPrince,
     int quantity = 1,
   }) {
@@ -32,7 +27,7 @@ abstract class ItemModel with _$ItemModel {
     return ItemModel(
       shoppingId: shoppingId,
       productId: productId,
-      isUnitPrice: isUnitPrice,
+      saleBy: saleBy,
       unitPrince: unitPrince,
       quantity: quantity,
       createdAt: now,

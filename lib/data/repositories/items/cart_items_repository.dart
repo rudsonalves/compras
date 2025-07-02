@@ -15,7 +15,6 @@ class CartItemsRepository extends ChangeNotifier
   CartItemsRepository(this._dbService);
 
   final Map<String, ItemModel> _items = {}; // indexed by productId
-  bool _isInitialized = false;
   String _shoppingId = '';
 
   @override
@@ -29,9 +28,7 @@ class CartItemsRepository extends ChangeNotifier
 
   @override
   Future<Result<void>> initialize(String shoppingId) async {
-    if (_isInitialized) return Result.success(null);
-
-    _isInitialized = true;
+    if (_shoppingId == shoppingId) return Result.success(null);
     _shoppingId = shoppingId;
 
     final result = await fetchAll(shoppingId);

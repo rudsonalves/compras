@@ -1,4 +1,4 @@
-import 'package:compras/domain/models/sqlite_helpers.dart';
+import 'package:compras/domain/enums/enums.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -13,13 +13,9 @@ abstract class ProductDto with _$ProductDto {
     required String name,
     required String description,
     @JsonKey(name: 'bar_code') required String barCode,
-    @Default(true)
-    @JsonKey(
-      name: 'is_unit_price',
-      fromJson: SqliteHelpers.intToBool,
-      toJson: SqliteHelpers.boolToInt,
-    )
-    bool isUnitPrice,
+    @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
+    String? category,
+    String? subcategory,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ProductDto;
@@ -28,7 +24,9 @@ abstract class ProductDto with _$ProductDto {
     required String name,
     required String description,
     required String barCode,
-    bool isUnitPrice = true,
+    SaleBy saleBy = SaleBy.unit,
+    String? category,
+    String? subcategory,
   }) {
     final now = DateTime.now();
 
@@ -36,7 +34,9 @@ abstract class ProductDto with _$ProductDto {
       name: name,
       description: description,
       barCode: barCode,
-      isUnitPrice: isUnitPrice,
+      saleBy: saleBy,
+      category: category,
+      subcategory: subcategory,
       createdAt: now,
       updatedAt: now,
     );
