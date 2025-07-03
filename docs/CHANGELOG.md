@@ -2,6 +2,85 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/03 last_price_repository-08 - by rudsonalves
+
+### Enhance category repo, add QR scanner flow, and rename number controller
+
+This update improves subcategory loading by ID, integrates a QR code scanner into the “Add Product” workflow, and standardizes numeric input handling. It refactors product DTO/model fields to use `category_id` and `sub_category_id`, injects new commands into the view model, and adds utility and scanner view files.
+
+### Modified Files
+
+* **Makefile**
+
+  * Added `run_build_runner_watch` target and swapped its behavior with `run_build_runner`.
+
+* **lib/config/dependencies.dart**
+
+  * Registered `ICategoryRepository` with `CategoryRepository(dbService)`.
+
+* **lib/data/repositories/category/category\_repository.dart**
+
+  * Introduced `_loadsCategoryIds` to avoid redundant subcategory fetches.
+  * Removed unnecessary clearing of `_subCategories`.
+  * Added `fetchSubCategory(String)` to load a single subcategory by ID.
+  * Moved and documented `_findCategoryId` and `_findSubCategoryId` helper methods.
+
+* **lib/data/repositories/category/i\_category\_repository.dart**
+
+  * Extended interface with `fetchSubCategory` declaration and detailed DartDoc for each method.
+
+* **lib/domain/dto/product/product\_dto.dart**
+
+  * Renamed `category` → `@JsonKey('category_id') categoryId` and `subcategory` → `@JsonKey('sub_category_id') subCategoryId`.
+
+* **lib/domain/models/product/product\_model.dart**
+
+  * Updated model fields to match DTO: `categoryId` and `subCategoryId`.
+
+* **lib/domain/user\_cases/shopping\_cart\_user\_case.dart**
+
+  * Injected `ICategoryRepository`.
+  * Added `findProductByBarCode` and `getSubCategory` methods to support lookup by barcode and subcategory retrieval.
+
+* **lib/routing/router.dart**
+
+  * Provided `categoryRepository` to `ShoppingCartUserCase`.
+  * Added `GoRoute` for the scanner view.
+  * Imported `QrCodeScannerView`.
+
+* **lib/routing/routes.dart**
+
+  * Declared new `scanner` route constant.
+
+* **lib/ui/core/ui/editing\_controllers/number\_editing\_controller.dart**
+
+  * Renamed from `currency_editing_controller.dart` to `number_editing_controller.dart`.
+  * Changed regex to allow digits only and renamed `currencyValue` → `numberValue`.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Integrated snack bar feedback and GoRouter push to the scanner route.
+  * Added listener for `findProductByBarCode`, showing a loading dialog and populating fields on success.
+  * Captured scanned code and triggered barcode lookup.
+  * Stored `categoryId`/`subCategoryId` for subsequent subcategory fetch.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\_model.dart**
+
+  * Added `findProductByBarCode` and `getSubCategory` `Command1` instances.
+
+### New Files
+
+* **lib/ui/view/scanner\_barcode/scanner\_barcode\_view\.dart**
+  Implements a full-screen QR/barcode scanner using `mobile_scanner`, returning the scanned value on pop.
+
+* **lib/utils/extensions/list\_equality.dart**
+  Provides `ListEquality` for deep list comparisons, copied from the Dart `collection` package.
+
+### Conclusion
+
+With these changes, the app now supports barcode-driven product lookup, efficient subcategory fetching, and a unified numeric input controller, ensuring a smoother “Add Product” experience.
+
+
 ## 2025/07/02 last_price_repository-07 - by rudsonalves
 
 ### Implement category management layer and enrich DatabaseService documentation

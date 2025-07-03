@@ -1,3 +1,5 @@
+import 'package:compras/data/repositories/category/i_category_repository.dart';
+import 'package:compras/ui/view/scanner_barcode/scanner_barcode_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -50,6 +52,7 @@ GoRouter router() => GoRouter(
           productsRepository: ctx.read<IProductsRepository>(),
           cartItemsRepository: ctx.read<ICartItemsRepository>(),
           lastPriceRepository: ctx.read<ILastPriceRepository>(),
+          categoryRepository: ctx.read<ICategoryRepository>(),
         );
 
         return Provider<ShoppingCartUserCase>.value(
@@ -85,6 +88,11 @@ GoRouter router() => GoRouter(
           ],
         ),
       ],
+    ),
+    GoRoute(
+      path: Routes.scanner.path,
+      name: Routes.scanner.name,
+      builder: (ctx, _) => QrCodeScannerView(),
     ),
   ],
 );

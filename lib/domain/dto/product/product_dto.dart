@@ -15,8 +15,8 @@ abstract class ProductDto with _$ProductDto {
     required String description,
     @JsonKey(name: 'bar_code') required String barCode,
     @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
-    String? category,
-    String? subcategory,
+    @JsonKey(name: 'category_id') String? categoryId,
+    @JsonKey(name: 'sub_category_id') String? subCategoryId,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ProductDto;
@@ -26,8 +26,8 @@ abstract class ProductDto with _$ProductDto {
     required String description,
     required String barCode,
     SaleBy saleBy = SaleBy.unit,
-    String? category,
-    String? subcategory,
+    String? categoryId,
+    String? subCategoryId,
   }) {
     final now = DateTime.now();
 
@@ -36,8 +36,8 @@ abstract class ProductDto with _$ProductDto {
       description: description,
       barCode: barCode,
       saleBy: saleBy,
-      category: category,
-      subcategory: subcategory,
+      categoryId: categoryId,
+      subCategoryId: subCategoryId,
       createdAt: now,
       updatedAt: now,
     );

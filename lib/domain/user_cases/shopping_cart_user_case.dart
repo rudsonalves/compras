@@ -1,5 +1,7 @@
-import 'package:compras/domain/models/item/item_model.dart';
-
+import '/data/repositories/category/i_category_repository.dart';
+import '/domain/models/item/item_model.dart';
+import '/domain/models/product/product_model.dart';
+import '/domain/models/sub_category/sub_category_model.dart';
 import '/domain/models/shopping/shopping_model.dart';
 import '/utils/result.dart';
 import '/data/repositories/items/i_cart_items_repository.dart';
@@ -11,16 +13,19 @@ class ShoppingCartUserCase {
   final IProductsRepository _productsRepository;
   final ICartItemsRepository _cartItemsRepository;
   final ILastPriceRepository _lastPriceRepository;
+  final ICategoryRepository _categoryRepository;
 
   ShoppingCartUserCase({
     required ShoppingModel shopping,
     required IProductsRepository productsRepository,
     required ICartItemsRepository cartItemsRepository,
     required ILastPriceRepository lastPriceRepository,
+    required ICategoryRepository categoryRepository,
   }) : _shopping = shopping,
        _productsRepository = productsRepository,
        _cartItemsRepository = cartItemsRepository,
-       _lastPriceRepository = lastPriceRepository;
+       _lastPriceRepository = lastPriceRepository,
+       _categoryRepository = categoryRepository;
 
   ICartItemsRepository get cartItemsRepository => _cartItemsRepository;
 
@@ -49,5 +54,19 @@ class ShoppingCartUserCase {
     // if (result.isFailure) return Result.failure(result.error!);
     await Future.delayed(const Duration(seconds: 2));
     return Result.success(null);
+  }
+
+  Future<Result<ProductModel?>> findProductByBarCode(String barCode) async {
+    // final result = await _productsRepository.(barCode);
+    // if (result.isFailure) return Result.failure(result.error!);
+    await Future.delayed(const Duration(seconds: 2));
+    return Result.success(null);
+  }
+
+  Future<Result<SubCategoryModel>> getSubCategory(
+    String subCategoryId,
+  ) async {
+    final result = await _categoryRepository.fetchSubCategory(subCategoryId);
+    return result;
   }
 }

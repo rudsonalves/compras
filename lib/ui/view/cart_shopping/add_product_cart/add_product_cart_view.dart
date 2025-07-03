@@ -1,10 +1,14 @@
+import 'package:compras/routing/routes.dart';
+import 'package:compras/ui/core/ui/dialogs/app_snack_bar.dart';
+import 'package:compras/utils/result.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '/ui/core/ui/buttons/big_button.dart';
 import '/domain/enums/enums.dart';
 import '/ui/core/themes/dimens.dart';
-import '/ui/core/ui/editing_controllers/currency_editing_controller.dart';
+import '../../../core/ui/editing_controllers/number_editing_controller.dart';
 import '/ui/core/ui/form_fields/basic_form_field.dart';
 import '/ui/core/ui/form_fields/enum_form_field.dart';
 import '/ui/view/cart_shopping/add_product_cart/add_product_cart_view_model.dart';
@@ -26,25 +30,31 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   final _barCodeController = TextEditingController();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _priceController = CurrencyEditingController();
-  final _quantityController = CurrencyEditingController(decimalDigits: 0);
-  final _weightController = CurrencyEditingController(decimalDigits: 3);
+  final _priceController = NumberEditingController();
+  final _quantityController = NumberEditingController(decimalDigits: 0);
+  final _weightController = NumberEditingController(decimalDigits: 3);
   final _categoryController = TextEditingController();
   final _subCategoryController = TextEditingController();
 
   final _saleBy = ValueNotifier<SaleBy>(SaleBy.unit);
+  String? _categoryId;
+  String? _subCategoryId;
 
   @override
   void initState() {
     _viewModel = widget.viewModel;
 
-    _quantityController.currencyValue = 1;
+    _viewModel.findProductByBarCode.addListener(_findProduct);
+
+    _quantityController.numberValue = 1;
 
     super.initState();
   }
 
   @override
   void dispose() {
+    _viewModel.findProductByBarCode.removeListener(_findProduct);
+
     _barCodeController.dispose();
     _nameController.dispose();
     _descriptionController.dispose();
@@ -62,7 +72,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Adicinar Produto'),
+        title: const Text('Adicionar Produto'),
         centerTitle: true,
         elevation: 5,
         leading: IconButton(
@@ -145,7 +155,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
                         validator: (_) => GenericValidations.notZero(
-                          _priceController.currencyValue,
+                          _priceController.numberValue,
                         ),
                       ),
                     ),
@@ -166,7 +176,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                                 icon: Icon(Symbols.remove_rounded),
                               ),
                               validator: (_) => GenericValidations.notZero(
-                                _quantityController.currencyValue,
+                                _quantityController.numberValue,
                               ),
                             )
                           : BasicFormField(
@@ -177,7 +187,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                               controller: _weightController,
                               keyboardType: TextInputType.number,
                               validator: (_) => GenericValidations.notZero(
-                                _weightController.currencyValue,
+                                _weightController.numberValue,
                               ),
                             ),
                     ),
@@ -207,6 +217,52 @@ class _AddProductCartViewState extends State<AddProductCartView> {
     );
   }
 
+  void _findProduct() {
+    if (_viewModel.findProductByBarCode.running) {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.black54,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+      return;
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+
+      final result = _viewModel.findProductByBarCode.result!;
+      switch (result) {
+        case Success():
+          final product = result.value;
+          if (product != null) {
+            _categoryId = product.categoryId;
+            _subCategoryId = product.subCategoryId;
+
+            // pegar categoria e subcategoria
+            if (_categoryId != null) {
+              _viewModel.getSubCategory.execute(_subCategoryId!);
+            }
+
+            _nameController.text = product.name;
+            _descriptionController.text = product.description;
+          }
+          break;
+        case Failure():
+          AppSnackBar.showBottom(
+            context,
+            title: 'Erro',
+            iconTitle: Symbols.error_rounded,
+            isError: true,
+            message: 'Ocorreu um erro ao buscar o produto.',
+          );
+          break;
+      }
+    }
+  }
+
   void _toggleSaleType(SaleBy? value) {
     _saleBy.value = _saleBy.value == SaleBy.unit ? SaleBy.weight : SaleBy.unit;
   }
@@ -217,16 +273,28 @@ class _AddProductCartViewState extends State<AddProductCartView> {
     }
   }
 
-  void _barcodeScanner() {}
+  Future<void> _barcodeScanner() async {
+    try {
+      final response = await context.push(Routes.scanner.path);
+      if (response == null) return;
+
+      _barCodeController.text = response as String;
+
+      // busca produto pelo código de barras
+      _viewModel.findProductByBarCode.execute(_barCodeController.text);
+    } catch (err) {
+      debugPrint(err.toString());
+    }
+  }
 
   void _addQuantity() {
-    final value = _quantityController.currencyValue;
-    _quantityController.currencyValue = value + 1;
+    final value = _quantityController.numberValue;
+    _quantityController.numberValue = value + 1;
   }
 
   void _removeQuantity() {
-    final value = _quantityController.currencyValue;
+    final value = _quantityController.numberValue;
     if (value <= 1) return;
-    _quantityController.currencyValue = value - 1;
+    _quantityController.numberValue = value - 1;
   }
 }

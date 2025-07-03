@@ -15,6 +15,8 @@ class CategoryRepository implements ICategoryRepository {
 
   final Map<String, CategoryModel> _categories = {};
   final Map<String, SubCategoryModel> _subCategories = {};
+  final List<String> _loadsCategoryIds = [];
+
   String? _categoryId;
   bool _isInitialized = false;
 
@@ -74,7 +76,6 @@ class CategoryRepository implements ICategoryRepository {
       return Result.success(subCategories);
     }
 
-    _subCategories.clear();
     _categoryId = categoryId;
 
     final result = await _dbService.fetchAll<SubCategoryModel>(
@@ -86,10 +87,36 @@ class CategoryRepository implements ICategoryRepository {
 
     switch (result) {
       case Success(:final value):
+        _loadsCategoryIds.add(categoryId);
         for (var subCategory in value) {
           _subCategories[subCategory.id] = subCategory;
         }
         return Result.success(subCategories);
+
+      case Failure(:final error):
+        log('Error fetching subCategories: $error');
+        return Result.failure(error);
+    }
+  }
+
+  @override
+  Future<Result<SubCategoryModel>> fetchSubCategory(
+    String subCategoryId,
+  ) async {
+    if (_subCategories.containsKey(subCategoryId)) {
+      return Result.success(_subCategories[subCategoryId]!);
+    }
+
+    final result = await _dbService.fetchById<SubCategoryModel>(
+      Tables.subCategories,
+      fromMap: SubCategoryModel.fromJson,
+      id: subCategoryId,
+    );
+
+    switch (result) {
+      case Success(value: final subCategory):
+        _subCategories[subCategoryId] = subCategory;
+        return Result.success(subCategory);
 
       case Failure(:final error):
         log('Error fetching subCategories: $error');
@@ -122,16 +149,6 @@ class CategoryRepository implements ICategoryRepository {
     }
   }
 
-  String? _findCategoryId(String name) {
-    for (final category in categories) {
-      if (category.name == name) {
-        return category.id;
-      }
-    }
-
-    return null;
-  }
-
   @override
   Future<Result<SubCategoryModel>> insertSubCategory(SubCategoryDto dto) async {
     if (await _findSubCategoryId(dto.categoryId, dto.name) != null) {
@@ -153,20 +170,6 @@ class CategoryRepository implements ICategoryRepository {
         log('Error inserting subCategory: $error');
         return Result.failure(error);
     }
-  }
-
-  Future<String?> _findSubCategoryId(String categoryId, String name) async {
-    if (_categoryId != categoryId) {
-      await fetchSubCategories(categoryId);
-    }
-
-    for (final subCategory in subCategories) {
-      if (subCategory.name == name) {
-        return subCategory.id;
-      }
-    }
-
-    return null;
   }
 
   @override
@@ -245,5 +248,51 @@ class CategoryRepository implements ICategoryRepository {
         log('Error deleting subCategory: $error');
         return Result.failure(error);
     }
+  }
+
+  /// Finds the ID of a category by its name.
+  ///
+  /// Iterates through the list of categories and returns the
+  /// ID of the category that matches the given name. If no
+  /// category with the specified name is found, returns null.
+  ///
+  /// [name] is the name of the category to search for.
+  ///
+  /// Returns a [String] representing the category ID if found,
+  /// otherwise returns null.
+  String? _findCategoryId(String name) {
+    for (final category in categories) {
+      if (category.name == name) {
+        return category.id;
+      }
+    }
+
+    return null;
+  }
+
+  /// Finds the ID of a subcategory by its name and category ID.
+  ///
+  /// Iterates through the list of subcategories associated with the given category
+  /// and returns the ID of the subcategory that matches the given name. If no
+  /// subcategory with the specified name is found, returns null.
+  ///
+  /// [categoryId] is the category ID of the subcategory to search for.
+  ///
+  /// [name] is the name of the subcategory to search for.
+  ///
+  /// Returns a [String] representing the subcategory ID if found, otherwise
+  /// returns null.
+  Future<String?> _findSubCategoryId(String categoryId, String name) async {
+    if (_categoryId != categoryId) {
+      await fetchSubCategories(categoryId);
+    }
+
+    for (final subCategory in subCategories) {
+      if (subCategory.name == name) {
+        return subCategory.id;
+      }
+    }
+
+    return null;
   }
 }
