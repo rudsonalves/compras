@@ -2,6 +2,113 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/04 last_price_repository-09 - rudsonalves
+
+### Refactor repo structure, add CartItemDto and SuggestionTextField
+
+This commit reorganizes the cart items repository paths, enriches category and product repository interfaces and implementations, and introduces robust error handling in the database layer. It also adds a new `CartItemDto` for decoupling item creation from domain models, enhances the `ProductDto` and `ProductModel` to support category metadata, and implements a `SuggestionTextField` component for improved category/subcategory selection in the UI.
+
+### Modified Files
+
+* **docs/Diagrama\_de\_Classes.drawio**
+
+  * Updated Draw\.io file to the latest version metadata.
+
+* **lib/config/dependencies.dart**
+
+  * Adjusted import paths for `cart_items` repositories.
+  * Initialized `CategoryRepository` before providing it.
+  * Replaced inline provider creation with the pre-initialized `categoryRepository` instance.
+
+* **lib/data/repositories/cart\_items/**
+
+  * Renamed `items/cart_items_repository.dart` and `items/i_cart_items_repository.dart` to `cart_items/cart_items_repository.dart` and `cart_items/i_cart_items_repository.dart`.
+
+* **lib/data/repositories/category/category\_repository.dart**
+
+  * Renamed `fetchCategories` → `fetchAllCategories` and `fetchSubCategories` → `fetchAllSubCategories`.
+  * Removed single `_categoryId` field in favor of a `_loadsCategoryIds` cache list.
+  * Added `category(String)` getter, `getSubCategory(...)` async lookup, and private helper `_subCategoriesList(...)`.
+  * Updated `updateSubCategory` signature casing.
+  * Streamlined subcategory caching logic.
+
+* **lib/data/repositories/category/i\_category\_repository.dart**
+
+  * Updated interface to match renamed methods: `fetchAllCategories`, `fetchAllSubCategories`.
+  * Added getters `subCategories`, `getSubCategory(...)`, and `category(String)`.
+
+* **lib/data/repositories/products/i\_products\_repository.dart**
+
+  * Added `fetchByBarCode(String barCode)` to interface.
+
+* **lib/data/repositories/products/products\_repository.dart**
+
+  * Implemented `fetchByBarCode` with filter query and in-memory caching.
+
+* **lib/data/services/database/database\_service.dart**
+
+  * Imported `RecordNotFoundException`.
+  * Replaced all generic `Exception('No record found…')` throws with `RecordNotFoundException` for consistency.
+
+* **lib/data/services/database/tables/sql\_tables.dart**
+
+  * Added `categoryName` and `subCategoryName` columns to `ProductColumns` and SQL table schema.
+
+* **lib/domain/dto/product/product\_dto.dart**
+
+  * Imported `ProductModel`.
+  * Added `category` and `subCategory` fields.
+  * Introduced `isEqualModel` method to compare DTO and model.
+
+* **lib/domain/models/product/product\_model.dart**
+
+  * Added `category` and `subCategory` fields and updated JSON serialization in `.g.dart`.
+
+* **lib/domain/user\_cases/shopping\_cart\_user\_case.dart**
+
+  * Updated imports to new `cart_items` path.
+  * Exposed `categories` and `subCategories` getters.
+  * Implemented `findProductByBarCode` to fetch the product and preload subcategories.
+  * Renamed and added helper methods for subcategory fetching.
+
+* **lib/routing/router.dart**
+
+  * Updated import for cart items repository.
+  * Changed AddProductCart route builder to accept `ShoppingModel` via `state.extra`.
+
+* **lib/ui/core/ui/form\_fields/basic\_form\_field.dart**
+
+  * Added `errorText`, `labelStyle`, `onFieldSubmitted`, `initialValue` parameters.
+  * Wired `initialValue`, `errorText`, `labelStyle` into `InputDecoration` and field callbacks.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Switched to `SugestionTextField` for category/subcategory input.
+  * Added `ShoppingModel` to widget constructor and route passing.
+  * Introduced `RecordNotFoundException`–based UI messaging.
+  * Updated save logic to build `CartItemDto`.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\_model.dart**
+
+  * Switched save command to accept `CartItemDto`.
+  * Added `fetchAllSubcategories` command.
+  * Implemented product creation/update before item save.
+
+* **lib/ui/view/cart\_shopping/cart\_shopping\_view\_model.dart**
+
+  * Updated import path for cart items repository.
+
+### New Files
+
+* **lib/data/services/exceptions/exceptions.dart** — Defines `RecordNotFoundException` for clearer error handling.
+* **lib/domain/dto/cart\_item\_dto/cart\_item\_dto.dart** — Freezed DTO for cart item creation.
+* **lib/ui/core/ui/form\_fields/sugestion\_text\_field.dart** — New auto-complete text field for suggestion-based input.
+
+### Conclusions
+
+All changes are complete and the system remains fully functional.
+
+
 ## 2025/07/03 last_price_repository-08 - by rudsonalves
 
 ### Enhance category repo, add QR scanner flow, and rename number controller

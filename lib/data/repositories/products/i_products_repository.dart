@@ -13,6 +13,8 @@ abstract class IProductsRepository {
 
   Future<Result<ProductModel>> fetch(String id);
 
+  Future<Result<ProductModel>> fetchByBarCode(String barCode);
+
   Future<Result<ProductModel>> update(ProductModel product);
 
   Future<Result<void>> delete(String id);

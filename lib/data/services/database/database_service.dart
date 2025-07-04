@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:compras/data/services/exceptions/exceptions.dart';
 import 'package:compras/utils/result.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
@@ -38,7 +39,7 @@ class DatabaseService {
         whereArgs: [id],
       );
 
-      if (results.isEmpty) throw Exception('No record found with id: $id');
+      if (results.isEmpty) throw RecordNotFoundException('with id $id');
 
       return Result.success(fromMap(results.first));
     } on Exception catch (err, stack) {
@@ -85,7 +86,7 @@ class DatabaseService {
       );
 
       if (results.isEmpty) {
-        throw Exception('No record found with filter: $filter');
+        throw RecordNotFoundException('with filter $filter');
       }
 
       return Result.success(fromMap(results.first));
@@ -248,7 +249,7 @@ class DatabaseService {
         whereArgs: [id],
       );
 
-      if (count == 0) throw Exception('No record found with id: $id');
+      if (count == 0) throw RecordNotFoundException('with id $id');
 
       return Result.success(null);
     } on Exception catch (err, stack) {
@@ -288,7 +289,7 @@ class DatabaseService {
         whereArgs: filterArgs,
       );
 
-      if (count == 0) throw Exception('No record found with filter: $filter');
+      if (count == 0) throw RecordNotFoundException('with filter $filter');
 
       return Result.success(null);
     } on Exception catch (err, stack) {
@@ -321,7 +322,7 @@ class DatabaseService {
         whereArgs: [id],
       );
 
-      if (count == 0) throw Exception('No record found with id: $id');
+      if (count == 0) throw RecordNotFoundException('with id $id');
 
       return Result.success(null);
     } on Exception catch (err, stack) {
@@ -357,7 +358,7 @@ class DatabaseService {
         whereArgs: filterArgs,
       );
 
-      if (count == 0) throw Exception('No record found with filter: $filter');
+      if (count == 0) throw RecordNotFoundException('with filter $filter');
 
       return Result.success(null);
     } on Exception catch (err, stack) {

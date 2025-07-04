@@ -5,6 +5,16 @@ import '/utils/result.dart';
 
 abstract class ICategoryRepository {
   List<CategoryModel> get categories;
+  List<SubCategoryModel> get subCategories;
+
+  Future<SubCategoryModel?> getSubCategory(
+    String subCategoryId,
+    String categoryId,
+  );
+
+  /// Returns a category associated with the given [categoryId].
+  /// If the category ID is not found, an null value is returned.
+  CategoryModel? category(String categoryId);
 
   /// Initializes the category repository by fetching all categories from the
   /// database.
@@ -29,7 +39,7 @@ abstract class ICategoryRepository {
   /// if the fetch operation is successful.
   /// Throws an exception if an error occurs while performing the fetch
   /// operation.
-  Future<Result<List<CategoryModel>>> fetchCategories();
+  Future<Result<List<CategoryModel>>> fetchAllCategories();
 
   /// Fetches a list of subcategories from the database, associated with a given
   /// category.
@@ -43,7 +53,9 @@ abstract class ICategoryRepository {
   /// Returns a [Result] containing a list of instances of type
   /// [SubCategoryModel] if the fetch operation is successful. Throws an
   /// exception if an error occurs while performing the fetch operation.
-  Future<Result<List<SubCategoryModel>>> fetchSubCategories(String categoryId);
+  Future<Result<List<SubCategoryModel>>> fetchAllSubCategories(
+    String categoryId,
+  );
 
   /// Fetches a single subcategory by its ID from the database.
   ///
@@ -106,7 +118,7 @@ abstract class ICategoryRepository {
   ///
   /// Returns a [Result] containing the updated [SubCategoryModel] if the update
   /// operation is successful, or a [Result] containing an error if it fails.
-  Future<Result<SubCategoryModel>> updatesubCategory(
+  Future<Result<SubCategoryModel>> updateSubCategory(
     SubCategoryModel subCategory,
   );
 

@@ -45,7 +45,9 @@ final class ProductColumns {
   static const String barCode = 'bar_code';
   static const String saleBy = 'sale_by';
   static const String categoryId = 'category_id';
+  static const String categoryName = 'category_name';
   static const String subCategoryId = 'sub_category_id';
+  static const String subCategoryName = 'sub_category_name';
   static const String createdAt = 'created_at';
   static const String updatedAt = 'updated_at';
 }
@@ -94,7 +96,9 @@ final class SqlTables {
         ${ProductColumns.barCode} TEXT NOT NULL,
         ${ItemColumns.saleBy} INTEGER DEFAULT "unit" NOT NULL,
         ${ProductColumns.categoryId} TEXT,
+        ${ProductColumns.categoryName} TEXT,
         ${ProductColumns.subCategoryId} TEXT,
+        ${ProductColumns.subCategoryName} TEXT,
         ${ProductColumns.createdAt} TEXT NOT NULL,
         ${ProductColumns.updatedAt} TEXT NOT NULL,
         FOREIGN KEY (${ProductColumns.categoryId}) 

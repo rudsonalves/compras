@@ -3,7 +3,7 @@ import 'package:compras/ui/view/scanner_barcode/scanner_barcode_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '/data/repositories/items/i_cart_items_repository.dart';
+import '../data/repositories/cart_items/i_cart_items_repository.dart';
 import '/data/repositories/last_price/i_last_price_repository.dart';
 import '/data/repositories/products/i_products_repository.dart';
 import '/domain/user_cases/shopping_cart_user_case.dart';
@@ -78,9 +78,11 @@ GoRouter router() => GoRouter(
             GoRoute(
               path: Routes.addProductCart.path,
               name: Routes.addProductCart.name,
-              builder: (ctx, _) {
+              builder: (ctx, state) {
+                final shopping = state.extra as ShoppingModel;
                 final userCase = ctx.read<ShoppingCartUserCase>();
                 return AddProductCartView(
+                  shopping: shopping,
                   viewModel: AddProductCartViewModel(userCase),
                 );
               },

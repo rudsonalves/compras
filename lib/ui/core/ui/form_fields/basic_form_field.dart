@@ -27,6 +27,10 @@ class BasicFormField extends StatefulWidget {
   final int? maxLines;
   final int? minLines;
   final TextAlign textAlign;
+  final String? errorText;
+  final TextStyle? labelStyle;
+  final void Function(String)? onFieldSubmitted;
+  final String? initialValue;
 
   const BasicFormField({
     super.key,
@@ -55,6 +59,10 @@ class BasicFormField extends StatefulWidget {
     this.maxLines = 1,
     this.minLines,
     this.textAlign = TextAlign.start,
+    this.errorText,
+    this.labelStyle,
+    this.onFieldSubmitted,
+    this.initialValue,
   });
 
   @override
@@ -112,6 +120,7 @@ class _BasicFormFieldState extends State<BasicFormField> {
     return TextFormField(
       autovalidateMode: autoValidate,
       controller: widget.controller,
+      initialValue: widget.initialValue,
       focusNode: widget.focusNode,
       textCapitalization: widget.textCapitalization,
       textInputAction: widget.textInputAction,
@@ -128,6 +137,9 @@ class _BasicFormFieldState extends State<BasicFormField> {
         if (widget.nextFocusNode != null) {
           FocusScope.of(context).requestFocus(widget.nextFocusNode);
         }
+        if (widget.onFieldSubmitted != null) {
+          widget.onFieldSubmitted!(value);
+        }
       },
       decoration: InputDecoration(
         labelText: widget.labelText,
@@ -138,6 +150,8 @@ class _BasicFormFieldState extends State<BasicFormField> {
         prefixIcon: prefixIcon,
         prefixText: widget.prefixText,
         suffixText: widget.suffixText,
+        errorText: widget.errorText,
+        labelStyle: widget.labelStyle,
       ),
     );
   }

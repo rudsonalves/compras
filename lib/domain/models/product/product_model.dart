@@ -17,7 +17,9 @@ abstract class ProductModel with _$ProductModel {
     @JsonKey(name: 'bar_code') required String barCode,
     @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
     @JsonKey(name: 'category_id') String? categoryId,
+    @JsonKey(name: 'category') String? category,
     @JsonKey(name: 'sub_category_id') String? subCategoryId,
+    @JsonKey(name: 'sub_category') String? subCategory,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ProductModel;
@@ -29,7 +31,9 @@ abstract class ProductModel with _$ProductModel {
     required String barCode,
     SaleBy saleBy = SaleBy.unit,
     String? categoryId,
+    String? category,
     String? subCategoryId,
+    String? subCategory,
   }) {
     final now = DateTime.now();
     return ProductModel(
@@ -39,7 +43,9 @@ abstract class ProductModel with _$ProductModel {
       barCode: barCode,
       saleBy: saleBy,
       categoryId: categoryId,
+      category: category,
       subCategoryId: subCategoryId,
+      subCategory: subCategory,
       createdAt: now,
       updatedAt: now,
     );
@@ -52,8 +58,10 @@ abstract class ProductModel with _$ProductModel {
     barCode: dto.barCode,
     saleBy: dto.saleBy,
     categoryId: dto.categoryId,
+    category: dto.category,
     subCategoryId: dto.subCategoryId,
     createdAt: dto.createdAt,
+    subCategory: dto.subCategory,
     updatedAt: dto.updatedAt,
   );
 

@@ -1,14 +1,18 @@
-import 'package:compras/routing/routes.dart';
-import 'package:compras/ui/core/ui/dialogs/app_snack_bar.dart';
-import 'package:compras/utils/result.dart';
+import 'package:compras/domain/models/shopping/shopping_model.dart';
+import 'package:compras/ui/core/ui/form_fields/sugestion_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '/data/services/exceptions/exceptions.dart';
+import '/domain/dto/cart_item_dto/cart_item_dto.dart';
+import '/routing/routes.dart';
+import '/ui/core/ui/dialogs/app_snack_bar.dart';
+import '/utils/result.dart';
 import '/ui/core/ui/buttons/big_button.dart';
 import '/domain/enums/enums.dart';
 import '/ui/core/themes/dimens.dart';
-import '../../../core/ui/editing_controllers/number_editing_controller.dart';
+import '/ui/core/ui/editing_controllers/number_editing_controller.dart';
 import '/ui/core/ui/form_fields/basic_form_field.dart';
 import '/ui/core/ui/form_fields/enum_form_field.dart';
 import '/ui/view/cart_shopping/add_product_cart/add_product_cart_view_model.dart';
@@ -16,8 +20,13 @@ import '/utils/validates/generic_validations.dart';
 
 class AddProductCartView extends StatefulWidget {
   final AddProductCartViewModel viewModel;
+  final ShoppingModel shopping;
 
-  const AddProductCartView({super.key, required this.viewModel});
+  const AddProductCartView({
+    super.key,
+    required this.viewModel,
+    required this.shopping,
+  });
 
   @override
   State<AddProductCartView> createState() => _AddProductCartViewState();
@@ -35,6 +44,9 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   final _weightController = NumberEditingController(decimalDigits: 3);
   final _categoryController = TextEditingController();
   final _subCategoryController = TextEditingController();
+
+  final _subCategoryFocusNode = FocusNode();
+  final _priceFocusNode = FocusNode();
 
   final _saleBy = ValueNotifier<SaleBy>(SaleBy.unit);
   String? _categoryId;
@@ -63,12 +75,16 @@ class _AddProductCartViewState extends State<AddProductCartView> {
     _weightController.dispose();
     _saleBy.dispose();
 
+    _subCategoryFocusNode.dispose();
+    _priceFocusNode.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final dimens = Dimens.of(context);
+    final categoriesNames = _viewModel.categoriesNames;
 
     return Scaffold(
       appBar: AppBar(
@@ -97,31 +113,12 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                   onPressed: _barcodeScanner,
                 ),
               ),
+
               BasicFormField(
                 labelText: 'Nome do Produto',
                 hintText: 'Digite o nome do produto',
                 controller: _nameController,
                 validator: GenericValidations.name,
-              ),
-              Row(
-                spacing: dimens.spacingHorizontal,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: BasicFormField(
-                      labelText: 'Categoria',
-                      hintText: 'Selecione uma categoria para o produto',
-                      controller: _categoryController,
-                    ),
-                  ),
-                  Expanded(
-                    child: BasicFormField(
-                      labelText: 'Sub-Categoria',
-                      hintText: 'Selecione uma sub-categoria para o produto',
-                      controller: _subCategoryController,
-                    ),
-                  ),
-                ],
               ),
 
               BasicFormField(
@@ -130,6 +127,57 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                 controller: _descriptionController,
                 validator: GenericValidations.notEmpty,
               ),
+
+              SugestionTextField(
+                labelText: 'Categoria',
+                hintText: 'Selecione uma categoria para o produto',
+                controller: _categoryController,
+                sugestions: categoriesNames,
+                nextFocusNode: _subCategoryFocusNode,
+                onChanged: _selectCategory,
+              ),
+
+              ListenableBuilder(
+                listenable: _viewModel.fetchAllSubcategories,
+                builder: (context, _) {
+                  final subCategoriesNames = _categoryId == null
+                      ? <String>[]
+                      : _viewModel.subCategoriesNames(
+                          _categoryId!,
+                        );
+                  return SugestionTextField(
+                    focusNode: _subCategoryFocusNode,
+                    nextFocusNode: _priceFocusNode,
+                    labelText: 'Sub-Categoria',
+                    hintText: 'Selecione uma sub-categoria para o produto',
+                    controller: _subCategoryController,
+                    sugestions: subCategoriesNames,
+                    onChanged: _selectSubCategory,
+                  );
+                },
+              ),
+
+              // Row(
+              //   spacing: dimens.spacingHorizontal,
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     Expanded(
+              //       child: SugestionTextField(
+              //         labelText: 'Categoria',
+              //         hintText: 'Selecione uma categoria para o produto',
+              //         controller: _categoryController,
+              //         sugestions: _viewModel.categoriesNames,
+              //       ),
+              //     ),
+              //     Expanded(
+              //       child: BasicFormField(
+              //         labelText: 'Sub-Categoria',
+              //         hintText: 'Selecione uma sub-categoria para o produto',
+              //         controller: _subCategoryController,
+              //       ),
+              //     ),
+              //   ],
+              // ),
               EnumFormField<SaleBy>(
                 title: 'Vendido por',
                 values: SaleBy.values,
@@ -138,6 +186,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                 layout: EnumFormLayout.row,
                 onChanged: _toggleSaleType,
               ),
+
               ValueListenableBuilder(
                 valueListenable: _saleBy,
                 builder: (_, value, __) => Row(
@@ -151,6 +200,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                             : 'Preço por kg',
                         prefixText: value == SaleBy.unit ? 'R\$' : 'R\$/kg',
                         hintText: ' 0,00',
+                        focusNode: _priceFocusNode,
                         controller: _priceController,
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
@@ -159,6 +209,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                         ),
                       ),
                     ),
+
                     Expanded(
                       child: value == SaleBy.unit
                           ? BasicFormField(
@@ -194,6 +245,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                   ],
                 ),
               ),
+
               ListenableBuilder(
                 listenable: Listenable.merge([
                   _viewModel.save,
@@ -217,6 +269,22 @@ class _AddProductCartViewState extends State<AddProductCartView> {
     );
   }
 
+  void _selectCategory(String? value) {
+    if (value == null) return;
+
+    _categoryId = _viewModel.categoryIdFromName(value);
+    if (_categoryId == null) return;
+
+    _viewModel.fetchAllSubcategories.execute(_categoryId!);
+  }
+
+  void _selectSubCategory(String? value) {
+    if (value == null) return;
+
+    _subCategoryId = _viewModel.subCategoryIdFromName(value, _categoryId!);
+    if (_subCategoryId == null) return;
+  }
+
   void _findProduct() {
     if (_viewModel.findProductByBarCode.running) {
       showDialog<void>(
@@ -235,28 +303,46 @@ class _AddProductCartViewState extends State<AddProductCartView> {
 
       final result = _viewModel.findProductByBarCode.result!;
       switch (result) {
-        case Success():
-          final product = result.value;
+        case Success(value: final product):
           if (product != null) {
-            _categoryId = product.categoryId;
-            _subCategoryId = product.subCategoryId;
-
-            // pegar categoria e subcategoria
-            if (_categoryId != null) {
-              _viewModel.getSubCategory.execute(_subCategoryId!);
-            }
-
             _nameController.text = product.name;
             _descriptionController.text = product.description;
+            _categoryController.text = product.category ?? '';
+            _subCategoryController.text = product.subCategory ?? '';
+            _saleBy.value = product.saleBy;
           }
           break;
-        case Failure():
+        case Failure(:final error):
+          final (
+            title,
+            message,
+            duration,
+            isErro,
+            iconTitle,
+          ) = error is RecordNotFoundException
+              ? (
+                  'Produto não Encontrado',
+                  'O produto não foi encontrado no banco de dados.\n'
+                      'Um novo será registrado com os dados informados.',
+                  5,
+                  false,
+                  Symbols.info_rounded,
+                )
+              : (
+                  'Erro ao buscar produto',
+                  'Ocorreu um erro ao buscar o produto.',
+                  3,
+                  true,
+                  Symbols.error_rounded,
+                );
+
           AppSnackBar.showBottom(
             context,
-            title: 'Erro',
+            title: title,
             iconTitle: Symbols.error_rounded,
-            isError: true,
-            message: 'Ocorreu um erro ao buscar o produto.',
+            isError: isErro,
+            message: message,
+            duration: Duration(seconds: duration),
           );
           break;
       }
@@ -268,9 +354,26 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   }
 
   void _saving() {
-    if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
+    if (_formKey.currentState == null ||
+        !_formKey.currentState!.validate() && _viewModel.save.running) {
       return;
     }
+
+    final cartItem = CartItemDto(
+      shoppingId: widget.shopping.id,
+      name: _nameController.text,
+      description: _descriptionController.text,
+      barCode: _barCodeController.text,
+      category: _categoryController.text,
+      subCategory: _subCategoryController.text,
+      saleBy: _saleBy.value,
+      price: (_priceController.numberValue * 100).round(),
+      quantity: _saleBy.value == SaleBy.unit
+          ? (_quantityController.numberValue).round()
+          : (_weightController.numberValue * 1000).round(),
+    );
+
+    _viewModel.save.execute(cartItem);
   }
 
   Future<void> _barcodeScanner() async {

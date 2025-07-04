@@ -17,14 +17,30 @@ class CategoryRepository implements ICategoryRepository {
   final Map<String, SubCategoryModel> _subCategories = {};
   final List<String> _loadsCategoryIds = [];
 
-  String? _categoryId;
   bool _isInitialized = false;
 
   @override
   List<CategoryModel> get categories => List.unmodifiable(_categories.values);
 
+  @override
   List<SubCategoryModel> get subCategories =>
       List.unmodifiable(_subCategories.values);
+
+  @override
+  CategoryModel? category(String categoryId) => _categories[categoryId];
+
+  @override
+  Future<SubCategoryModel?> getSubCategory(
+    String subCategoryId,
+    String categoryId,
+  ) async {
+    if (_subCategories.containsKey(subCategoryId)) {
+      return _subCategories[subCategoryId];
+    }
+
+    await fetchAllSubCategories(categoryId);
+    return _subCategories[subCategoryId];
+  }
 
   @override
   Future<Result<void>> initialize() async {
@@ -32,7 +48,7 @@ class CategoryRepository implements ICategoryRepository {
 
     _isInitialized = true;
 
-    final result = await fetchCategories();
+    final result = await fetchAllCategories();
 
     switch (result) {
       case Success():
@@ -46,7 +62,7 @@ class CategoryRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Result<List<CategoryModel>>> fetchCategories() async {
+  Future<Result<List<CategoryModel>>> fetchAllCategories() async {
     _categories.clear();
 
     final result = await _dbService.fetchAll<CategoryModel>(
@@ -69,14 +85,12 @@ class CategoryRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Result<List<SubCategoryModel>>> fetchSubCategories(
+  Future<Result<List<SubCategoryModel>>> fetchAllSubCategories(
     String categoryId,
   ) async {
-    if (_categoryId == categoryId) {
-      return Result.success(subCategories);
+    if (_loadsCategoryIds.contains(categoryId)) {
+      return Result.success(_subCategoriesList(categoryId));
     }
-
-    _categoryId = categoryId;
 
     final result = await _dbService.fetchAll<SubCategoryModel>(
       Tables.subCategories,
@@ -91,7 +105,7 @@ class CategoryRepository implements ICategoryRepository {
         for (var subCategory in value) {
           _subCategories[subCategory.id] = subCategory;
         }
-        return Result.success(subCategories);
+        return Result.success(_subCategoriesList(categoryId));
 
       case Failure(:final error):
         log('Error fetching subCategories: $error');
@@ -191,13 +205,9 @@ class CategoryRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Result<SubCategoryModel>> updatesubCategory(
+  Future<Result<SubCategoryModel>> updateSubCategory(
     SubCategoryModel subCategory,
   ) async {
-    if (_categoryId != subCategory.categoryId) {
-      await fetchSubCategories(subCategory.categoryId);
-    }
-
     final result = await _dbService.update<SubCategoryModel>(
       Tables.subCategories,
       map: subCategory.toJson(),
@@ -283,11 +293,11 @@ class CategoryRepository implements ICategoryRepository {
   /// Returns a [String] representing the subcategory ID if found, otherwise
   /// returns null.
   Future<String?> _findSubCategoryId(String categoryId, String name) async {
-    if (_categoryId != categoryId) {
-      await fetchSubCategories(categoryId);
+    if (!_loadsCategoryIds.contains(categoryId)) {
+      await fetchAllSubCategories(categoryId);
     }
 
-    for (final subCategory in subCategories) {
+    for (final subCategory in _subCategoriesList(categoryId)) {
       if (subCategory.name == name) {
         return subCategory.id;
       }
@@ -295,4 +305,19 @@ class CategoryRepository implements ICategoryRepository {
 
     return null;
   }
+
+  /// Returns an unmodifiable list of subcategories for a given category ID.
+  ///
+  /// Filters the subcategories by the provided [categoryId] and returns
+  /// an unmodifiable list containing the subcategories that belong to
+  /// that category.
+  ///
+  /// [categoryId] is the ID of the category to filter subcategories by.
+  ///
+  /// Returns a [List<SubCategoryModel>] containing the subcategories associated
+  /// with the specified category ID.
+  List<SubCategoryModel> _subCategoriesList(String categoryId) =>
+      List.unmodifiable(
+        _subCategories.values.where((sc) => sc.categoryId == categoryId),
+      );
 }
