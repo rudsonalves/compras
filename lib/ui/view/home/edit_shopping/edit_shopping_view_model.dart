@@ -1,7 +1,6 @@
 import 'dart:developer';
 
-import 'package:compras/utils/result.dart';
-
+import '/utils/result.dart';
 import '/data/repositories/shopping/i_shopping_repository.dart';
 import '/domain/dto/shopping/shopping_dto.dart';
 import '/domain/models/shopping/shopping_model.dart';

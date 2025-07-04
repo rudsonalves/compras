@@ -1,7 +1,7 @@
-import 'package:compras/domain/models/shopping/shopping_model.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '/domain/models/shopping/shopping_model.dart';
 import '/ui/core/ui/dialogs/app_snack_bar.dart';
 import '/utils/result.dart';
 import '/domain/dto/shopping/shopping_dto.dart';

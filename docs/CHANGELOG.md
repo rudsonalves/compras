@@ -2,6 +2,79 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/04 save_product - rudsonalves
+
+### Refactor imports to use absolute paths
+
+This update standardizes all import statements across the project to use absolute package paths (`/…`) instead of relative or legacy `package:compras/...` forms, improving consistency and simplifying refactoring.
+
+### Modified Files
+
+* **lib/config/dependencies.dart**
+
+  * Swapped `package:compras/data/repositories/...` imports for absolute imports (`/data/repositories/...`).
+
+* **lib/data/services/database/database\_manager.dart**
+
+  * Replaced domain model imports from `package:compras/...` to absolute imports (`/domain/models/...`).
+
+* **lib/data/services/database/database\_service.dart**
+
+  * Updated exception and result utility imports to absolute paths (`/data/services/exceptions/...`, `/utils/result.dart`).
+
+* **lib/domain/dto/last\_price/last\_price\_dto.dart**
+
+  * Changed SQLite helpers import to absolute path (`/domain/models/sqlite_helpers.dart`).
+
+* **lib/domain/models/product/product\_model.dart**
+
+  * Reordered imports: moved `freezed_annotation` import above, and switched `enums.dart` import to absolute path (`/domain/enums/enums.dart`).
+
+* **lib/domain/models/sub\_category/sub\_category\_model.dart**
+
+  * Converted DTO import to absolute path (`/domain/dto/sub_category/sub_category_dto.dart`).
+
+* **lib/routing/router.dart**
+
+  * Updated category repository and scanner view imports to absolute paths (`/data/repositories/category/i_category_repository.dart`, `/ui/view/scanner_barcode/scanner_barcode_view.dart`).
+
+* **lib/ui/core/ui/form\_fields/basic\_form\_field.dart**
+
+  * Switched `dimens.dart` import to absolute path (`/ui/core/themes/dimens.dart`).
+
+* **lib/ui/core/ui/form\_fields/selection\_field.dart**
+
+  * Updated `BasicFormField` import to use absolute path (`/ui/core/ui/form_fields/basic_form_field.dart`).
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Replaced domain model, fonts, and `SelectionField` imports with absolute paths.
+
+* **lib/ui/view/cart\_shopping/cart\_shopping\_view\.dart**
+
+  * Changed `routes.dart` import to absolute path (`/routing/routes.dart`).
+
+* **lib/ui/view/cart\_shopping/cart\_shopping\_view\_model.dart**
+
+  * Updated cart items repository import to absolute path (`/data/repositories/cart_items/i_cart_items_repository.dart`).
+
+* **lib/ui/view/home/edit\_shopping/edit\_shopping\_view\.dart**
+
+  * Added absolute import for `shopping_model.dart`.
+
+* **lib/ui/view/home/edit\_shopping/edit\_shopping\_view\_model.dart**
+
+  * Converted `result.dart` import to absolute path (`/utils/result.dart`).
+
+* **lib/ui/view/home/widgets/shopping\_list\_tile.dart**
+
+  * Updated multiple imports—model, fonts, dismissible container, and extensions—to absolute paths.
+
+### Conclusions
+
+All import statements are now consistent and use absolute package paths, improving maintainability and reducing potential conflicts.
+
+
 ## 2025/07/04 last_price_repository-10 - rudsonalves
 
 ### Introduce SelectionField and refine form components and cart UI

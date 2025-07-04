@@ -1,5 +1,6 @@
-import 'package:compras/ui/core/ui/form_fields/basic_form_field.dart';
 import 'package:flutter/material.dart';
+
+import '/ui/core/ui/form_fields/basic_form_field.dart';
 
 class SelectionField extends StatelessWidget {
   final String labelText;

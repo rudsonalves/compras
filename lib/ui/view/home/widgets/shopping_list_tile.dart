@@ -1,9 +1,10 @@
-import 'package:compras/domain/models/shopping/shopping_model.dart';
-import 'package:compras/ui/core/themes/fonts.dart';
-import 'package:compras/ui/core/ui/dismissibles/dismissible_container.dart';
-import 'package:compras/utils/extensions/date_time_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+
+import '/domain/models/shopping/shopping_model.dart';
+import '/ui/core/themes/fonts.dart';
+import '/ui/core/ui/dismissibles/dismissible_container.dart';
+import '/utils/extensions/date_time_extensions.dart';
 
 class ShoppingListTile extends StatelessWidget {
   final ShoppingModel shopping;

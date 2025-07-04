@@ -1,7 +1,7 @@
-import 'package:compras/domain/enums/enums.dart';
-
-import '/domain/dto/product/product_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '/domain/enums/enums.dart';
+import '/domain/dto/product/product_dto.dart';
 
 part 'product_model.freezed.dart';
 part 'product_model.g.dart';

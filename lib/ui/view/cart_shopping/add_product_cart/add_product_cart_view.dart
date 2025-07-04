@@ -1,10 +1,10 @@
-import 'package:compras/domain/models/shopping/shopping_model.dart';
-import 'package:compras/ui/core/themes/fonts.dart';
-import 'package:compras/ui/core/ui/form_fields/selection_field.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '/domain/models/shopping/shopping_model.dart';
+import '/ui/core/themes/fonts.dart';
+import '/ui/core/ui/form_fields/selection_field.dart';
 import '/data/services/exceptions/exceptions.dart';
 import '/domain/dto/cart_item_dto/cart_item_dto.dart';
 import '/routing/routes.dart';

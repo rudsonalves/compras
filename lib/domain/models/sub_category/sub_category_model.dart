@@ -1,6 +1,6 @@
-import 'package:compras/domain/dto/sub_category/sub_category_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '/domain/dto/sub_category/sub_category_dto.dart';
 part 'sub_category_model.freezed.dart';
 part 'sub_category_model.g.dart';
 

@@ -1,8 +1,8 @@
-import 'package:compras/data/repositories/category/category_repository.dart';
-import 'package:compras/data/repositories/category/i_category_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart' show SingleChildWidget;
 
+import '/data/repositories/category/category_repository.dart';
+import '/data/repositories/category/i_category_repository.dart';
 import '/data/repositories/shopping/i_shopping_repository.dart';
 import '../data/repositories/cart_items/i_cart_items_repository.dart';
 import '../data/repositories/cart_items/cart_items_repository.dart';
