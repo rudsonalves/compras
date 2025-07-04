@@ -1,8 +1,12 @@
+import 'package:flutter/material.dart';
+
 import '/domain/models/item/item_model.dart';
 import '/utils/result.dart';
 
-abstract class IItemsRepository {
+abstract class ICartItemsRepository extends ChangeNotifier {
   List<ItemModel> get itemsList;
+
+  int totalPrice();
 
   Future<Result<void>> initialize(String shoppingId);
 

@@ -1,3 +1,4 @@
+import 'package:compras/domain/models/shopping/shopping_model.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
@@ -5,38 +6,45 @@ import '/ui/core/ui/dialogs/app_snack_bar.dart';
 import '/utils/result.dart';
 import '/domain/dto/shopping/shopping_dto.dart';
 import '/ui/core/ui/buttons/big_button.dart';
-import '/ui/view/new_shoppint/new_shopping_view_model.dart';
+import 'edit_shopping_view_model.dart';
 import '/utils/validates/generic_validations.dart';
 import '/domain/enums/enums.dart';
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/ui/form_fields/basic_form_field.dart';
 import '/ui/core/ui/form_fields/enum_form_field.dart';
 
-class NewShopping extends StatefulWidget {
-  final NewShoppingViewModel viewModel;
+class EditShoppingView extends StatefulWidget {
+  final EditShoppingViewModel viewModel;
+  final ShoppingModel? shopping;
 
-  const NewShopping({
+  const EditShoppingView({
     super.key,
+    this.shopping,
     required this.viewModel,
   });
 
   @override
-  State<NewShopping> createState() => _NewShoppingState();
+  State<EditShoppingView> createState() => _EditShoppingViewState();
 }
 
-class _NewShoppingState extends State<NewShopping> {
-  late final NewShoppingViewModel _viewModel;
+class _EditShoppingViewState extends State<EditShoppingView> {
+  late final EditShoppingViewModel _viewModel;
 
   final _formKey = GlobalKey<FormState>();
   final _namecontroller = TextEditingController();
   final _descriptionController = TextEditingController();
 
   ShoppingType _type = ShoppingType.supermarket;
+  bool _isEditing = false;
+  String? _shoppingId;
 
   @override
   void initState() {
     _viewModel = widget.viewModel;
     _viewModel.saving.addListener(_onSaved);
+    _viewModel.update.addListener(_onSaved);
+
+    _initializeForm();
 
     super.initState();
   }
@@ -57,7 +65,7 @@ class _NewShoppingState extends State<NewShopping> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Abrido uma Compra'),
+        title: Text('${_isEditing ? 'Editar' : 'Criar'} Compra'),
         elevation: 5,
         centerTitle: true,
         leading: IconButton(
@@ -107,9 +115,11 @@ class _NewShoppingState extends State<NewShopping> {
                   return BigButton(
                     color: Colors.green,
                     onPressed: _onSave,
-                    label: 'Criar',
+                    label: _isEditing ? 'Salvar' : 'Criar',
                     isRunning: _viewModel.saving.running,
-                    iconData: Symbols.add_shopping_cart_rounded,
+                    iconData: _isEditing
+                        ? Symbols.save_rounded
+                        : Symbols.add_rounded,
                   );
                 },
               ),
@@ -127,6 +137,7 @@ class _NewShoppingState extends State<NewShopping> {
 
   void _onSave() {
     if (_viewModel.saving.running ||
+        _viewModel.update.running ||
         _formKey.currentState == null ||
         !_formKey.currentState!.validate()) {
       return;
@@ -138,13 +149,21 @@ class _NewShoppingState extends State<NewShopping> {
       type: _type,
     );
 
-    _viewModel.saving.execute(dto);
+    if (!_isEditing) {
+      _viewModel.saving.execute(dto);
+      return;
+    }
+
+    final shopping = ShoppingModel.fromDto(_shoppingId!, dto);
+    _viewModel.update.execute(shopping);
   }
 
   void _onSaved() {
-    if (_viewModel.saving.running) return;
+    if (_viewModel.saving.running || _viewModel.update.running) return;
 
-    final result = _viewModel.saving.result!;
+    final result = _isEditing
+        ? _viewModel.update.result!
+        : _viewModel.saving.result!;
 
     switch (result) {
       case Success(value: final shopping):
@@ -158,9 +177,23 @@ class _NewShoppingState extends State<NewShopping> {
           title: 'Erro',
           iconTitle: Symbols.error_rounded,
           isError: true,
-          message: 'Ocorreu um erro ao criar a compra.',
+          message:
+              'Ocorreu um erro ao ${_isEditing ? 'editar' : 'criar'} a compra.',
         );
         break;
     }
+  }
+
+  void _initializeForm() {
+    if (widget.shopping == null) return;
+    _isEditing = true;
+    final shopping = widget.shopping!;
+
+    _namecontroller.text = shopping.name;
+    _descriptionController.text = shopping.description;
+    _type = shopping.type;
+    _shoppingId = shopping.id;
+
+    setState(() {});
   }
 }

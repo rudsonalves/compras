@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProductDto implements DiagnosticableTreeMixin {
 
- String get name; String get description;@JsonKey(name: 'bar_code') String get barCode;@JsonKey(name: 'is_unit_price') bool get isUnitPrice;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt;
+ String get name; String get description;@JsonKey(name: 'bar_code') String get barCode;@JsonKey(name: 'sale_by') SaleBy get saleBy;@JsonKey(name: 'category_id') String? get categoryId;@JsonKey(name: 'category') String? get category;@JsonKey(name: 'sub_category_id') String? get subCategoryId;@JsonKey(name: 'sub_category') String? get subCategory;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt;
 /// Create a copy of ProductDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,21 +30,21 @@ $ProductDtoCopyWith<ProductDto> get copyWith => _$ProductDtoCopyWithImpl<Product
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'ProductDto'))
-    ..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('description', description))..add(DiagnosticsProperty('barCode', barCode))..add(DiagnosticsProperty('isUnitPrice', isUnitPrice))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
+    ..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('description', description))..add(DiagnosticsProperty('barCode', barCode))..add(DiagnosticsProperty('saleBy', saleBy))..add(DiagnosticsProperty('categoryId', categoryId))..add(DiagnosticsProperty('category', category))..add(DiagnosticsProperty('subCategoryId', subCategoryId))..add(DiagnosticsProperty('subCategory', subCategory))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductDto&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.barCode, barCode) || other.barCode == barCode)&&(identical(other.isUnitPrice, isUnitPrice) || other.isUnitPrice == isUnitPrice)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductDto&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.barCode, barCode) || other.barCode == barCode)&&(identical(other.saleBy, saleBy) || other.saleBy == saleBy)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.category, category) || other.category == category)&&(identical(other.subCategoryId, subCategoryId) || other.subCategoryId == subCategoryId)&&(identical(other.subCategory, subCategory) || other.subCategory == subCategory)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,description,barCode,isUnitPrice,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,name,description,barCode,saleBy,categoryId,category,subCategoryId,subCategory,createdAt,updatedAt);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'ProductDto(name: $name, description: $description, barCode: $barCode, isUnitPrice: $isUnitPrice, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'ProductDto(name: $name, description: $description, barCode: $barCode, saleBy: $saleBy, categoryId: $categoryId, category: $category, subCategoryId: $subCategoryId, subCategory: $subCategory, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -55,7 +55,7 @@ abstract mixin class $ProductDtoCopyWith<$Res>  {
   factory $ProductDtoCopyWith(ProductDto value, $Res Function(ProductDto) _then) = _$ProductDtoCopyWithImpl;
 @useResult
 $Res call({
- String name, String description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'is_unit_price') bool isUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ String name, String description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'sale_by') SaleBy saleBy,@JsonKey(name: 'category_id') String? categoryId,@JsonKey(name: 'category') String? category,@JsonKey(name: 'sub_category_id') String? subCategoryId,@JsonKey(name: 'sub_category') String? subCategory,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 
@@ -72,13 +72,17 @@ class _$ProductDtoCopyWithImpl<$Res>
 
 /// Create a copy of ProductDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? description = null,Object? barCode = null,Object? isUnitPrice = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? description = null,Object? barCode = null,Object? saleBy = null,Object? categoryId = freezed,Object? category = freezed,Object? subCategoryId = freezed,Object? subCategory = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,barCode: null == barCode ? _self.barCode : barCode // ignore: cast_nullable_to_non_nullable
-as String,isUnitPrice: null == isUnitPrice ? _self.isUnitPrice : isUnitPrice // ignore: cast_nullable_to_non_nullable
-as bool,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,saleBy: null == saleBy ? _self.saleBy : saleBy // ignore: cast_nullable_to_non_nullable
+as SaleBy,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as String?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as String?,subCategoryId: freezed == subCategoryId ? _self.subCategoryId : subCategoryId // ignore: cast_nullable_to_non_nullable
+as String?,subCategory: freezed == subCategory ? _self.subCategory : subCategory // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
@@ -91,13 +95,17 @@ as DateTime?,
 @JsonSerializable()
 
 class _ProductDto extends ProductDto with DiagnosticableTreeMixin {
-  const _ProductDto({required this.name, required this.description, @JsonKey(name: 'bar_code') required this.barCode, @JsonKey(name: 'is_unit_price') this.isUnitPrice = true, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt}): super._();
+  const _ProductDto({required this.name, required this.description, @JsonKey(name: 'bar_code') required this.barCode, @JsonKey(name: 'sale_by') this.saleBy = SaleBy.unit, @JsonKey(name: 'category_id') this.categoryId, @JsonKey(name: 'category') this.category, @JsonKey(name: 'sub_category_id') this.subCategoryId, @JsonKey(name: 'sub_category') this.subCategory, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt}): super._();
   factory _ProductDto.fromJson(Map<String, dynamic> json) => _$ProductDtoFromJson(json);
 
 @override final  String name;
 @override final  String description;
 @override@JsonKey(name: 'bar_code') final  String barCode;
-@override@JsonKey(name: 'is_unit_price') final  bool isUnitPrice;
+@override@JsonKey(name: 'sale_by') final  SaleBy saleBy;
+@override@JsonKey(name: 'category_id') final  String? categoryId;
+@override@JsonKey(name: 'category') final  String? category;
+@override@JsonKey(name: 'sub_category_id') final  String? subCategoryId;
+@override@JsonKey(name: 'sub_category') final  String? subCategory;
 @override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 @override@JsonKey(name: 'updated_at') final  DateTime? updatedAt;
 
@@ -115,21 +123,21 @@ Map<String, dynamic> toJson() {
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'ProductDto'))
-    ..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('description', description))..add(DiagnosticsProperty('barCode', barCode))..add(DiagnosticsProperty('isUnitPrice', isUnitPrice))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
+    ..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('description', description))..add(DiagnosticsProperty('barCode', barCode))..add(DiagnosticsProperty('saleBy', saleBy))..add(DiagnosticsProperty('categoryId', categoryId))..add(DiagnosticsProperty('category', category))..add(DiagnosticsProperty('subCategoryId', subCategoryId))..add(DiagnosticsProperty('subCategory', subCategory))..add(DiagnosticsProperty('createdAt', createdAt))..add(DiagnosticsProperty('updatedAt', updatedAt));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductDto&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.barCode, barCode) || other.barCode == barCode)&&(identical(other.isUnitPrice, isUnitPrice) || other.isUnitPrice == isUnitPrice)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductDto&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.barCode, barCode) || other.barCode == barCode)&&(identical(other.saleBy, saleBy) || other.saleBy == saleBy)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.category, category) || other.category == category)&&(identical(other.subCategoryId, subCategoryId) || other.subCategoryId == subCategoryId)&&(identical(other.subCategory, subCategory) || other.subCategory == subCategory)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,description,barCode,isUnitPrice,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,name,description,barCode,saleBy,categoryId,category,subCategoryId,subCategory,createdAt,updatedAt);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'ProductDto(name: $name, description: $description, barCode: $barCode, isUnitPrice: $isUnitPrice, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'ProductDto(name: $name, description: $description, barCode: $barCode, saleBy: $saleBy, categoryId: $categoryId, category: $category, subCategoryId: $subCategoryId, subCategory: $subCategory, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -140,7 +148,7 @@ abstract mixin class _$ProductDtoCopyWith<$Res> implements $ProductDtoCopyWith<$
   factory _$ProductDtoCopyWith(_ProductDto value, $Res Function(_ProductDto) _then) = __$ProductDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'is_unit_price') bool isUnitPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ String name, String description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'sale_by') SaleBy saleBy,@JsonKey(name: 'category_id') String? categoryId,@JsonKey(name: 'category') String? category,@JsonKey(name: 'sub_category_id') String? subCategoryId,@JsonKey(name: 'sub_category') String? subCategory,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 
@@ -157,13 +165,17 @@ class __$ProductDtoCopyWithImpl<$Res>
 
 /// Create a copy of ProductDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? description = null,Object? barCode = null,Object? isUnitPrice = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? description = null,Object? barCode = null,Object? saleBy = null,Object? categoryId = freezed,Object? category = freezed,Object? subCategoryId = freezed,Object? subCategory = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_ProductDto(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,barCode: null == barCode ? _self.barCode : barCode // ignore: cast_nullable_to_non_nullable
-as String,isUnitPrice: null == isUnitPrice ? _self.isUnitPrice : isUnitPrice // ignore: cast_nullable_to_non_nullable
-as bool,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,saleBy: null == saleBy ? _self.saleBy : saleBy // ignore: cast_nullable_to_non_nullable
+as SaleBy,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as String?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as String?,subCategoryId: freezed == subCategoryId ? _self.subCategoryId : subCategoryId // ignore: cast_nullable_to_non_nullable
+as String?,subCategory: freezed == subCategory ? _self.subCategory : subCategory // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));

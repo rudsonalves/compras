@@ -9,7 +9,7 @@ part of 'item_model.dart';
 _ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => _ItemModel(
   shoppingId: json['shopping_id'] as String,
   productId: json['product_id'] as String,
-  isUnitPrice: json['is_unit_price'] as bool? ?? true,
+  saleBy: $enumDecodeNullable(_$SaleByEnumMap, json['sale_by']) ?? SaleBy.unit,
   unitPrince: (json['unit_price'] as num).toInt(),
   quantity: (json['quantity'] as num?)?.toInt() ?? 1,
   createdAt: json['created_at'] == null
@@ -21,8 +21,10 @@ Map<String, dynamic> _$ItemModelToJson(_ItemModel instance) =>
     <String, dynamic>{
       'shopping_id': instance.shoppingId,
       'product_id': instance.productId,
-      'is_unit_price': instance.isUnitPrice,
+      'sale_by': _$SaleByEnumMap[instance.saleBy]!,
       'unit_price': instance.unitPrince,
       'quantity': instance.quantity,
       'created_at': instance.createdAt?.toIso8601String(),
     };
+
+const _$SaleByEnumMap = {SaleBy.unit: 'unit', SaleBy.weight: 'weight'};

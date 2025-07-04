@@ -1,3 +1,4 @@
+import 'package:compras/domain/models/sqlite_helpers.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'last_price_dto.freezed.dart';
@@ -9,7 +10,13 @@ abstract class LastPriceDto with _$LastPriceDto {
 
   const factory LastPriceDto({
     @JsonKey(name: 'product_id') required String productId,
-    @Default(true) @JsonKey(name: 'is_unit_price') bool isUnitPrice,
+    @Default(true)
+    @JsonKey(
+      name: 'is_unit_price',
+      fromJson: SqliteHelpers.intToBool,
+      toJson: SqliteHelpers.boolToInt,
+    )
+    bool isUnitPrice,
     @JsonKey(name: 'last_unit_price') required int lastUnitPrice,
     @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _LastPriceDto;

@@ -9,7 +9,9 @@ part of 'last_price_dto.dart';
 _LastPriceDto _$LastPriceDtoFromJson(Map<String, dynamic> json) =>
     _LastPriceDto(
       productId: json['product_id'] as String,
-      isUnitPrice: json['is_unit_price'] as bool? ?? true,
+      isUnitPrice: json['is_unit_price'] == null
+          ? true
+          : SqliteHelpers.intToBool((json['is_unit_price'] as num).toInt()),
       lastUnitPrice: (json['last_unit_price'] as num).toInt(),
       createdAt: json['created_at'] == null
           ? null
@@ -19,7 +21,7 @@ _LastPriceDto _$LastPriceDtoFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$LastPriceDtoToJson(_LastPriceDto instance) =>
     <String, dynamic>{
       'product_id': instance.productId,
-      'is_unit_price': instance.isUnitPrice,
+      'is_unit_price': SqliteHelpers.boolToInt(instance.isUnitPrice),
       'last_unit_price': instance.lastUnitPrice,
       'created_at': instance.createdAt?.toIso8601String(),
     };

@@ -15,7 +15,7 @@ abstract class ShoppingModel with _$ShoppingModel {
     required String name,
     required String description,
     required ShoppingType type,
-    @JsonKey(name: 'total_price') required int totalPrice,
+    @Default(0) @JsonKey(name: 'total_price') int totalPrice,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ShoppingModel;
@@ -26,7 +26,7 @@ abstract class ShoppingModel with _$ShoppingModel {
     required String name,
     required String description,
     required ShoppingType type,
-    required int totalPrice,
+    int totalPrice = 0,
   }) {
     final now = DateTime.now();
     return ShoppingModel(

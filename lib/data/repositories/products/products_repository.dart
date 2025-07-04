@@ -98,6 +98,25 @@ class ProductsRepository implements IProductsRepository {
   }
 
   @override
+  Future<Result<ProductModel>> fetchByBarCode(String barCode) async {
+    final result = await _dbService.fetchByFilter<ProductModel>(
+      Tables.products,
+      fromMap: ProductModel.fromJson,
+      filter: {ProductColumns.barCode: barCode},
+    );
+
+    switch (result) {
+      case Success(value: final product):
+        _products[product.id] = product;
+        return Result.success(product);
+
+      case Failure(:final error):
+        log('Error fetching product by bar code: $error');
+        return Result.failure(error);
+    }
+  }
+
+  @override
   Future<Result<ProductModel>> update(ProductModel product) async {
     final result = await _dbService.update<ProductModel>(
       Tables.products,

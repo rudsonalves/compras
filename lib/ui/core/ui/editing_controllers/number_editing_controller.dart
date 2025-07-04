@@ -3,12 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CurrencyEditingController extends TextEditingController {
+class NumberEditingController extends TextEditingController {
   final NumberFormat _formatter;
   final int decimalDigits;
   bool _isApplyingMask = false;
 
-  CurrencyEditingController({String locale = 'pt_BR', this.decimalDigits = 2})
+  NumberEditingController({String locale = 'pt_BR', this.decimalDigits = 2})
     : _formatter = NumberFormat.currency(
         locale: locale,
         symbol: '',
@@ -37,16 +37,16 @@ class CurrencyEditingController extends TextEditingController {
   }
 
   String _cleanString(String text) {
-    return text.replaceAll(RegExp(r'[^0-9]'), '');
+    return text.replaceAll(RegExp(r'[^\d]'), '');
   }
 
-  double get currencyValue {
+  double get numberValue {
     final cleanedText = _cleanString(text);
     final value = double.tryParse(cleanedText) ?? 0.0;
     return value / _getDivisionFactor();
   }
 
-  set currencyValue(double value) {
+  set numberValue(double value) {
     text = value.toStringAsFixed(decimalDigits);
   }
 

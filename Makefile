@@ -39,5 +39,9 @@ update_splash:
 update_launcher_icons:
 	flutter pub run flutter_launcher_icons
 
+run_build_runner_watch:
+	dart pub run build_runner watch \
+	--build-filter="lib/domain/models/**,lib/domain/dtos/**"
+
 run_build_runner:
 	dart run build_runner watch -d

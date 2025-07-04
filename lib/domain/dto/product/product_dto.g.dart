@@ -10,7 +10,9 @@ _ProductDto _$ProductDtoFromJson(Map<String, dynamic> json) => _ProductDto(
   name: json['name'] as String,
   description: json['description'] as String,
   barCode: json['bar_code'] as String,
-  isUnitPrice: json['is_unit_price'] as bool? ?? true,
+  saleBy: $enumDecodeNullable(_$SaleByEnumMap, json['sale_by']) ?? SaleBy.unit,
+  categoryId: json['category_id'] as String?,
+  subCategoryId: json['sub_category_id'] as String?,
   createdAt: json['created_at'] == null
       ? null
       : DateTime.parse(json['created_at'] as String),
@@ -24,7 +26,11 @@ Map<String, dynamic> _$ProductDtoToJson(_ProductDto instance) =>
       'name': instance.name,
       'description': instance.description,
       'bar_code': instance.barCode,
-      'is_unit_price': instance.isUnitPrice,
+      'sale_by': _$SaleByEnumMap[instance.saleBy]!,
+      'category_id': instance.categoryId,
+      'sub_category_id': instance.subCategoryId,
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
     };
+
+const _$SaleByEnumMap = {SaleBy.unit: 'unit', SaleBy.weight: 'weight'};

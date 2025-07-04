@@ -2,16 +2,16 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
-import '/data/repositories/shopping/shopping_repository.dart';
+import '/data/repositories/shopping/i_shopping_repository.dart';
 import '/utils/result.dart';
 import '/domain/models/shopping/shopping_model.dart';
 import '/utils/command.dart';
 
 class HomeViewModel {
-  final ShoppingRepository _shoppingRepository;
+  final IShoppingRepository _shoppingRepository;
 
   HomeViewModel({
-    required ShoppingRepository shoppingRepository,
+    required IShoppingRepository shoppingRepository,
   }) : _shoppingRepository = shoppingRepository {
     load = Command0<void>(_shoppingRepository.initialize)..execute();
     delete = Command1<void, String>(_delete);

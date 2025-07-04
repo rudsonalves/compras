@@ -86,7 +86,7 @@ as DateTime?,
 @JsonSerializable()
 
 class _ShoppingModel extends ShoppingModel {
-  const _ShoppingModel({required this.id, required this.name, required this.description, required this.type, @JsonKey(name: 'total_price') required this.totalPrice, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt}): super._();
+  const _ShoppingModel({required this.id, required this.name, required this.description, required this.type, @JsonKey(name: 'total_price') this.totalPrice = 0, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt}): super._();
   factory _ShoppingModel.fromJson(Map<String, dynamic> json) => _$ShoppingModelFromJson(json);
 
 @override final  String id;

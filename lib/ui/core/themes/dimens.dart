@@ -81,7 +81,7 @@ final class _DimensMobile extends Dimens {
   const _DimensMobile();
 
   @override
-  double get radius => 12.0;
+  double get radius => 18.0;
 
   @override
   BorderRadius get borderRadius => BorderRadius.circular(radius);
