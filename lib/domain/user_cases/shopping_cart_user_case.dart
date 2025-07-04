@@ -35,21 +35,6 @@ class ShoppingCartUserCase {
 
   List<SubCategoryModel> get subCategories => _categoryRepository.subCategories;
 
-  // Future<Result<List<SubCategoryModel>>> subCategories(
-  //   String categoryId,
-  // ) async {
-  //   final result = await _categoryRepository.fetchAllSubCategories(categoryId);
-
-  //   switch (result) {
-  //     case Success(value: final subCategories):
-  //       return Result.success(subCategories);
-
-  //     case Failure(:final error):
-  //       log('Error fetching subCategories: $error');
-  //       return Result.success([]);
-  //   }
-  // }
-
   Future<Result<void>> load() async {
     final productsResult = await _productsRepository.initialize();
     if (productsResult.isFailure) return Result.failure(productsResult.error!);

@@ -1,5 +1,6 @@
 import 'package:compras/domain/models/shopping/shopping_model.dart';
-import 'package:compras/ui/core/ui/form_fields/sugestion_text_field.dart';
+import 'package:compras/ui/core/themes/fonts.dart';
+import 'package:compras/ui/core/ui/form_fields/selection_field.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -51,12 +52,15 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   final _saleBy = ValueNotifier<SaleBy>(SaleBy.unit);
   String? _categoryId;
   String? _subCategoryId;
+  final _total = ValueNotifier<double>(0);
 
   @override
   void initState() {
     _viewModel = widget.viewModel;
 
     _viewModel.findProductByBarCode.addListener(_findProduct);
+
+    _saleBy.addListener(() => _calcTotal(null));
 
     _quantityController.numberValue = 1;
 
@@ -66,6 +70,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   @override
   void dispose() {
     _viewModel.findProductByBarCode.removeListener(_findProduct);
+    _saleBy.removeListener(() => _calcTotal(null));
 
     _barCodeController.dispose();
     _nameController.dispose();
@@ -84,7 +89,9 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   @override
   Widget build(BuildContext context) {
     final dimens = Dimens.of(context);
+    final fontStyle = AppFontsStyle.of(context);
     final categoriesNames = _viewModel.categoriesNames;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -128,56 +135,54 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                 validator: GenericValidations.notEmpty,
               ),
 
-              SugestionTextField(
-                labelText: 'Categoria',
-                hintText: 'Selecione uma categoria para o produto',
-                controller: _categoryController,
-                sugestions: categoriesNames,
-                nextFocusNode: _subCategoryFocusNode,
-                onChanged: _selectCategory,
-              ),
+              Row(
+                spacing: dimens.spacingHorizontal,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: SelectionField(
+                      labelText: 'Categoria',
+                      hintText: 'Selecione uma categoria',
+                      controller: _categoryController,
+                      suggestions: categoriesNames,
+                      // nextFocusNode: _subCategoryFocusNode,
+                      onChanged: _selectCategory,
+                    ),
+                  ),
 
-              ListenableBuilder(
-                listenable: _viewModel.fetchAllSubcategories,
-                builder: (context, _) {
-                  final subCategoriesNames = _categoryId == null
-                      ? <String>[]
-                      : _viewModel.subCategoriesNames(
-                          _categoryId!,
+                  Expanded(
+                    child: ListenableBuilder(
+                      listenable: _viewModel.fetchAllSubcategories,
+                      builder: (context, _) {
+                        final subCategoriesNames = _categoryId == null
+                            ? <String>['Nenhum']
+                            : _viewModel.subCategoriesNames(_categoryId!);
+                        return Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SelectionField(
+                              focusNode: _subCategoryFocusNode,
+                              labelText: 'Sub-Categoria',
+                              hintText: 'Selecione uma sub-categoria',
+                              controller: _subCategoryController,
+                              suggestions: subCategoriesNames,
+                              onChanged: _selectSubCategory,
+                            ),
+                            if (_viewModel.fetchAllSubcategories.running)
+                              Container(
+                                color: Colors.black38,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                          ],
                         );
-                  return SugestionTextField(
-                    focusNode: _subCategoryFocusNode,
-                    nextFocusNode: _priceFocusNode,
-                    labelText: 'Sub-Categoria',
-                    hintText: 'Selecione uma sub-categoria para o produto',
-                    controller: _subCategoryController,
-                    sugestions: subCategoriesNames,
-                    onChanged: _selectSubCategory,
-                  );
-                },
+                      },
+                    ),
+                  ),
+                ],
               ),
 
-              // Row(
-              //   spacing: dimens.spacingHorizontal,
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: [
-              //     Expanded(
-              //       child: SugestionTextField(
-              //         labelText: 'Categoria',
-              //         hintText: 'Selecione uma categoria para o produto',
-              //         controller: _categoryController,
-              //         sugestions: _viewModel.categoriesNames,
-              //       ),
-              //     ),
-              //     Expanded(
-              //       child: BasicFormField(
-              //         labelText: 'Sub-Categoria',
-              //         hintText: 'Selecione uma sub-categoria para o produto',
-              //         controller: _subCategoryController,
-              //       ),
-              //     ),
-              //   ],
-              // ),
               EnumFormField<SaleBy>(
                 title: 'Vendido por',
                 values: SaleBy.values,
@@ -207,6 +212,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                         validator: (_) => GenericValidations.notZero(
                           _priceController.numberValue,
                         ),
+                        onChanged: _calcTotal,
                       ),
                     ),
 
@@ -229,6 +235,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                               validator: (_) => GenericValidations.notZero(
                                 _quantityController.numberValue,
                               ),
+                              onChanged: _calcTotal,
                             )
                           : BasicFormField(
                               labelText: 'Peso (kg)',
@@ -240,9 +247,24 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                               validator: (_) => GenericValidations.notZero(
                                 _weightController.numberValue,
                               ),
+                              onChanged: _calcTotal,
                             ),
                     ),
                   ],
+                ),
+              ),
+
+              Center(
+                child: ValueListenableBuilder(
+                  valueListenable: _total,
+                  builder: (context, value, _) {
+                    return Text(
+                      'Total: R\$ ${value.toStringAsFixed(2)}',
+                      style: fontStyle.bodyExtraLargeTextStyle.copyWith(
+                        color: colorScheme.primary,
+                      ),
+                    );
+                  },
                 ),
               ),
 
@@ -255,7 +277,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                   return BigButton(
                     label: 'Adicionar',
                     color: Colors.indigoAccent,
-                    iconData: Symbols.add_rounded,
+                    iconData: Symbols.add_shopping_cart_rounded,
                     isRunning:
                         _viewModel.save.running || _viewModel.update.running,
                     onPressed: _saving,
@@ -267,6 +289,13 @@ class _AddProductCartViewState extends State<AddProductCartView> {
         ),
       ),
     );
+  }
+
+  void _calcTotal(String? value) {
+    final price = _priceController.numberValue;
+    final weight = _weightController.numberValue;
+    final quantity = _quantityController.numberValue;
+    _total.value = price * (_saleBy.value == SaleBy.unit ? quantity : weight);
   }
 
   void _selectCategory(String? value) {
@@ -354,8 +383,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   }
 
   void _saving() {
-    if (_formKey.currentState == null ||
-        !_formKey.currentState!.validate() && _viewModel.save.running) {
+    if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
       return;
     }
 
@@ -383,7 +411,6 @@ class _AddProductCartViewState extends State<AddProductCartView> {
 
       _barCodeController.text = response as String;
 
-      // busca produto pelo código de barras
       _viewModel.findProductByBarCode.execute(_barCodeController.text);
     } catch (err) {
       debugPrint(err.toString());

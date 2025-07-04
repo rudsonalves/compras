@@ -20,6 +20,7 @@ class BasicFormField extends StatefulWidget {
   final bool obscureText;
   final void Function(String)? onChanged;
   final void Function()? onEditingComplete;
+  final void Function()? onTap;
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
   final String? Function(String?)? validator;
@@ -51,6 +52,7 @@ class BasicFormField extends StatefulWidget {
     this.iconColor,
     this.obscureText = false,
     this.onChanged,
+    this.onTap,
     this.focusNode,
     this.nextFocusNode,
     this.onEditingComplete,
@@ -141,6 +143,7 @@ class _BasicFormFieldState extends State<BasicFormField> {
           widget.onFieldSubmitted!(value);
         }
       },
+      onTap: widget.onTap,
       decoration: InputDecoration(
         labelText: widget.labelText,
         hintText: widget.hintText,

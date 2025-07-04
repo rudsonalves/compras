@@ -1,8 +1,7 @@
 import 'dart:developer';
 
-import 'package:compras/domain/dto/cart_item_dto/cart_item_dto.dart';
-import 'package:compras/domain/dto/product/product_dto.dart';
-
+import '/domain/dto/cart_item_dto/cart_item_dto.dart';
+import '/domain/dto/product/product_dto.dart';
 import '/domain/models/category/category_model.dart';
 import '/domain/models/item/item_model.dart';
 import '/domain/models/product/product_model.dart';
@@ -60,8 +59,11 @@ class AddProductCartViewModel {
   List<String> get categoriesNames =>
       List.unmodifiable(_userCase.categories.map((c) => c.name));
 
-  List<String> subCategoriesNames(String categoryId) =>
-      List.unmodifiable(_userCase.subCategories.map((c) => c.name));
+  List<String> subCategoriesNames(String categoryId) => List.unmodifiable(
+    _userCase.subCategories
+        .where((cs) => cs.categoryId == categoryId)
+        .map((c) => c.name),
+  );
 
   Future<Result<void>> _save(CartItemDto itemDto) async {
     final productDto = ProductDto(

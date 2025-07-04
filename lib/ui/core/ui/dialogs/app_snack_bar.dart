@@ -100,17 +100,23 @@ class AppSnackBar {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (title != null) Text(title, style: textStyle.displayTextStyle),
-          if (title != null) const Divider(),
-          if (iconTitle != null)
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Icon(
-                iconTitle,
-                color: isError ? Colors.red : Colors.green,
-                size: 64,
-              ),
+          if (title != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (iconTitle != null)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Icon(
+                      iconTitle,
+                      color: isError ? Colors.red : Colors.green,
+                    ),
+                  ),
+                Text(title, style: textStyle.displayTextStyle),
+              ],
             ),
+          if (title != null) const Divider(),
+
           Text(message, style: textStyle.bodyTextStyle),
         ],
       ),

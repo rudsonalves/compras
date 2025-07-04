@@ -2,6 +2,62 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/04 last_price_repository-10 - rudsonalves
+
+### Introduce SelectionField and refine form components and cart UI
+
+This commit replaces the deprecated suggestion text field with a new `SelectionField` widget, extends `BasicFormField` to support `onTap` callbacks, adjusts global dimension values, restructures the snack bar layout for consistent icon and title alignment, and enhances the AddProductCartView and its ViewModel to calculate and display the total dynamically.
+
+### Modified Files
+
+* **lib/domain/user\_cases/shopping\_cart\_user\_case.dart**
+
+  * Removed commented-out `subCategories` method stub that duplicated existing getter logic.
+
+* **lib/ui/core/themes/dimens.dart**
+
+  * Increased default `radius` value from `12.0` to `18.0` for all border radii.
+
+* **lib/ui/core/ui/dialogs/app\_snack\_bar.dart**
+
+  * Wrapped title and icon inside a centered `Row` when a title is present.
+  * Moved the `Divider` to display below the title row.
+  * Removed explicit icon size to rely on default sizing.
+
+* **lib/ui/core/ui/form\_fields/basic\_form\_field.dart**
+
+  * Added new `onTap` callback parameter to the widget API.
+  * Hooked `onTap` into the underlying text field to handle read-only interactions.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Swapped out `SugestionTextField` for the new `SelectionField` in category and sub-category inputs.
+  * Imported `selection_field.dart` and `fonts.dart` instead of the deleted suggestion field.
+  * Introduced a `_total` `ValueNotifier<double>` and listeners on price, quantity, and weight to compute the line total.
+  * Added a `ValueListenableBuilder` to display the formatted total in the UI.
+  * Updated the “Add” button icon from `Symbols.add_rounded` to `Symbols.add_shopping_cart_rounded`.
+  * Refactored row layout for categories and sub-categories into two `Expanded` `SelectionField` widgets.
+  * Simplified form validation logic in `_saving()` by correcting the conditional check.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\_model.dart**
+
+  * Standardized import paths to use absolute package references.
+  * Updated `subCategoriesNames` to filter by `categoryId` before mapping names.
+
+* **lib/ui/core/ui/form\_fields/sugestion\_text\_field.dart**
+
+  * Deleted obsolete `SugestionTextField` implementation now superseded by `SelectionField`.
+
+### New Files
+
+* **lib/ui/core/ui/form\_fields/selection\_field.dart**
+  Provides a read-only dropdown-like text field with built-in menu options for selecting from a list of suggestions and handling focus transitions.
+
+### Conclusions
+
+All form components and cart UI enhancements are complete and functional.
+
+
 ## 2025/07/04 last_price_repository-09 - rudsonalves
 
 ### Refactor repo structure, add CartItemDto and SuggestionTextField
