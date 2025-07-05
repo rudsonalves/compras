@@ -66,19 +66,10 @@ class AddProductCartViewModel {
   );
 
   Future<Result<void>> _save(CartItemDto itemDto) async {
-    final productDto = ProductDto(
-      name: itemDto.name,
-      description: itemDto.description,
-      barCode: itemDto.barCode,
-      saleBy: itemDto.saleBy,
-      categoryId: itemDto.categoryId,
-      category: itemDto.category,
-      subCategoryId: itemDto.subCategoryId,
-      subCategory: itemDto.subCategory,
-    );
+    final productDto = ProductDto.fromCartItemDto(itemDto);
 
     // If the product doesn't exist, create it
-    if (_product == null) {
+    if (itemDto.productId == null) {
       final result = await _userCase.saveProduct(productDto);
       switch (result) {
         case Success(value: final product):
@@ -89,20 +80,9 @@ class AddProductCartViewModel {
           log('Error saving product: $error');
           return Result.failure(error);
       }
-    } else if (!productDto.isEqualModel(_product!)) {
+    } else if (!productDto.isEqualProductModel(_product!)) {
       // If the product has changed, update it
-      final updateProduct = _product!.copyWith(
-        name: itemDto.name,
-        description: itemDto.description,
-        barCode: itemDto.barCode,
-        saleBy: itemDto.saleBy,
-        categoryId: itemDto.categoryId,
-        category: itemDto.category,
-        subCategoryId: itemDto.subCategoryId,
-        subCategory: itemDto.subCategory,
-        updatedAt: DateTime.now(),
-      );
-
+      final updateProduct = ProductModel.fromDto(_product!.id, productDto);
       final result = await _userCase.updateProduct(updateProduct);
 
       switch (result) {
@@ -115,14 +95,7 @@ class AddProductCartViewModel {
       }
     }
 
-    final item = ItemModel(
-      shoppingId: itemDto.shoppingId,
-      productId: _product!.id,
-      saleBy: itemDto.saleBy,
-      unitPrince: itemDto.price,
-      quantity: itemDto.quantity,
-      createdAt: DateTime.now(),
-    );
+    final item = ItemModel.fromCartItemDto(_product!.id, itemDto);
 
     final result = await _userCase.save(item);
 

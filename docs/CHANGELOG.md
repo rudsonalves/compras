@@ -2,6 +2,68 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/05 save_product-01 - rudsonalves
+
+### Add product\_id and sale\_by support to DTOs, models, and views
+
+This commit enhances how cart items and pricing data are represented by introducing a nullable `product_id` field and a `saleBy` enum across DTOs, models, and view logic. It refactors factory constructors and mapping methods to streamline creation from `CartItemDto`, replaces the old `isUnitPrice` flag with a standardized enum, and updates dependency imports for consistency. View and ViewModel code now capture and propagate the product ID seamlessly.
+
+### Modified Files
+
+* **docs/Diagrama\_de\_Classes.drawio**
+
+  * Updated draw\.io metadata to the latest version for compatibility with the current editor.
+
+* **lib/config/dependencies.dart**
+
+  * Corrected import paths for `cart_items` repository to use absolute project imports.
+
+* **lib/domain/dto/cart\_item\_dto/cart\_item\_dto.dart**
+
+  * Added `@JsonKey(name: 'product_id') String? productId` to the `CartItemDto` factory signature.
+
+* **lib/domain/dto/last\_price/last\_price\_dto.dart**
+
+  * Removed the `isUnitPrice` boolean and `SqliteHelpers` import.
+  * Introduced `@JsonKey(name: 'sale_by') required SaleBy saleBy` enum field.
+
+* **lib/domain/dto/product/product\_dto.dart**
+
+  * Imported `CartItemDto`.
+  * Renamed `isEqualModel` to `isEqualProductModel`.
+  * Added `factory ProductDto.fromCartItemDto(CartItemDto dto)` to map directly from cart items.
+
+* **lib/domain/models/item/item\_model.dart**
+
+  * Added `name` and `priceVariation` properties.
+  * Refactored the `create` factory to include the new fields.
+  * Introduced `factory ItemModel.fromCartItemDto(String? productId, CartItemDto dto)` for direct mapping.
+
+* **lib/domain/models/last\_price/last\_price\_model.dart**
+
+  * Removed `isUnitPrice`, added `@JsonKey(name: 'sale_by') required SaleBy saleBy`.
+  * Updated the `create` and DTO‐to‐model mapping to use the new enum.
+
+* **lib/domain/models/product/product\_model.dart**
+
+  * Set `updatedAt: DateTime.now()` when mapping from DTO for consistency.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Added a `_productId` field to hold the fetched product’s ID.
+  * Assigned `_productId` when a product is successfully loaded.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\_model.dart**
+
+  * Replaced manual `ProductDto` instantiation with `ProductDto.fromCartItemDto`.
+  * Updated equivalence check to use `isEqualProductModel`.
+  * Simplified item creation to `ItemModel.fromCartItemDto`.
+
+### Conclusions
+
+All manual code and configuration changes are complete, and the application now fully supports product identification and standardized sale types across its data layer and UI.
+
+
 ## 2025/07/04 save_product - rudsonalves
 
 ### Refactor imports to use absolute paths

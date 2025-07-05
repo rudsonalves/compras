@@ -50,6 +50,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   final _priceFocusNode = FocusNode();
 
   final _saleBy = ValueNotifier<SaleBy>(SaleBy.unit);
+  String? _productId;
   String? _categoryId;
   String? _subCategoryId;
   final _total = ValueNotifier<double>(0);
@@ -334,6 +335,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
       switch (result) {
         case Success(value: final product):
           if (product != null) {
+            _productId = product.id;
             _nameController.text = product.name;
             _descriptionController.text = product.description;
             _categoryController.text = product.category ?? '';
@@ -389,6 +391,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
 
     final cartItem = CartItemDto(
       shoppingId: widget.shopping.id,
+      productId: _productId,
       name: _nameController.text,
       description: _descriptionController.text,
       barCode: _barCodeController.text,

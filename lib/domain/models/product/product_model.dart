@@ -62,7 +62,7 @@ abstract class ProductModel with _$ProductModel {
     subCategoryId: dto.subCategoryId,
     createdAt: dto.createdAt,
     subCategory: dto.subCategory,
-    updatedAt: dto.updatedAt,
+    updatedAt: DateTime.now(),
   );
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>

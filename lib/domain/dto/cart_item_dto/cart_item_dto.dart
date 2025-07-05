@@ -9,6 +9,7 @@ part 'cart_item_dto.freezed.dart';
 abstract class CartItemDto with _$CartItemDto {
   const factory CartItemDto({
     required String shoppingId,
+    @JsonKey(name: 'product_id') String? productId,
     required String name,
     required String description,
     @JsonKey(name: 'bar_code') required String barCode,

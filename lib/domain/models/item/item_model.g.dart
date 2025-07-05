@@ -9,9 +9,11 @@ part of 'item_model.dart';
 _ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => _ItemModel(
   shoppingId: json['shopping_id'] as String,
   productId: json['product_id'] as String,
+  name: json['name'] as String,
   saleBy: $enumDecodeNullable(_$SaleByEnumMap, json['sale_by']) ?? SaleBy.unit,
   unitPrince: (json['unit_price'] as num).toInt(),
   quantity: (json['quantity'] as num?)?.toInt() ?? 1,
+  priceVariation: (json['priceVariation'] as num?)?.toDouble() ?? 0,
   createdAt: json['created_at'] == null
       ? null
       : DateTime.parse(json['created_at'] as String),
@@ -21,9 +23,11 @@ Map<String, dynamic> _$ItemModelToJson(_ItemModel instance) =>
     <String, dynamic>{
       'shopping_id': instance.shoppingId,
       'product_id': instance.productId,
+      'name': instance.name,
       'sale_by': _$SaleByEnumMap[instance.saleBy]!,
       'unit_price': instance.unitPrince,
       'quantity': instance.quantity,
+      'priceVariation': instance.priceVariation,
       'created_at': instance.createdAt?.toIso8601String(),
     };
 

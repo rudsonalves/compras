@@ -1,3 +1,4 @@
+import 'package:compras/domain/dto/cart_item_dto/cart_item_dto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -53,7 +54,7 @@ abstract class ProductDto with _$ProductDto {
   factory ProductDto.fromJson(Map<String, dynamic> json) =>
       _$ProductDtoFromJson(json);
 
-  bool isEqualModel(ProductModel other) {
+  bool isEqualProductModel(ProductModel other) {
     return name == other.name &&
         description == other.description &&
         barCode == other.barCode &&
@@ -62,5 +63,18 @@ abstract class ProductDto with _$ProductDto {
         category == other.category &&
         subCategoryId == other.subCategoryId &&
         subCategory == other.subCategory;
+  }
+
+  factory ProductDto.fromCartItemDto(CartItemDto dto) {
+    return ProductDto(
+      name: dto.name,
+      description: dto.description,
+      barCode: dto.barCode,
+      saleBy: dto.saleBy,
+      categoryId: dto.categoryId,
+      category: dto.category,
+      subCategoryId: dto.subCategoryId,
+      subCategory: dto.subCategory,
+    );
   }
 }
