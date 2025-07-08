@@ -68,7 +68,7 @@ class CategoryRepository implements ICategoryRepository {
     final result = await _dbService.fetchAll<CategoryModel>(
       Tables.categories,
       fromMap: CategoryModel.fromJson,
-      orderBy: CategoriesColumns.name,
+      orderBy: CatsColumns.name,
     );
 
     switch (result) {
@@ -95,8 +95,8 @@ class CategoryRepository implements ICategoryRepository {
     final result = await _dbService.fetchAll<SubCategoryModel>(
       Tables.subCategories,
       fromMap: SubCategoryModel.fromJson,
-      filter: {SubCategoriesColumns.categoryId: categoryId},
-      orderBy: SubCategoriesColumns.name,
+      filter: {SubCatsColumns.categoryId: categoryId},
+      orderBy: SubCatsColumns.name,
     );
 
     switch (result) {
@@ -147,7 +147,7 @@ class CategoryRepository implements ICategoryRepository {
     final result = await _dbService.insert<CategoryModel>(
       Tables.categories,
       {
-        CategoriesColumns.name: name,
+        CatsColumns.name: name,
       },
     );
 

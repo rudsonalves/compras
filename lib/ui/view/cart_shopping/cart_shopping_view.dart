@@ -1,8 +1,8 @@
-import 'package:compras/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '/routing/routes.dart';
 import '/domain/models/shopping/shopping_model.dart';
 import 'cart_shopping_view_model.dart';
 

@@ -1,10 +1,12 @@
-import 'package:compras/domain/models/shopping/shopping_model.dart';
-import 'package:compras/ui/core/themes/fonts.dart';
-import 'package:compras/ui/core/ui/form_fields/selection_field.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '/ui/core/ui/buttons/button_signature.dart';
+import '/ui/core/ui/dialogs/bottom_sheet_dialog.dart';
+import '/domain/models/shopping/shopping_model.dart';
+import '/ui/core/themes/fonts.dart';
+import '/ui/core/ui/form_fields/selection_field.dart';
 import '/data/services/exceptions/exceptions.dart';
 import '/domain/dto/cart_item_dto/cart_item_dto.dart';
 import '/routing/routes.dart';
@@ -50,6 +52,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   final _priceFocusNode = FocusNode();
 
   final _saleBy = ValueNotifier<SaleBy>(SaleBy.unit);
+  String? _productId;
   String? _categoryId;
   String? _subCategoryId;
   final _total = ValueNotifier<double>(0);
@@ -57,10 +60,10 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   @override
   void initState() {
     _viewModel = widget.viewModel;
-
     _viewModel.findProductByBarCode.addListener(_findProduct);
+    _viewModel.saving.addListener(_saved);
 
-    _saleBy.addListener(() => _calcTotal(null));
+    _saleBy.addListener(() => _calcTotal());
 
     _quantityController.numberValue = 1;
 
@@ -70,7 +73,8 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   @override
   void dispose() {
     _viewModel.findProductByBarCode.removeListener(_findProduct);
-    _saleBy.removeListener(() => _calcTotal(null));
+    _viewModel.saving.removeListener(_saved);
+    _saleBy.removeListener(() => _calcTotal());
 
     _barCodeController.dispose();
     _nameController.dispose();
@@ -114,7 +118,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                 labelText: 'Código de Barras',
                 hintText: 'Digite ou leia o código de barras do produto',
                 controller: _barCodeController,
-                validator: GenericValidations.name,
+                keyboardType: TextInputType.number,
                 suffixIcon: IconButton(
                   icon: const Icon(Symbols.barcode_scanner_rounded),
                   onPressed: _barcodeScanner,
@@ -126,61 +130,55 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                 hintText: 'Digite o nome do produto',
                 controller: _nameController,
                 validator: GenericValidations.name,
+                textCapitalization: TextCapitalization.words,
               ),
 
               BasicFormField(
                 labelText: 'Descrição do Produto',
                 hintText: 'Digite a descrição do produto',
                 controller: _descriptionController,
-                validator: GenericValidations.notEmpty,
+                textCapitalization: TextCapitalization.sentences,
               ),
 
-              Row(
-                spacing: dimens.spacingHorizontal,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: SelectionField(
-                      labelText: 'Categoria',
-                      hintText: 'Selecione uma categoria',
-                      controller: _categoryController,
-                      suggestions: categoriesNames,
-                      // nextFocusNode: _subCategoryFocusNode,
-                      onChanged: _selectCategory,
-                    ),
-                  ),
+              SelectionField(
+                labelText: 'Categoria',
+                hintText: 'Selecione uma categoria',
+                controller: _categoryController,
+                suggestions: categoriesNames,
+                // nextFocusNode: _subCategoryFocusNode,
+                onChanged: _selectCategory,
+              ),
 
-                  Expanded(
-                    child: ListenableBuilder(
-                      listenable: _viewModel.fetchAllSubcategories,
-                      builder: (context, _) {
-                        final subCategoriesNames = _categoryId == null
-                            ? <String>['Nenhum']
-                            : _viewModel.subCategoriesNames(_categoryId!);
-                        return Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            SelectionField(
-                              focusNode: _subCategoryFocusNode,
-                              labelText: 'Sub-Categoria',
-                              hintText: 'Selecione uma sub-categoria',
-                              controller: _subCategoryController,
-                              suggestions: subCategoriesNames,
-                              onChanged: _selectSubCategory,
-                            ),
-                            if (_viewModel.fetchAllSubcategories.running)
-                              Container(
-                                color: Colors.black38,
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                ],
+              ListenableBuilder(
+                listenable: Listenable.merge([
+                  _viewModel.fetchAllSubcategories,
+                  _viewModel.findProductByBarCode,
+                ]),
+                builder: (context, _) {
+                  final subCategoriesNames = _categoryId == null
+                      ? <String>['Nenhum']
+                      : _viewModel.subCategoriesNames(_categoryId!);
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SelectionField(
+                        focusNode: _subCategoryFocusNode,
+                        labelText: 'Sub-Categoria',
+                        hintText: 'Selecione uma sub-categoria',
+                        controller: _subCategoryController,
+                        suggestions: subCategoriesNames,
+                        onChanged: _selectSubCategory,
+                      ),
+                      if (_viewModel.fetchAllSubcategories.running)
+                        Container(
+                          color: Colors.black38,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                    ],
+                  );
+                },
               ),
 
               EnumFormField<SaleBy>(
@@ -212,7 +210,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                         validator: (_) => GenericValidations.notZero(
                           _priceController.numberValue,
                         ),
-                        onChanged: _calcTotal,
+                        onChanged: _calcTotalValue,
                       ),
                     ),
 
@@ -235,7 +233,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                               validator: (_) => GenericValidations.notZero(
                                 _quantityController.numberValue,
                               ),
-                              onChanged: _calcTotal,
+                              onChanged: _calcTotalValue,
                             )
                           : BasicFormField(
                               labelText: 'Peso (kg)',
@@ -247,7 +245,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                               validator: (_) => GenericValidations.notZero(
                                 _weightController.numberValue,
                               ),
-                              onChanged: _calcTotal,
+                              onChanged: _calcTotalValue,
                             ),
                     ),
                   ],
@@ -270,7 +268,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
 
               ListenableBuilder(
                 listenable: Listenable.merge([
-                  _viewModel.save,
+                  _viewModel.saving,
                   _viewModel.update,
                 ]),
                 builder: (context, _) {
@@ -279,7 +277,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                     color: Colors.indigoAccent,
                     iconData: Symbols.add_shopping_cart_rounded,
                     isRunning:
-                        _viewModel.save.running || _viewModel.update.running,
+                        _viewModel.saving.running || _viewModel.update.running,
                     onPressed: _saving,
                   );
                 },
@@ -291,7 +289,9 @@ class _AddProductCartViewState extends State<AddProductCartView> {
     );
   }
 
-  void _calcTotal(String? value) {
+  void _calcTotalValue(String? value) => _calcTotal();
+
+  void _calcTotal() {
     final price = _priceController.numberValue;
     final weight = _weightController.numberValue;
     final quantity = _quantityController.numberValue;
@@ -334,10 +334,11 @@ class _AddProductCartViewState extends State<AddProductCartView> {
       switch (result) {
         case Success(value: final product):
           if (product != null) {
+            _productId = product.id;
             _nameController.text = product.name;
-            _descriptionController.text = product.description;
-            _categoryController.text = product.category ?? '';
-            _subCategoryController.text = product.subCategory ?? '';
+            _descriptionController.text = product.description ?? '';
+            _categoryController.text = product.categoryName ?? '';
+            _subCategoryController.text = product.subCategoryName ?? '';
             _saleBy.value = product.saleBy;
           }
           break;
@@ -387,13 +388,20 @@ class _AddProductCartViewState extends State<AddProductCartView> {
       return;
     }
 
+    final description = _descriptionController.text.trim().isEmpty
+        ? null
+        : _descriptionController.text.trim();
+
     final cartItem = CartItemDto(
       shoppingId: widget.shopping.id,
+      productId: _productId,
       name: _nameController.text,
-      description: _descriptionController.text,
+      description: description,
       barCode: _barCodeController.text,
-      category: _categoryController.text,
-      subCategory: _subCategoryController.text,
+      categoryName: _categoryController.text,
+      categoryId: _categoryId,
+      subCategoryName: _subCategoryController.text,
+      subCategoryId: _subCategoryId,
       saleBy: _saleBy.value,
       price: (_priceController.numberValue * 100).round(),
       quantity: _saleBy.value == SaleBy.unit
@@ -401,15 +409,56 @@ class _AddProductCartViewState extends State<AddProductCartView> {
           : (_weightController.numberValue * 1000).round(),
     );
 
-    _viewModel.save.execute(cartItem);
+    _viewModel.saving.execute(cartItem);
   }
 
   Future<void> _barcodeScanner() async {
-    try {
-      final response = await context.push(Routes.scanner.path);
-      if (response == null) return;
+    final response = await BottomSheetDialog.show<ThreeState>(
+      context,
+      title: 'Scannear Código de Barras',
+      body: [
+        Text(
+          'Ler novo código de barras de produto ou pesquisar por um código passado?',
+          textAlign: TextAlign.center,
+        ),
+      ],
+      buttons: [
+        ButtonSignature(
+          label: 'Ler Novo',
+          iconData: Symbols.qr_code_scanner_rounded,
+          onPressed: () {
+            return ThreeState.yes;
+          },
+        ),
+        ButtonSignature(
+          label: 'Pesquisar',
+          iconData: Symbols.search_rounded,
+          onPressed: () {
+            return ThreeState.no;
+          },
+        ),
+        ButtonSignature(
+          label: 'Cancelar',
+          iconData: Symbols.cancel_rounded,
+          onPressed: () {
+            return ThreeState.indeterminate;
+          },
+        ),
+      ],
+    );
 
-      _barCodeController.text = response as String;
+    if (response == null || response == ThreeState.indeterminate) return;
+
+    try {
+      if (response == ThreeState.yes) {
+        if (!mounted) return;
+        final response = await context.push(Routes.scanner.path);
+        if (response == null) return;
+
+        _barCodeController.text = response as String;
+      }
+
+      if (_barCodeController.text.trim().isEmpty) return;
 
       _viewModel.findProductByBarCode.execute(_barCodeController.text);
     } catch (err) {
@@ -420,11 +469,39 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   void _addQuantity() {
     final value = _quantityController.numberValue;
     _quantityController.numberValue = value + 1;
+    _calcTotal();
   }
 
   void _removeQuantity() {
     final value = _quantityController.numberValue;
     if (value <= 1) return;
     _quantityController.numberValue = value - 1;
+    _calcTotal();
+  }
+
+  void _saved() {
+    if (_viewModel.saving.running) return;
+
+    final result = _viewModel.saving.result!;
+    switch (result) {
+      case Success():
+        AppSnackBar.showBottom(
+          context,
+          title: 'Sucesso',
+          iconTitle: Symbols.check_rounded,
+          message: 'Item adicionado ao carrinho.',
+        );
+        Navigator.of(context).pop();
+        break;
+      case Failure():
+        AppSnackBar.showBottom(
+          context,
+          title: 'Erro',
+          iconTitle: Symbols.error_rounded,
+          isError: true,
+          message: 'Ocorreu um erro ao adicionar o item ao carrinho.',
+        );
+        break;
+    }
   }
 }

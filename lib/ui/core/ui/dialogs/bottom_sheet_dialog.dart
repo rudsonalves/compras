@@ -6,13 +6,13 @@ import '../buttons/button_signature.dart';
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/themes/fonts.dart';
 
-class BottonSheetDialog<T> extends StatefulWidget {
+class BottomSheetDialog<T> extends StatefulWidget {
   final String title;
   final List<Widget> body;
   final void Function()? onClosing;
   final List<ButtonSignature<T>>? buttons;
 
-  const BottonSheetDialog({
+  const BottomSheetDialog({
     super.key,
     required this.title,
     required this.body,
@@ -41,7 +41,7 @@ class BottonSheetDialog<T> extends StatefulWidget {
       constraints: BoxConstraints(
         maxHeight: height * .95,
       ),
-      builder: (context) => BottonSheetDialog<T>(
+      builder: (context) => BottomSheetDialog<T>(
         title: title,
         body: body,
         onClosing: onClosing,
@@ -51,10 +51,10 @@ class BottonSheetDialog<T> extends StatefulWidget {
   }
 
   @override
-  State<BottonSheetDialog<T>> createState() => _BottonSheetDialogState<T>();
+  State<BottomSheetDialog<T>> createState() => _BottomSheetDialogState<T>();
 }
 
-class _BottonSheetDialogState<T> extends State<BottonSheetDialog<T>> {
+class _BottomSheetDialogState<T> extends State<BottomSheetDialog<T>> {
   List<Widget> buttonList() {
     final fonts = AppFontsStyle.of(context);
 

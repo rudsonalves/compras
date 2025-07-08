@@ -1,11 +1,11 @@
 import 'dart:developer';
 
-import 'package:compras/domain/models/category/category_model.dart';
-import 'package:compras/domain/models/sub_category/sub_category_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
+import '/domain/models/category/category_model.dart';
+import '/domain/models/sub_category/sub_category_model.dart';
 import '/data/services/database/tables/sql_configurations.dart';
 import '/data/services/database/tables/sql_tables.dart';
 

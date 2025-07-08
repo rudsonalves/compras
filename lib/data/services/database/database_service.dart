@@ -1,9 +1,10 @@
 import 'dart:developer';
 
-import 'package:compras/data/services/exceptions/exceptions.dart';
-import 'package:compras/utils/result.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
+
+import '/data/services/exceptions/exceptions.dart';
+import '/utils/result.dart';
 
 class DatabaseService {
   final Database _database;
@@ -204,10 +205,6 @@ class DatabaseService {
     Map<String, dynamic> map,
   ) async {
     try {
-      if (map['id'] == null) {
-        throw Exception('ID should be provided for set');
-      }
-
       await _database.insert(
         table,
         map,

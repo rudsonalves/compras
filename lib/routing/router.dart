@@ -1,8 +1,8 @@
-import 'package:compras/data/repositories/category/i_category_repository.dart';
-import 'package:compras/ui/view/scanner_barcode/scanner_barcode_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '/data/repositories/category/i_category_repository.dart';
+import '/ui/view/scanner_barcode/scanner_barcode_view.dart';
 import '../data/repositories/cart_items/i_cart_items_repository.dart';
 import '/data/repositories/last_price/i_last_price_repository.dart';
 import '/data/repositories/products/i_products_repository.dart';

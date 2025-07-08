@@ -2,6 +2,278 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## ## 2025/07/08 save_product-03 - rudsonalves
+
+### Add documentation structure and reorganize docs assets
+
+This commit introduces the foundational documentation for the Compras project, adding key markdown files and assets. It also renames and relocates existing changelog and diagram files to maintain a consistent docs hierarchy. The changes ensure all architectural and introductory materials are available under `docs`, with images centralized in the `images` subfolder.
+
+### Modified Files
+
+* **docs/CHANGELOG.md → docs/Changelog.md**
+
+  * Renamed the changelog to standardize filename casing and update references.
+* **docs/Diagrama\_de\_Classes.drawio → docs/images/Diagrama\_de\_Classes.drawio**
+
+  * Moved the class diagram file into the `images` directory for better organization.
+* **docs/images/MVVM.png → docs/images/MVVM\_MVP.png**
+
+  * Renamed the MVVM diagram to reflect its use in the MVP context.
+
+### New Files
+
+* **docs/Architecture.md**
+
+  * Adds the MVVM-based architecture overview, outlining the Data, Domain, and UI layers with descriptions and diagrams.
+* **docs/ai\_ready.md**
+
+  * Documents the AI-ready commit message generation prompt and guidelines.
+* **docs/images/MVVM\_layers.png**
+
+  * Introduces the foundational MVVM layer diagram asset.
+* **docs/index.md**
+
+  * Provides a project summary and table of contents for the documentation.
+* **docs/introduction.md**
+
+  * Adds the project introduction, MVP scope, and planned final version features.
+
+### Assets and Test Data
+
+* **docs/images/MVVM\_layers.png**
+
+  * Foundational illustration of the MVVM layers.
+* **docs/images/Diagrama\_de\_Classes.drawio**
+
+  * Class diagram for the MVP implementation.
+
+### Conclusions
+
+All documentation files have been added and existing resources reorganized under the `docs` directory; the system documentation is now complete and structured.
+
+
+## 2025/07/08 save_product-02 - rudsonalves
+
+### Refactor column constants, DTO field mappings, and improve UI dialogs
+
+This commit refactors the database column constants and SQL schema definitions to use abbreviated naming conventions, updates DTOs and models to support nullable descriptions and renamed JSON keys, enhances the shopping cart user case with comprehensive logging and error handling, corrects UI dialog naming and flow, and streamlines date formatting utilities.
+
+### Modified Files
+
+* **lib/data/repositories/category/category\_repository.dart**
+
+  * Updated `orderBy` and `filter` parameters to reference `CatsColumns` and `SubCatsColumns` instead of the old `CategoriesColumns` and `SubCategoriesColumns`.
+
+* **lib/data/services/database/database\_service.dart**
+
+  * Removed redundant null check for `id` in the `set` operation prior to database insert.
+
+* **lib/data/services/database/tables/sql\_tables.dart**
+
+  * Renamed `CategoriesColumns` to `CatsColumns` and `SubCategoriesColumns` to `SubCatsColumns`.
+  * Added new `name` and `priceVariation` fields to `ItemColumns`.
+  * Updated table creation SQL to treat descriptions as nullable, enforce uniqueness on bar codes, and update foreign key references to use the new column constants.
+  * Introduced detailed comments for each schema and added indexes for products, last price, categories, and sub-categories.
+
+* **lib/domain/dto/cart\_item\_dto/cart\_item\_dto.dart**
+
+  * Made `description` nullable.
+  * Renamed fields `category` → `categoryName` and `sub_category` → `subCategoryName` with corresponding JSON key updates.
+
+* **lib/domain/dto/product/product\_dto.dart**
+
+  * Made `description` nullable.
+  * Renamed JSON keys and properties from `category` → `category_name` and `sub_category` → `sub_category_name`, adjusting factory and mapping logic.
+
+* **lib/domain/enums/enums.dart**
+
+  * Added new `ThreeState` enum with values `yes`, `no`, and `indeterminate` for dialog handling.
+
+* **lib/domain/models/item/item\_model.dart**
+
+  * Annotated `priceVariation` with `@JsonKey(name: 'price_variation')` for proper JSON serialization.
+
+* **lib/domain/models/product/product\_model.dart**
+
+  * Made `description` nullable.
+  * Renamed model and JSON fields `category` → `categoryName` and `sub_category` → `subCategoryName`.
+
+* **lib/domain/user\_cases/shopping\_cart\_user\_case.dart**
+
+  * Improved initialization and save methods with `switch` cases for `Result`, logging successes and failures.
+  * Renamed `save` to `saveItem` and updated call sites.
+
+* **lib/ui/core/ui/dialogs/bottom\_sheet\_dialog.dart**
+
+  * Corrected class name from `BottonSheetDialog` to `BottomSheetDialog` and updated state class accordingly.
+
+* **lib/ui/core/ui/form\_fields/date\_form\_field.dart**
+
+  * Replaced `toDDMMYYYY()` with `toBrDate()` for Brazilian date formatting.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Imported `ButtonSignature` and `BottomSheetDialog`.
+  * Switched from `save` to `saving` command listener and merged listeners for state updates.
+  * Enhanced barcode dialog flow using `ThreeState` responses.
+  * Updated form field properties for capitalization, keyboard input, and null-safe descriptions.
+  * Refactored `ListenableBuilder` to merge multiple notifiers.
+  * Added snackbar feedback on save result and handled navigation pop on success.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\_model.dart**
+
+  * Renamed `save` command to `saving` and updated method call to `saveItem`.
+  * Enhanced error logging logic in barcode lookup.
+
+* **lib/ui/view/home/edit\_shopping/edit\_shopping\_view\.dart**
+
+  * Added suffix icons and handlers to insert current date in name and description fields.
+  * Imported `date_time_extensions` for utility methods.
+
+* **lib/utils/extensions/date\_time\_extensions.dart**
+
+  * Renamed `toDDMMYYYY` to `toBrDate` and updated `toBrDateTime` to use the new method.
+
+### Conclusions
+
+All changes have been implemented and the application is fully functional.
+
+
+## 2025/07/05 save_product-01 - rudsonalves
+
+### Add product\_id and sale\_by support to DTOs, models, and views
+
+This commit enhances how cart items and pricing data are represented by introducing a nullable `product_id` field and a `saleBy` enum across DTOs, models, and view logic. It refactors factory constructors and mapping methods to streamline creation from `CartItemDto`, replaces the old `isUnitPrice` flag with a standardized enum, and updates dependency imports for consistency. View and ViewModel code now capture and propagate the product ID seamlessly.
+
+### Modified Files
+
+* **docs/Diagrama\_de\_Classes.drawio**
+
+  * Updated draw\.io metadata to the latest version for compatibility with the current editor.
+
+* **lib/config/dependencies.dart**
+
+  * Corrected import paths for `cart_items` repository to use absolute project imports.
+
+* **lib/domain/dto/cart\_item\_dto/cart\_item\_dto.dart**
+
+  * Added `@JsonKey(name: 'product_id') String? productId` to the `CartItemDto` factory signature.
+
+* **lib/domain/dto/last\_price/last\_price\_dto.dart**
+
+  * Removed the `isUnitPrice` boolean and `SqliteHelpers` import.
+  * Introduced `@JsonKey(name: 'sale_by') required SaleBy saleBy` enum field.
+
+* **lib/domain/dto/product/product\_dto.dart**
+
+  * Imported `CartItemDto`.
+  * Renamed `isEqualModel` to `isEqualProductModel`.
+  * Added `factory ProductDto.fromCartItemDto(CartItemDto dto)` to map directly from cart items.
+
+* **lib/domain/models/item/item\_model.dart**
+
+  * Added `name` and `priceVariation` properties.
+  * Refactored the `create` factory to include the new fields.
+  * Introduced `factory ItemModel.fromCartItemDto(String? productId, CartItemDto dto)` for direct mapping.
+
+* **lib/domain/models/last\_price/last\_price\_model.dart**
+
+  * Removed `isUnitPrice`, added `@JsonKey(name: 'sale_by') required SaleBy saleBy`.
+  * Updated the `create` and DTO‐to‐model mapping to use the new enum.
+
+* **lib/domain/models/product/product\_model.dart**
+
+  * Set `updatedAt: DateTime.now()` when mapping from DTO for consistency.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Added a `_productId` field to hold the fetched product’s ID.
+  * Assigned `_productId` when a product is successfully loaded.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\_model.dart**
+
+  * Replaced manual `ProductDto` instantiation with `ProductDto.fromCartItemDto`.
+  * Updated equivalence check to use `isEqualProductModel`.
+  * Simplified item creation to `ItemModel.fromCartItemDto`.
+
+### Conclusions
+
+All manual code and configuration changes are complete, and the application now fully supports product identification and standardized sale types across its data layer and UI.
+
+
+## 2025/07/04 save_product - rudsonalves
+
+### Refactor imports to use absolute paths
+
+This update standardizes all import statements across the project to use absolute package paths (`/…`) instead of relative or legacy `package:compras/...` forms, improving consistency and simplifying refactoring.
+
+### Modified Files
+
+* **lib/config/dependencies.dart**
+
+  * Swapped `package:compras/data/repositories/...` imports for absolute imports (`/data/repositories/...`).
+
+* **lib/data/services/database/database\_manager.dart**
+
+  * Replaced domain model imports from `package:compras/...` to absolute imports (`/domain/models/...`).
+
+* **lib/data/services/database/database\_service.dart**
+
+  * Updated exception and result utility imports to absolute paths (`/data/services/exceptions/...`, `/utils/result.dart`).
+
+* **lib/domain/dto/last\_price/last\_price\_dto.dart**
+
+  * Changed SQLite helpers import to absolute path (`/domain/models/sqlite_helpers.dart`).
+
+* **lib/domain/models/product/product\_model.dart**
+
+  * Reordered imports: moved `freezed_annotation` import above, and switched `enums.dart` import to absolute path (`/domain/enums/enums.dart`).
+
+* **lib/domain/models/sub\_category/sub\_category\_model.dart**
+
+  * Converted DTO import to absolute path (`/domain/dto/sub_category/sub_category_dto.dart`).
+
+* **lib/routing/router.dart**
+
+  * Updated category repository and scanner view imports to absolute paths (`/data/repositories/category/i_category_repository.dart`, `/ui/view/scanner_barcode/scanner_barcode_view.dart`).
+
+* **lib/ui/core/ui/form\_fields/basic\_form\_field.dart**
+
+  * Switched `dimens.dart` import to absolute path (`/ui/core/themes/dimens.dart`).
+
+* **lib/ui/core/ui/form\_fields/selection\_field.dart**
+
+  * Updated `BasicFormField` import to use absolute path (`/ui/core/ui/form_fields/basic_form_field.dart`).
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Replaced domain model, fonts, and `SelectionField` imports with absolute paths.
+
+* **lib/ui/view/cart\_shopping/cart\_shopping\_view\.dart**
+
+  * Changed `routes.dart` import to absolute path (`/routing/routes.dart`).
+
+* **lib/ui/view/cart\_shopping/cart\_shopping\_view\_model.dart**
+
+  * Updated cart items repository import to absolute path (`/data/repositories/cart_items/i_cart_items_repository.dart`).
+
+* **lib/ui/view/home/edit\_shopping/edit\_shopping\_view\.dart**
+
+  * Added absolute import for `shopping_model.dart`.
+
+* **lib/ui/view/home/edit\_shopping/edit\_shopping\_view\_model.dart**
+
+  * Converted `result.dart` import to absolute path (`/utils/result.dart`).
+
+* **lib/ui/view/home/widgets/shopping\_list\_tile.dart**
+
+  * Updated multiple imports—model, fonts, dismissible container, and extensions—to absolute paths.
+
+### Conclusions
+
+All import statements are now consistent and use absolute package paths, improving maintainability and reducing potential conflicts.
+
+
 ## 2025/07/04 last_price_repository-10 - rudsonalves
 
 ### Introduce SelectionField and refine form components and cart UI

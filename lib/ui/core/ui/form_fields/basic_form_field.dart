@@ -1,5 +1,6 @@
-import 'package:compras/ui/core/themes/dimens.dart';
 import 'package:flutter/material.dart';
+
+import '/ui/core/themes/dimens.dart';
 
 class BasicFormField extends StatefulWidget {
   final String? labelText;
