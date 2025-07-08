@@ -2,6 +2,56 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## ## 2025/07/08 save_product-03 - rudsonalves
+
+### Add documentation structure and reorganize docs assets
+
+This commit introduces the foundational documentation for the Compras project, adding key markdown files and assets. It also renames and relocates existing changelog and diagram files to maintain a consistent docs hierarchy. The changes ensure all architectural and introductory materials are available under `docs`, with images centralized in the `images` subfolder.
+
+### Modified Files
+
+* **docs/CHANGELOG.md → docs/Changelog.md**
+
+  * Renamed the changelog to standardize filename casing and update references.
+* **docs/Diagrama\_de\_Classes.drawio → docs/images/Diagrama\_de\_Classes.drawio**
+
+  * Moved the class diagram file into the `images` directory for better organization.
+* **docs/images/MVVM.png → docs/images/MVVM\_MVP.png**
+
+  * Renamed the MVVM diagram to reflect its use in the MVP context.
+
+### New Files
+
+* **docs/Architecture.md**
+
+  * Adds the MVVM-based architecture overview, outlining the Data, Domain, and UI layers with descriptions and diagrams.
+* **docs/ai\_ready.md**
+
+  * Documents the AI-ready commit message generation prompt and guidelines.
+* **docs/images/MVVM\_layers.png**
+
+  * Introduces the foundational MVVM layer diagram asset.
+* **docs/index.md**
+
+  * Provides a project summary and table of contents for the documentation.
+* **docs/introduction.md**
+
+  * Adds the project introduction, MVP scope, and planned final version features.
+
+### Assets and Test Data
+
+* **docs/images/MVVM\_layers.png**
+
+  * Foundational illustration of the MVVM layers.
+* **docs/images/Diagrama\_de\_Classes.drawio**
+
+  * Class diagram for the MVP implementation.
+
+### Conclusions
+
+All documentation files have been added and existing resources reorganized under the `docs` directory; the system documentation is now complete and structured.
+
+
 ## 2025/07/08 save_product-02 - rudsonalves
 
 ### Refactor column constants, DTO field mappings, and improve UI dialogs
