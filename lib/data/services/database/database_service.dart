@@ -205,10 +205,6 @@ class DatabaseService {
     Map<String, dynamic> map,
   ) async {
     try {
-      if (map['id'] == null) {
-        throw Exception('ID should be provided for set');
-      }
-
       await _database.insert(
         table,
         map,

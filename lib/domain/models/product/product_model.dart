@@ -13,13 +13,13 @@ abstract class ProductModel with _$ProductModel {
   const factory ProductModel({
     required String id,
     required String name,
-    required String description,
+    String? description,
     @JsonKey(name: 'bar_code') required String barCode,
     @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
     @JsonKey(name: 'category_id') String? categoryId,
-    @JsonKey(name: 'category') String? category,
+    @JsonKey(name: 'category_name') String? categoryName,
     @JsonKey(name: 'sub_category_id') String? subCategoryId,
-    @JsonKey(name: 'sub_category') String? subCategory,
+    @JsonKey(name: 'sub_category_name') String? subCategoryName,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ProductModel;
@@ -27,13 +27,13 @@ abstract class ProductModel with _$ProductModel {
   factory ProductModel.create({
     required String id,
     required String name,
-    required String description,
+    String? description,
     required String barCode,
     SaleBy saleBy = SaleBy.unit,
     String? categoryId,
-    String? category,
+    String? categoryName,
     String? subCategoryId,
-    String? subCategory,
+    String? subCategoryName,
   }) {
     final now = DateTime.now();
     return ProductModel(
@@ -43,9 +43,9 @@ abstract class ProductModel with _$ProductModel {
       barCode: barCode,
       saleBy: saleBy,
       categoryId: categoryId,
-      category: category,
+      categoryName: categoryName,
       subCategoryId: subCategoryId,
-      subCategory: subCategory,
+      subCategoryName: subCategoryName,
       createdAt: now,
       updatedAt: now,
     );
@@ -58,10 +58,10 @@ abstract class ProductModel with _$ProductModel {
     barCode: dto.barCode,
     saleBy: dto.saleBy,
     categoryId: dto.categoryId,
-    category: dto.category,
+    categoryName: dto.categoryName,
     subCategoryId: dto.subCategoryId,
+    subCategoryName: dto.subCategoryName,
     createdAt: dto.createdAt,
-    subCategory: dto.subCategory,
     updatedAt: DateTime.now(),
   );
 

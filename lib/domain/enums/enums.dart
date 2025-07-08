@@ -19,3 +19,9 @@ enum SaleBy {
   final String label;
   const SaleBy(this.label);
 }
+
+enum ThreeState {
+  yes,
+  no,
+  indeterminate,
+}

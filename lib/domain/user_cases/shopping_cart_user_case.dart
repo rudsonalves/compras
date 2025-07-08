@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '/domain/dto/product/product_dto.dart';
 import '/domain/models/category/category_model.dart';
 import '/data/repositories/category/i_category_repository.dart';
@@ -45,33 +47,42 @@ class ShoppingCartUserCase {
     final lastResult = await _lastPriceRepository.initialize();
     if (lastResult.isFailure) return Result.failure(lastResult.error!);
 
-    return Result.success(null);
+    switch (lastResult) {
+      case Success():
+        log('Last price loaded successfully');
+        return Result.success(null);
+      case Failure(:final error):
+        log('Error loading last price: $error');
+        return Result.failure(error);
+    }
   }
 
-  Future<Result<void>> save(ItemModel item) async {
-    // final result = await _cartItemsRepository.insert(item);
-    // if (result.isFailure) return Result.failure(result.error!);
-    await Future.delayed(const Duration(seconds: 2));
-    return Result.success(null);
+  Future<Result<void>> saveItem(ItemModel item) async {
+    final result = await _cartItemsRepository.insert(item);
+
+    switch (result) {
+      case Success(value: final item):
+        log('Item saved successfully: ${item.name}');
+        return Result.success(null);
+      case Failure(error: final error):
+        log('Error saving item: $error');
+        return Result.failure(result.error);
+    }
   }
 
   Future<Result<void>> update(ItemModel item) async {
-    // final result = await _cartItemsRepository.update(item);
-    // if (result.isFailure) return Result.failure(result.error!);
-    await Future.delayed(const Duration(seconds: 2));
-    return Result.success(null);
+    final result = await _cartItemsRepository.update(item);
+
+    switch (result) {
+      case Success(value: final item):
+        log('Item updated successfully: ${item.name}');
+        return Result.success(null);
+      case Failure(error: final error):
+        log('Error updating item: $error');
+        return Result.failure(result.error);
+    }
   }
 
-  /// Finds a product by its barcode.
-  ///
-  /// If the product is not found, returns a failure result.
-  ///
-  /// If the product is found, but its category id is null or empty,
-  /// returns a success result with the product.
-  ///
-  /// If the product is found and its category id is not null or empty,
-  /// fetches the subcategory list for the category and returns a success
-  /// result with the product.
   Future<Result<ProductModel?>> findProductByBarCode(String barCode) async {
     final productResult = await _productsRepository.fetchByBarCode(barCode);
     if (productResult.isFailure) return productResult;
@@ -83,53 +94,84 @@ class ShoppingCartUserCase {
       await _categoryRepository.fetchAllSubCategories(categoryId);
     }
 
-    return Result.success(product);
+    switch (productResult) {
+      case Success(value: final product):
+        log('Product found successfully: ${product.name}');
+        return Result.success(product);
+      case Failure(error: final error):
+        log('Error finding product: $error');
+        return Result.failure(error);
+    }
   }
 
-  /// Fetches a subcategory by its ID.
-  ///
-  /// If the subcategory is not found, returns a failure result.
-  ///
-  /// If the subcategory is found, returns a success result with the
-  /// subcategory.
   Future<Result<SubCategoryModel>> fetchSubCategory(
     String subCategoryId,
   ) async {
     final result = await _categoryRepository.fetchSubCategory(subCategoryId);
-    return result;
+
+    switch (result) {
+      case Success(value: final subCategory):
+        log('SubCategory found successfully: ${subCategory.name}');
+        return Result.success(subCategory);
+      case Failure(error: final error):
+        log('Error finding subcategory: $error');
+        return Result.failure(error);
+    }
   }
 
-  /// Fetches a list of subcategories for a given category ID.
-  ///
-  /// If the category has no subcategories, returns a success result with an
-  /// empty list.
-  ///
-  /// If the category has subcategories, returns a success result with the list
-  /// of subcategories.
-  ///
-  /// If an error occurs while fetching the subcategories, returns a failure
-  /// result.
   Future<Result<List<SubCategoryModel>>> fetchSubCategoryList(
     String categoryId,
   ) async {
     final result = await _categoryRepository.fetchAllSubCategories(categoryId);
-    return result;
+
+    switch (result) {
+      case Success(value: final subCategories):
+        log('SubCategory list loaded successfully');
+        return Result.success(subCategories);
+      case Failure(error: final error):
+        log('Error loading subcategory list: $error');
+        return Result.failure(error);
+    }
   }
 
   Future<Result<ProductModel>> saveProduct(ProductDto productDto) async {
     final result = await _productsRepository.insert(productDto);
-    return result;
+
+    switch (result) {
+      case Success(value: final product):
+        log('Product saved successfully: ${product.name}');
+        return Result.success(product);
+      case Failure(error: final error):
+        log('Error saving product: $error');
+        return Result.failure(error);
+    }
   }
 
   Future<Result<ProductModel>> updateProduct(ProductModel product) async {
     final result = await _productsRepository.update(product);
-    return result;
+
+    switch (result) {
+      case Success(value: final product):
+        log('Product updated successfully: ${product.name}');
+        return Result.success(product);
+      case Failure(error: final error):
+        log('Error updating product: $error');
+        return Result.failure(error);
+    }
   }
 
   Future<Result<List<SubCategoryModel>>> fetchAllSubcategories(
     String categoryId,
   ) async {
     final result = await _categoryRepository.fetchAllSubCategories(categoryId);
-    return result;
+
+    switch (result) {
+      case Success(value: final subCategories):
+        log('SubCategory list loaded successfully');
+        return Result.success(subCategories);
+      case Failure(error: final error):
+        log('Error loading subcategory list: $error');
+        return Result.failure(error);
+    }
   }
 }

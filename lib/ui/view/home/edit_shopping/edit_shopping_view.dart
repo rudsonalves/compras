@@ -1,3 +1,4 @@
+import 'package:compras/utils/extensions/date_time_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
@@ -93,12 +94,20 @@ class _EditShoppingViewState extends State<EditShoppingView> {
                 controller: _namecontroller,
                 validator: GenericValidations.name,
                 textCapitalization: TextCapitalization.words,
+                suffixIcon: IconButton(
+                  onPressed: () => _addDateIn(_namecontroller),
+                  icon: Icon(Symbols.calendar_add_on_rounded),
+                ),
               ),
               BasicFormField(
                 labelText: 'Descrição',
                 controller: _descriptionController,
                 validator: GenericValidations.notEmpty,
                 textCapitalization: TextCapitalization.sentences,
+                suffixIcon: IconButton(
+                  onPressed: () => _addDateIn(_descriptionController),
+                  icon: Icon(Symbols.calendar_add_on_rounded),
+                ),
               ),
               EnumFormField<ShoppingType>(
                 title: 'Tipo de Compra',
@@ -128,6 +137,13 @@ class _EditShoppingViewState extends State<EditShoppingView> {
         ),
       ),
     );
+  }
+
+  void _addDateIn(TextEditingController controller) {
+    final text = controller.text.trim();
+    final date = DateTime.now().toBrDate();
+
+    controller.text = text.isEmpty ? date : '${controller.text.trim()} $date';
   }
 
   void _changeType(ShoppingType? type) {

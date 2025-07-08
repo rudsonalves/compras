@@ -15,7 +15,7 @@ abstract class ItemModel with _$ItemModel {
     @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
     @JsonKey(name: 'unit_price') required int unitPrince,
     @Default(1) int quantity,
-    @Default(0) double priceVariation,
+    @Default(0) @JsonKey(name: 'price_variation') double priceVariation,
     @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _ItemModel;
 

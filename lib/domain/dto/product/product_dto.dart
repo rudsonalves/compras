@@ -14,38 +14,37 @@ abstract class ProductDto with _$ProductDto {
 
   const factory ProductDto({
     required String name,
-    required String description,
+    String? description,
     @JsonKey(name: 'bar_code') required String barCode,
     @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
     @JsonKey(name: 'category_id') String? categoryId,
-    @JsonKey(name: 'category') String? category,
+    @JsonKey(name: 'category_name') String? categoryName,
     @JsonKey(name: 'sub_category_id') String? subCategoryId,
-    @JsonKey(name: 'sub_category') String? subCategory,
+    @JsonKey(name: 'sub_category_name') String? subCategoryName,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _ProductDto;
 
   factory ProductDto.create({
     required String name,
-    required String description,
+    String? description,
     required String barCode,
     SaleBy saleBy = SaleBy.unit,
     String? categoryId,
-    String? category,
+    String? categoryName,
     String? subCategoryId,
-    String? subCategory,
+    String? subCategoryName,
   }) {
     final now = DateTime.now();
-
     return ProductDto(
       name: name,
       description: description,
       barCode: barCode,
       saleBy: saleBy,
       categoryId: categoryId,
-      category: category,
+      categoryName: categoryName,
       subCategoryId: subCategoryId,
-      subCategory: subCategory,
+      subCategoryName: subCategoryName,
       createdAt: now,
       updatedAt: now,
     );
@@ -60,21 +59,24 @@ abstract class ProductDto with _$ProductDto {
         barCode == other.barCode &&
         saleBy == other.saleBy &&
         categoryId == other.categoryId &&
-        category == other.category &&
+        categoryName == other.categoryName &&
         subCategoryId == other.subCategoryId &&
-        subCategory == other.subCategory;
+        subCategoryName == other.subCategoryName;
   }
 
   factory ProductDto.fromCartItemDto(CartItemDto dto) {
+    final now = DateTime.now();
     return ProductDto(
       name: dto.name,
       description: dto.description,
       barCode: dto.barCode,
       saleBy: dto.saleBy,
       categoryId: dto.categoryId,
-      category: dto.category,
+      categoryName: dto.categoryName,
       subCategoryId: dto.subCategoryId,
-      subCategory: dto.subCategory,
+      subCategoryName: dto.subCategoryName,
+      createdAt: now,
+      updatedAt: now,
     );
   }
 }

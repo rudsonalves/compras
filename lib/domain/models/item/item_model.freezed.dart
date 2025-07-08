@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ItemModel {
 
-@JsonKey(name: 'shopping_id') String get shoppingId;@JsonKey(name: 'product_id') String get productId; String get name;@JsonKey(name: 'sale_by') SaleBy get saleBy;@JsonKey(name: 'unit_price') int get unitPrince; int get quantity; double get priceVariation;@JsonKey(name: 'created_at') DateTime? get createdAt;
+@JsonKey(name: 'shopping_id') String get shoppingId;@JsonKey(name: 'product_id') String get productId; String get name;@JsonKey(name: 'sale_by') SaleBy get saleBy;@JsonKey(name: 'unit_price') int get unitPrince; int get quantity;@JsonKey(name: 'price_variation') double get priceVariation;@JsonKey(name: 'created_at') DateTime? get createdAt;
 /// Create a copy of ItemModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $ItemModelCopyWith<$Res>  {
   factory $ItemModelCopyWith(ItemModel value, $Res Function(ItemModel) _then) = _$ItemModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String productId, String name,@JsonKey(name: 'sale_by') SaleBy saleBy,@JsonKey(name: 'unit_price') int unitPrince, int quantity, double priceVariation,@JsonKey(name: 'created_at') DateTime? createdAt
+@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String productId, String name,@JsonKey(name: 'sale_by') SaleBy saleBy,@JsonKey(name: 'unit_price') int unitPrince, int quantity,@JsonKey(name: 'price_variation') double priceVariation,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -87,7 +87,7 @@ as DateTime?,
 @JsonSerializable()
 
 class _ItemModel implements ItemModel {
-  const _ItemModel({@JsonKey(name: 'shopping_id') required this.shoppingId, @JsonKey(name: 'product_id') required this.productId, required this.name, @JsonKey(name: 'sale_by') this.saleBy = SaleBy.unit, @JsonKey(name: 'unit_price') required this.unitPrince, this.quantity = 1, this.priceVariation = 0, @JsonKey(name: 'created_at') this.createdAt});
+  const _ItemModel({@JsonKey(name: 'shopping_id') required this.shoppingId, @JsonKey(name: 'product_id') required this.productId, required this.name, @JsonKey(name: 'sale_by') this.saleBy = SaleBy.unit, @JsonKey(name: 'unit_price') required this.unitPrince, this.quantity = 1, @JsonKey(name: 'price_variation') this.priceVariation = 0, @JsonKey(name: 'created_at') this.createdAt});
   factory _ItemModel.fromJson(Map<String, dynamic> json) => _$ItemModelFromJson(json);
 
 @override@JsonKey(name: 'shopping_id') final  String shoppingId;
@@ -96,7 +96,7 @@ class _ItemModel implements ItemModel {
 @override@JsonKey(name: 'sale_by') final  SaleBy saleBy;
 @override@JsonKey(name: 'unit_price') final  int unitPrince;
 @override@JsonKey() final  int quantity;
-@override@JsonKey() final  double priceVariation;
+@override@JsonKey(name: 'price_variation') final  double priceVariation;
 @override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 
 /// Create a copy of ItemModel
@@ -132,7 +132,7 @@ abstract mixin class _$ItemModelCopyWith<$Res> implements $ItemModelCopyWith<$Re
   factory _$ItemModelCopyWith(_ItemModel value, $Res Function(_ItemModel) _then) = __$ItemModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String productId, String name,@JsonKey(name: 'sale_by') SaleBy saleBy,@JsonKey(name: 'unit_price') int unitPrince, int quantity, double priceVariation,@JsonKey(name: 'created_at') DateTime? createdAt
+@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String productId, String name,@JsonKey(name: 'sale_by') SaleBy saleBy,@JsonKey(name: 'unit_price') int unitPrince, int quantity,@JsonKey(name: 'price_variation') double priceVariation,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 

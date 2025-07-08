@@ -82,7 +82,7 @@ class _DateFormatFieldState extends State<DateFormatField> {
     if (pickDate != null && pickDate != _selectedDate) {
       setState(() {
         _selectedDate = pickDate;
-        final strDate = pickDate.toDDMMYYYY();
+        final strDate = pickDate.toBrDate();
         widget.controller.text = strDate;
         widget.onDatePicked?.call(pickDate);
         widget.onChanged?.call(strDate);

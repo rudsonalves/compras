@@ -13,7 +13,7 @@ _ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => _ItemModel(
   saleBy: $enumDecodeNullable(_$SaleByEnumMap, json['sale_by']) ?? SaleBy.unit,
   unitPrince: (json['unit_price'] as num).toInt(),
   quantity: (json['quantity'] as num?)?.toInt() ?? 1,
-  priceVariation: (json['priceVariation'] as num?)?.toDouble() ?? 0,
+  priceVariation: (json['price_variation'] as num?)?.toDouble() ?? 0,
   createdAt: json['created_at'] == null
       ? null
       : DateTime.parse(json['created_at'] as String),
@@ -27,7 +27,7 @@ Map<String, dynamic> _$ItemModelToJson(_ItemModel instance) =>
       'sale_by': _$SaleByEnumMap[instance.saleBy]!,
       'unit_price': instance.unitPrince,
       'quantity': instance.quantity,
-      'priceVariation': instance.priceVariation,
+      'price_variation': instance.priceVariation,
       'created_at': instance.createdAt?.toIso8601String(),
     };
 

@@ -15,7 +15,7 @@ class AddProductCartViewModel {
 
   AddProductCartViewModel(this._userCase) {
     // load = Command0<void>(_userCase.load)..execute();
-    save = Command1<void, CartItemDto>(_save);
+    saving = Command1<void, CartItemDto>(_save);
     update = Command1<void, ItemModel>(_update);
     findProductByBarCode = Command1<ProductModel?, String>(
       _findProductByBarCode,
@@ -26,7 +26,7 @@ class AddProductCartViewModel {
   }
 
   // late final Command0<void> load;
-  late final Command1<void, CartItemDto> save;
+  late final Command1<void, CartItemDto> saving;
   late final Command1<void, ItemModel> update;
   late final Command1<ProductModel?, String> findProductByBarCode;
   late final Command1<(CategoryModel, SubCategoryModel), String> getSubCategory;
@@ -97,7 +97,7 @@ class AddProductCartViewModel {
 
     final item = ItemModel.fromCartItemDto(_product!.id, itemDto);
 
-    final result = await _userCase.save(item);
+    final result = await _userCase.saveItem(item);
 
     switch (result) {
       case Success():
@@ -125,11 +125,26 @@ class AddProductCartViewModel {
   Future<Result<ProductModel?>> _findProductByBarCode(String barCode) async {
     final result = await _userCase.findProductByBarCode(barCode);
 
-    switch (result) {
-      case Success(value: final product):
-        _product = product;
+    if (result.isFailure) {
+      log('Error finding product by barcode: ${result.error}');
+      return Result.failure(result.error!);
+    }
+
+    _product = result.value;
+
+    if (_product!.categoryId == null || _product!.categoryId!.isEmpty) {
+      log('Product found without category: ${_product!.name}');
+      return Result.success(_product);
+    }
+
+    final resultCategory = await _userCase.fetchAllSubcategories(
+      _product!.categoryId!,
+    );
+
+    switch (resultCategory) {
+      case Success():
         log('Product found: $result');
-        return Result.success(result.value);
+        return Result.success(_product);
       case Failure(:final error):
         log('Error finding product: $error');
         return Result.failure(error);
@@ -140,7 +155,6 @@ class AddProductCartViewModel {
     String categoryId,
   ) async {
     final result = await _userCase.fetchAllSubcategories(categoryId);
-    await Future.delayed(Duration(seconds: 2));
     return result;
   }
 }

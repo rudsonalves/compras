@@ -2,6 +2,93 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/08 save_product-02 - rudsonalves
+
+### Refactor column constants, DTO field mappings, and improve UI dialogs
+
+This commit refactors the database column constants and SQL schema definitions to use abbreviated naming conventions, updates DTOs and models to support nullable descriptions and renamed JSON keys, enhances the shopping cart user case with comprehensive logging and error handling, corrects UI dialog naming and flow, and streamlines date formatting utilities.
+
+### Modified Files
+
+* **lib/data/repositories/category/category\_repository.dart**
+
+  * Updated `orderBy` and `filter` parameters to reference `CatsColumns` and `SubCatsColumns` instead of the old `CategoriesColumns` and `SubCategoriesColumns`.
+
+* **lib/data/services/database/database\_service.dart**
+
+  * Removed redundant null check for `id` in the `set` operation prior to database insert.
+
+* **lib/data/services/database/tables/sql\_tables.dart**
+
+  * Renamed `CategoriesColumns` to `CatsColumns` and `SubCategoriesColumns` to `SubCatsColumns`.
+  * Added new `name` and `priceVariation` fields to `ItemColumns`.
+  * Updated table creation SQL to treat descriptions as nullable, enforce uniqueness on bar codes, and update foreign key references to use the new column constants.
+  * Introduced detailed comments for each schema and added indexes for products, last price, categories, and sub-categories.
+
+* **lib/domain/dto/cart\_item\_dto/cart\_item\_dto.dart**
+
+  * Made `description` nullable.
+  * Renamed fields `category` → `categoryName` and `sub_category` → `subCategoryName` with corresponding JSON key updates.
+
+* **lib/domain/dto/product/product\_dto.dart**
+
+  * Made `description` nullable.
+  * Renamed JSON keys and properties from `category` → `category_name` and `sub_category` → `sub_category_name`, adjusting factory and mapping logic.
+
+* **lib/domain/enums/enums.dart**
+
+  * Added new `ThreeState` enum with values `yes`, `no`, and `indeterminate` for dialog handling.
+
+* **lib/domain/models/item/item\_model.dart**
+
+  * Annotated `priceVariation` with `@JsonKey(name: 'price_variation')` for proper JSON serialization.
+
+* **lib/domain/models/product/product\_model.dart**
+
+  * Made `description` nullable.
+  * Renamed model and JSON fields `category` → `categoryName` and `sub_category` → `subCategoryName`.
+
+* **lib/domain/user\_cases/shopping\_cart\_user\_case.dart**
+
+  * Improved initialization and save methods with `switch` cases for `Result`, logging successes and failures.
+  * Renamed `save` to `saveItem` and updated call sites.
+
+* **lib/ui/core/ui/dialogs/bottom\_sheet\_dialog.dart**
+
+  * Corrected class name from `BottonSheetDialog` to `BottomSheetDialog` and updated state class accordingly.
+
+* **lib/ui/core/ui/form\_fields/date\_form\_field.dart**
+
+  * Replaced `toDDMMYYYY()` with `toBrDate()` for Brazilian date formatting.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Imported `ButtonSignature` and `BottomSheetDialog`.
+  * Switched from `save` to `saving` command listener and merged listeners for state updates.
+  * Enhanced barcode dialog flow using `ThreeState` responses.
+  * Updated form field properties for capitalization, keyboard input, and null-safe descriptions.
+  * Refactored `ListenableBuilder` to merge multiple notifiers.
+  * Added snackbar feedback on save result and handled navigation pop on success.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\_model.dart**
+
+  * Renamed `save` command to `saving` and updated method call to `saveItem`.
+  * Enhanced error logging logic in barcode lookup.
+
+* **lib/ui/view/home/edit\_shopping/edit\_shopping\_view\.dart**
+
+  * Added suffix icons and handlers to insert current date in name and description fields.
+  * Imported `date_time_extensions` for utility methods.
+
+* **lib/utils/extensions/date\_time\_extensions.dart**
+
+  * Renamed `toDDMMYYYY` to `toBrDate` and updated `toBrDateTime` to use the new method.
+
+### Conclusions
+
+All changes have been implemented and the application is fully functional.
+
+
 ## 2025/07/05 save_product-01 - rudsonalves
 
 ### Add product\_id and sale\_by support to DTOs, models, and views
