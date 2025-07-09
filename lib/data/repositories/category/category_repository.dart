@@ -1,11 +1,12 @@
 import 'dart:developer';
 
+import '/domain/dto/category_subcategory/category_subcategory_dto.dart';
 import '/data/repositories/category/i_category_repository.dart';
 import '/data/services/database/database_service.dart';
 import '/data/services/database/tables/sql_tables.dart';
-import '/domain/dto/sub_category/sub_category_dto.dart';
+import '../../../domain/dto/subcategory/subcategory_dto.dart';
 import '/domain/models/category/category_model.dart';
-import '/domain/models/sub_category/sub_category_model.dart';
+import '../../../domain/models/subcategory/subcategory_model.dart';
 import '/utils/result.dart';
 
 class CategoryRepository implements ICategoryRepository {
@@ -14,7 +15,7 @@ class CategoryRepository implements ICategoryRepository {
   CategoryRepository(this._dbService);
 
   final Map<String, CategoryModel> _categories = {};
-  final Map<String, SubCategoryModel> _subCategories = {};
+  final Map<String, SubcategoryModel> _subCategories = {};
   final List<String> _loadsCategoryIds = [];
 
   bool _isInitialized = false;
@@ -23,14 +24,14 @@ class CategoryRepository implements ICategoryRepository {
   List<CategoryModel> get categories => List.unmodifiable(_categories.values);
 
   @override
-  List<SubCategoryModel> get subCategories =>
+  List<SubcategoryModel> get subCategories =>
       List.unmodifiable(_subCategories.values);
 
   @override
   CategoryModel? category(String categoryId) => _categories[categoryId];
 
   @override
-  Future<SubCategoryModel?> getSubCategory(
+  Future<SubcategoryModel?> getSubcategory(
     String subCategoryId,
     String categoryId,
   ) async {
@@ -38,7 +39,7 @@ class CategoryRepository implements ICategoryRepository {
       return _subCategories[subCategoryId];
     }
 
-    await fetchAllSubCategories(categoryId);
+    await fetchSubcategoriesFrom(categoryId);
     return _subCategories[subCategoryId];
   }
 
@@ -48,7 +49,10 @@ class CategoryRepository implements ICategoryRepository {
 
     _isInitialized = true;
 
-    final result = await fetchAllCategories();
+    final categoriesResult = await fetchAllCategories();
+    if (categoriesResult is Failure) return categoriesResult;
+
+    final result = await fetchAllSubcategories();
 
     switch (result) {
       case Success():
@@ -85,16 +89,16 @@ class CategoryRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Result<List<SubCategoryModel>>> fetchAllSubCategories(
+  Future<Result<List<SubcategoryModel>>> fetchSubcategoriesFrom(
     String categoryId,
   ) async {
     if (_loadsCategoryIds.contains(categoryId)) {
       return Result.success(_subCategoriesList(categoryId));
     }
 
-    final result = await _dbService.fetchAll<SubCategoryModel>(
+    final result = await _dbService.fetchAll<SubcategoryModel>(
       Tables.subCategories,
-      fromMap: SubCategoryModel.fromJson,
+      fromMap: SubcategoryModel.fromJson,
       filter: {SubCatsColumns.categoryId: categoryId},
       orderBy: SubCatsColumns.name,
     );
@@ -114,16 +118,16 @@ class CategoryRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Result<SubCategoryModel>> fetchSubCategory(
+  Future<Result<SubcategoryModel>> fetchSubcategory(
     String subCategoryId,
   ) async {
     if (_subCategories.containsKey(subCategoryId)) {
       return Result.success(_subCategories[subCategoryId]!);
     }
 
-    final result = await _dbService.fetchById<SubCategoryModel>(
+    final result = await _dbService.fetchById<SubcategoryModel>(
       Tables.subCategories,
-      fromMap: SubCategoryModel.fromJson,
+      fromMap: SubcategoryModel.fromJson,
       id: subCategoryId,
     );
 
@@ -164,19 +168,19 @@ class CategoryRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Result<SubCategoryModel>> insertSubCategory(SubCategoryDto dto) async {
-    if (await _findSubCategoryId(dto.categoryId, dto.name) != null) {
-      return Result.failure(Exception('SubCategory already exists'));
+  Future<Result<SubcategoryModel>> insertSubcategory(SubcategoryDto dto) async {
+    if (await _findSubcCategoryId(dto.categoryId, dto.name) != null) {
+      return Result.failure(Exception('Subcategory already exists'));
     }
 
-    final result = await _dbService.insert<SubCategoryModel>(
+    final result = await _dbService.insert<SubcategoryModel>(
       Tables.subCategories,
       dto.toJson(),
     );
 
     switch (result) {
       case Success(value: final id):
-        final subCategory = SubCategoryModel.fromDto(id, dto);
+        final subCategory = SubcategoryModel.fromDto(id, dto);
         _subCategories[id] = subCategory;
         return Result.success(subCategory);
 
@@ -205,10 +209,10 @@ class CategoryRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Result<SubCategoryModel>> updateSubCategory(
-    SubCategoryModel subCategory,
+  Future<Result<SubcategoryModel>> updateSubcategory(
+    SubcategoryModel subCategory,
   ) async {
-    final result = await _dbService.update<SubCategoryModel>(
+    final result = await _dbService.update<SubcategoryModel>(
       Tables.subCategories,
       map: subCategory.toJson(),
     );
@@ -243,8 +247,8 @@ class CategoryRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Result<void>> deleteSubCategory(String id) async {
-    final result = await _dbService.delete<SubCategoryModel>(
+  Future<Result<void>> deleteSubcategory(String id) async {
+    final result = await _dbService.delete<SubcategoryModel>(
       Tables.subCategories,
       id: id,
     );
@@ -256,6 +260,75 @@ class CategoryRepository implements ICategoryRepository {
 
       case Failure(:final error):
         log('Error deleting subCategory: $error');
+        return Result.failure(error);
+    }
+  }
+
+  @override
+  Future<Result<List<CategorySubcategoryDto>>> search(String query) async {
+    try {
+      if (!_isInitialized) await initialize();
+
+      final normalized = query.trim().toLowerCase();
+      final List<CategorySubcategoryDto> results = [];
+
+      // 1) match on category name
+      for (final category in categories) {
+        if (category.name.toLowerCase().contains(normalized)) {
+          // fetch subcategories for this category
+          final subCategories = _subCategoriesList(category.id);
+          for (final subCategory in subCategories) {
+            if (subCategory.categoryId == category.id) {
+              results.add(
+                CategorySubcategoryDto(
+                  category: category,
+                  subcategory: subCategory,
+                ),
+              );
+            }
+          }
+        }
+      }
+
+      // 2) match on subcategory name
+      for (final subCategory in _subCategories.values) {
+        if (subCategory.name.toLowerCase().contains(normalized)) {
+          final category = _categories[subCategory.categoryId];
+          if (category != null) {
+            results.add(
+              CategorySubcategoryDto(
+                category: category,
+                subcategory: subCategory,
+              ),
+            );
+          }
+        }
+      }
+
+      return Result.success(results);
+    } catch (err, stack) {
+      log('Error in CategoryRepository.search: $err', stackTrace: stack);
+      return Result.failure(Exception('search: err.toString()'));
+    }
+  }
+
+  @override
+  Future<Result<void>> fetchAllSubcategories() async {
+    final result = await _dbService.fetchAll<SubcategoryModel>(
+      Tables.subCategories,
+      fromMap: SubcategoryModel.fromJson,
+      orderBy: SubCatsColumns.name,
+    );
+
+    switch (result) {
+      case Success(value: final subCategories):
+        _subCategories.clear();
+        for (final subCategory in subCategories) {
+          _subCategories[subCategory.id] = subCategory;
+        }
+        return Result.success(null);
+      case Failure(error: final error):
+        log('Error loading subcategory list: $error');
         return Result.failure(error);
     }
   }
@@ -292,9 +365,9 @@ class CategoryRepository implements ICategoryRepository {
   ///
   /// Returns a [String] representing the subcategory ID if found, otherwise
   /// returns null.
-  Future<String?> _findSubCategoryId(String categoryId, String name) async {
+  Future<String?> _findSubcCategoryId(String categoryId, String name) async {
     if (!_loadsCategoryIds.contains(categoryId)) {
-      await fetchAllSubCategories(categoryId);
+      await fetchSubcategoriesFrom(categoryId);
     }
 
     for (final subCategory in _subCategoriesList(categoryId)) {
@@ -314,9 +387,9 @@ class CategoryRepository implements ICategoryRepository {
   ///
   /// [categoryId] is the ID of the category to filter subcategories by.
   ///
-  /// Returns a [List<SubCategoryModel>] containing the subcategories associated
+  /// Returns a [List<SubcategoryModel>] containing the subcategories associated
   /// with the specified category ID.
-  List<SubCategoryModel> _subCategoriesList(String categoryId) =>
+  List<SubcategoryModel> _subCategoriesList(String categoryId) =>
       List.unmodifiable(
         _subCategories.values.where((sc) => sc.categoryId == categoryId),
       );

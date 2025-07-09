@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class FontsTheme {
   FontsTheme._();
 
-  static const String display = 'Marcellus';
+  static const String display = 'Gabriela'; //Marcellus';
   static const String body = 'Questrial';
 }
 

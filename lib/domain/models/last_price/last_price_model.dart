@@ -12,6 +12,7 @@ abstract class LastPriceModel with _$LastPriceModel {
 
   const factory LastPriceModel({
     required String id,
+    @JsonKey(name: 'shopping_id') required String shoppingId,
     @JsonKey(name: 'product_id') required String productId,
     @JsonKey(name: 'last_unit_price') required int lastUnitPrice,
     @JsonKey(name: 'sale_by') required SaleBy saleBy,
@@ -20,6 +21,7 @@ abstract class LastPriceModel with _$LastPriceModel {
 
   factory LastPriceModel.create({
     required String id,
+    required String shoppingId,
     required String productId,
     required SaleBy saleBy,
     required int lastUnitPrice,
@@ -27,6 +29,7 @@ abstract class LastPriceModel with _$LastPriceModel {
     final now = DateTime.now();
     return LastPriceModel(
       id: id,
+      shoppingId: shoppingId,
       productId: productId,
       saleBy: saleBy,
       lastUnitPrice: lastUnitPrice,
@@ -37,6 +40,7 @@ abstract class LastPriceModel with _$LastPriceModel {
   factory LastPriceModel.fromDto(String id, LastPriceDto lastPriceDto) =>
       LastPriceModel(
         id: id,
+        shoppingId: lastPriceDto.shoppingId,
         productId: lastPriceDto.productId,
         saleBy: lastPriceDto.saleBy,
         lastUnitPrice: lastPriceDto.lastUnitPrice,

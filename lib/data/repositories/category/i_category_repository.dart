@@ -1,13 +1,15 @@
-import '/domain/dto/sub_category/sub_category_dto.dart';
+import 'package:compras/domain/dto/category_subcategory/category_subcategory_dto.dart';
+
+import '../../../domain/dto/subcategory/subcategory_dto.dart';
 import '/domain/models/category/category_model.dart';
-import '/domain/models/sub_category/sub_category_model.dart';
+import '../../../domain/models/subcategory/subcategory_model.dart';
 import '/utils/result.dart';
 
 abstract class ICategoryRepository {
   List<CategoryModel> get categories;
-  List<SubCategoryModel> get subCategories;
+  List<SubcategoryModel> get subCategories;
 
-  Future<SubCategoryModel?> getSubCategory(
+  Future<SubcategoryModel?> getSubcategory(
     String subCategoryId,
     String categoryId,
   );
@@ -51,9 +53,9 @@ abstract class ICategoryRepository {
   /// message.
   ///
   /// Returns a [Result] containing a list of instances of type
-  /// [SubCategoryModel] if the fetch operation is successful. Throws an
+  /// [SubcategoryModel] if the fetch operation is successful. Throws an
   /// exception if an error occurs while performing the fetch operation.
-  Future<Result<List<SubCategoryModel>>> fetchAllSubCategories(
+  Future<Result<List<SubcategoryModel>>> fetchSubcategoriesFrom(
     String categoryId,
   );
 
@@ -65,10 +67,10 @@ abstract class ICategoryRepository {
   /// If the fetch operation fails, it logs an error message. If the fetch
   /// operation is successful, it logs a success message.
   ///
-  /// Returns a [Result] containing an instance of type [SubCategoryModel] if
+  /// Returns a [Result] containing an instance of type [SubcategoryModel] if
   /// the fetch operation is successful. Throws an exception if an error occurs
   /// while performing the fetch operation.
-  Future<Result<SubCategoryModel>> fetchSubCategory(String subCategoryId);
+  Future<Result<SubcategoryModel>> fetchSubcategory(String subCategoryId);
 
   /// Inserts a category into the database.
   ///
@@ -91,12 +93,12 @@ abstract class ICategoryRepository {
   /// logs an error message. If the insertion operation is successful, it logs a
   /// success message.
   ///
-  /// Returns a [Result] containing an instance of type [SubCategoryModel] if
+  /// Returns a [Result] containing an instance of type [SubcategoryModel] if
   /// the insertion operation is successful. Throws an exception if an error
   /// occurs while performing the insertion operation.
   ///
   /// [dto] is the subcategory to insert.
-  Future<Result<SubCategoryModel>> insertSubCategory(SubCategoryDto dto);
+  Future<Result<SubcategoryModel>> insertSubcategory(SubcategoryDto dto);
 
   /// Updates an existing category in the database.
   ///
@@ -111,15 +113,15 @@ abstract class ICategoryRepository {
 
   /// Updates an existing subcategory in the database.
   ///
-  /// Takes a [SubCategoryModel] instance as input and updates the corresponding
+  /// Takes a [SubcategoryModel] instance as input and updates the corresponding
   /// record in the database with the new data. If the update operation is
   /// successful, the internal subcategory cache is also updated with the new
   /// subcategory data. Logs an error message if the update operation fails.
   ///
-  /// Returns a [Result] containing the updated [SubCategoryModel] if the update
+  /// Returns a [Result] containing the updated [SubcategoryModel] if the update
   /// operation is successful, or a [Result] containing an error if it fails.
-  Future<Result<SubCategoryModel>> updateSubCategory(
-    SubCategoryModel subCategory,
+  Future<Result<SubcategoryModel>> updateSubcategory(
+    SubcategoryModel subCategory,
   );
 
   /// Deletes a category from the database.
@@ -147,5 +149,9 @@ abstract class ICategoryRepository {
   /// Returns a [Result] containing null if the deletion operation is
   /// successful,
   /// or a [Result] containing an error if it fails.
-  Future<Result<void>> deleteSubCategory(String id);
+  Future<Result<void>> deleteSubcategory(String id);
+
+  Future<Result<List<CategorySubcategoryDto>>> search(String query);
+
+  Future<Result<void>> fetchAllSubcategories();
 }

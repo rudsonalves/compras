@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '/domain/dto/category_subcategory/category_subcategory_dto.dart';
 import '/ui/core/ui/buttons/button_signature.dart';
 import '/ui/core/ui/dialogs/bottom_sheet_dialog.dart';
 import '/domain/models/shopping/shopping_model.dart';
 import '/ui/core/themes/fonts.dart';
-import '/ui/core/ui/form_fields/selection_field.dart';
 import '/data/services/exceptions/exceptions.dart';
 import '/domain/dto/cart_item_dto/cart_item_dto.dart';
 import '/routing/routes.dart';
@@ -46,7 +46,6 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   final _quantityController = NumberEditingController(decimalDigits: 0);
   final _weightController = NumberEditingController(decimalDigits: 3);
   final _categoryController = TextEditingController();
-  final _subCategoryController = TextEditingController();
 
   final _subCategoryFocusNode = FocusNode();
   final _priceFocusNode = FocusNode();
@@ -55,6 +54,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   String? _productId;
   String? _categoryId;
   String? _subCategoryId;
+  String? _subcatName;
   final _total = ValueNotifier<double>(0);
 
   @override
@@ -94,7 +94,6 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   Widget build(BuildContext context) {
     final dimens = Dimens.of(context);
     final fontStyle = AppFontsStyle.of(context);
-    final categoriesNames = _viewModel.categoriesNames;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -140,45 +139,16 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                 textCapitalization: TextCapitalization.sentences,
               ),
 
-              SelectionField(
-                labelText: 'Categoria',
-                hintText: 'Selecione uma categoria',
-                controller: _categoryController,
-                suggestions: categoriesNames,
-                // nextFocusNode: _subCategoryFocusNode,
-                onChanged: _selectCategory,
-              ),
-
-              ListenableBuilder(
-                listenable: Listenable.merge([
-                  _viewModel.fetchAllSubcategories,
-                  _viewModel.findProductByBarCode,
-                ]),
-                builder: (context, _) {
-                  final subCategoriesNames = _categoryId == null
-                      ? <String>['Nenhum']
-                      : _viewModel.subCategoriesNames(_categoryId!);
-                  return Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SelectionField(
-                        focusNode: _subCategoryFocusNode,
-                        labelText: 'Sub-Categoria',
-                        hintText: 'Selecione uma sub-categoria',
-                        controller: _subCategoryController,
-                        suggestions: subCategoriesNames,
-                        onChanged: _selectSubCategory,
-                      ),
-                      if (_viewModel.fetchAllSubcategories.running)
-                        Container(
-                          color: Colors.black38,
-                          child: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                    ],
-                  );
-                },
+              InkWell(
+                onTap: _searchCategory,
+                child: AbsorbPointer(
+                  child: BasicFormField(
+                    labelText: 'Categoria',
+                    hintText: 'Selecione uma categoria',
+                    controller: _categoryController,
+                    readOnly: true,
+                  ),
+                ),
               ),
 
               EnumFormField<SaleBy>(
@@ -289,6 +259,25 @@ class _AddProductCartViewState extends State<AddProductCartView> {
     );
   }
 
+  Future<void> _searchCategory() async {
+    final CategorySubcategoryDto? result = await context
+        .pushNamed<CategorySubcategoryDto>(
+          Routes.searchCategory.name,
+          extra: widget.shopping,
+        );
+
+    if (result != null) {
+      final categoryText = CategorySubcategoryDto.string(
+        result.category.name,
+        result.subcategory.name,
+      );
+      _subcatName = result.subcategory.name;
+      _categoryId = result.category.id;
+      _categoryController.text = categoryText;
+      _subCategoryId = result.subcategory.id;
+    }
+  }
+
   void _calcTotalValue(String? value) => _calcTotal();
 
   void _calcTotal() {
@@ -296,22 +285,6 @@ class _AddProductCartViewState extends State<AddProductCartView> {
     final weight = _weightController.numberValue;
     final quantity = _quantityController.numberValue;
     _total.value = price * (_saleBy.value == SaleBy.unit ? quantity : weight);
-  }
-
-  void _selectCategory(String? value) {
-    if (value == null) return;
-
-    _categoryId = _viewModel.categoryIdFromName(value);
-    if (_categoryId == null) return;
-
-    _viewModel.fetchAllSubcategories.execute(_categoryId!);
-  }
-
-  void _selectSubCategory(String? value) {
-    if (value == null) return;
-
-    _subCategoryId = _viewModel.subCategoryIdFromName(value, _categoryId!);
-    if (_subCategoryId == null) return;
   }
 
   void _findProduct() {
@@ -334,11 +307,18 @@ class _AddProductCartViewState extends State<AddProductCartView> {
       switch (result) {
         case Success(value: final product):
           if (product != null) {
+            final categoryText =
+                product.categoryName != null && product.subCategoryName != null
+                ? CategorySubcategoryDto.string(
+                    product.categoryName ?? '',
+                    product.subCategoryName ?? '',
+                  )
+                : '';
             _productId = product.id;
             _nameController.text = product.name;
             _descriptionController.text = product.description ?? '';
-            _categoryController.text = product.categoryName ?? '';
-            _subCategoryController.text = product.subCategoryName ?? '';
+            _categoryController.text = categoryText;
+            _subcatName = product.subCategoryName;
             _saleBy.value = product.saleBy;
           }
           break;
@@ -400,7 +380,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
       barCode: _barCodeController.text,
       categoryName: _categoryController.text,
       categoryId: _categoryId,
-      subCategoryName: _subCategoryController.text,
+      subCategoryName: _subcatName,
       subCategoryId: _subCategoryId,
       saleBy: _saleBy.value,
       price: (_priceController.numberValue * 100).round(),

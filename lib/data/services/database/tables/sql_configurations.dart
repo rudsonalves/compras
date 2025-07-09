@@ -2,7 +2,7 @@ class SqlConfigurations {
   SqlConfigurations._();
 
   static const String dbName = 'shopping.db';
-  static const int dbVersion = 1;
+  // static const int dbVersion = 2;
   static const String enableForeignKeys = 'PRAGMA foreign_keys = ON';
 }
 
@@ -62,6 +62,7 @@ const Map<String, List<String>> categories = {
     'Óleos e Gorduras',
     'Doces e Sobremesas',
     'Snacks e Petiscos',
+    'Molhos',
     'Outros',
   ],
   'Congelados': [

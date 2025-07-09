@@ -10,6 +10,7 @@ abstract class LastPriceDto with _$LastPriceDto {
   const LastPriceDto._();
 
   const factory LastPriceDto({
+    @JsonKey(name: 'shopping_id') required String shoppingId,
     @JsonKey(name: 'product_id') required String productId,
     @JsonKey(name: 'sale_by') required SaleBy saleBy,
     @JsonKey(name: 'last_unit_price') required int lastUnitPrice,
@@ -17,12 +18,14 @@ abstract class LastPriceDto with _$LastPriceDto {
   }) = _LastPriceDto;
 
   factory LastPriceDto.create({
+    required String shoppingId,
     required String productId,
     SaleBy saleBy = SaleBy.unit,
     required int lastPrice,
   }) {
     final now = DateTime.now();
     return LastPriceDto(
+      shoppingId: shoppingId,
       productId: productId,
       saleBy: saleBy,
       lastUnitPrice: lastPrice,

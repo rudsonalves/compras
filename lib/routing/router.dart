@@ -1,9 +1,11 @@
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '/ui/view/search_category/search_category_view.dart';
+import '/ui/view/search_category/search_category_view_model.dart';
 import '/data/repositories/category/i_category_repository.dart';
 import '/ui/view/scanner_barcode/scanner_barcode_view.dart';
-import '../data/repositories/cart_items/i_cart_items_repository.dart';
+import '/data/repositories/cart_items/i_cart_items_repository.dart';
 import '/data/repositories/last_price/i_last_price_repository.dart';
 import '/data/repositories/products/i_products_repository.dart';
 import '/domain/user_cases/shopping_cart_user_case.dart';
@@ -12,8 +14,8 @@ import '/ui/view/cart_shopping/add_product_cart/add_product_cart_view_model.dart
 import '/domain/models/shopping/shopping_model.dart';
 import '/ui/view/home/edit_shopping/edit_shopping_view.dart';
 import '/ui/view/home/edit_shopping/edit_shopping_view_model.dart';
-import '../ui/view/cart_shopping/cart_shopping_view.dart';
-import '../ui/view/cart_shopping/cart_shopping_view_model.dart';
+import '/ui/view/cart_shopping/cart_shopping_view.dart';
+import '/ui/view/cart_shopping/cart_shopping_view_model.dart';
 import '/data/repositories/shopping/i_shopping_repository.dart';
 import '/routing/routes.dart';
 import '/ui/view/home/home_view.dart';
@@ -84,6 +86,16 @@ GoRouter router() => GoRouter(
                 return AddProductCartView(
                   shopping: shopping,
                   viewModel: AddProductCartViewModel(userCase),
+                );
+              },
+            ),
+            GoRoute(
+              path: Routes.searchCategory.path,
+              name: Routes.searchCategory.name,
+              builder: (ctx, state) {
+                final userCase = ctx.read<ShoppingCartUserCase>();
+                return SearchCategoryView(
+                  viewModel: SearchCategoryViewModel(userCase),
                 );
               },
             ),
