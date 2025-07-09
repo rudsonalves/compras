@@ -68,6 +68,7 @@ final class LastPriceColumns {
   LastPriceColumns._();
 
   static const String id = 'id';
+  static const String shoppingId = 'shopping_id';
   static const String productId = 'product_id';
   static const String saleBy = 'sale_by';
   static const String lastUnitPrice = 'last_unit_price';
@@ -174,10 +175,19 @@ final class SqlTables {
           ON DELETE CASCADE
       )''';
 
+  // Last Prices table
+  // Contains the last recorded prices for products.
+  // Each entry is uniquely identified by an ID and linked to a product by its
+  // product ID.
+  // The table includes fields for the sale type, last unit price, and creation
+  // timestamp.
+  // The `saleBy` field indicates how the product is sold (e.g., by unit or
+  // weight), with a default value of 1 (unit).
   static const String lastPrices =
       '''
       CREATE TABLE IF NOT EXISTS ${Tables.lastPrice} (
         ${LastPriceColumns.id} TEXT NOT NULL PRIMARY KEY,
+        ${LastPriceColumns.shoppingId} TEXT NOT NULL,
         ${LastPriceColumns.productId} TEXT NOT NULL,
         ${LastPriceColumns.saleBy} INTEGER DEFAULT 1 NOT NULL,
         ${LastPriceColumns.lastUnitPrice} INTEGER NOT NULL,
@@ -187,9 +197,13 @@ final class SqlTables {
           ON DELETE CASCADE
       )''';
 
-  static const String lastPriceIndex = '''
+  static const String lastPriceProductIndex = '''
     CREATE INDEX IF NOT EXISTS idx_last_price_product_id 
       ON ${Tables.lastPrice} (${LastPriceColumns.productId})''';
+
+  static const String lastPriceShoppingIndex = '''
+    CREATE INDEX IF NOT EXISTS idx_last_price_shopping_id 
+      ON ${Tables.lastPrice} (${LastPriceColumns.shoppingId})''';
 
   // Categories and Sub-Categories tables
   // These tables manage product categories and sub-categories.

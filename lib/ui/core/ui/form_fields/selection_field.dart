@@ -51,24 +51,65 @@ class SelectionField extends StatelessWidget {
   }
 
   void _showOptions(BuildContext context) {
-    final renderBox = context.findRenderObject() as RenderBox;
-    final position = renderBox.localToGlobal(Offset.zero);
-    showMenu<String>(
+    showModalBottomSheet<String>(
       context: context,
-      position: RelativeRect.fromLTRB(
-        position.dx,
-        position.dy + renderBox.size.height,
-        position.dx + renderBox.size.width,
-        position.dy,
-      ),
-      items: suggestions
-          .map(
-            (opt) => PopupMenuItem(
-              value: opt,
-              child: Text(opt),
-            ),
-          )
-          .toList(),
+      isScrollControlled: true,
+      builder: (context) {
+        final TextEditingController searchController = TextEditingController();
+        List<String> filtered = List.from(suggestions);
+
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Pesquisar $labelText',
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          filtered = suggestions
+                              .where(
+                                (s) => s.toLowerCase().contains(
+                                  value.toLowerCase(),
+                                ),
+                              )
+                              .toList();
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: filtered.length,
+                      itemBuilder: (context, index) {
+                        final option = filtered[index];
+                        return ListTile(
+                          title: Text(option),
+                          onTap: () {
+                            Navigator.pop(context, option);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
     ).then((selected) {
       if (selected != null) {
         controller.text = selected;

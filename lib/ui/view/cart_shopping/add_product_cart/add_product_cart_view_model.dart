@@ -5,7 +5,7 @@ import '/domain/dto/product/product_dto.dart';
 import '/domain/models/category/category_model.dart';
 import '/domain/models/item/item_model.dart';
 import '/domain/models/product/product_model.dart';
-import '/domain/models/sub_category/sub_category_model.dart';
+import '../../../../domain/models/subcategory/subcategory_model.dart';
 import '/domain/user_cases/shopping_cart_user_case.dart';
 import '/utils/command.dart';
 import '/utils/result.dart';
@@ -20,7 +20,7 @@ class AddProductCartViewModel {
     findProductByBarCode = Command1<ProductModel?, String>(
       _findProductByBarCode,
     );
-    fetchAllSubcategories = Command1<List<SubCategoryModel>, String>(
+    fetchAllSubcategories = Command1<List<SubcategoryModel>, String>(
       _fetchAllSubcategories,
     );
   }
@@ -29,8 +29,8 @@ class AddProductCartViewModel {
   late final Command1<void, CartItemDto> saving;
   late final Command1<void, ItemModel> update;
   late final Command1<ProductModel?, String> findProductByBarCode;
-  late final Command1<(CategoryModel, SubCategoryModel), String> getSubCategory;
-  late final Command1<List<SubCategoryModel>, String> fetchAllSubcategories;
+  late final Command1<(CategoryModel, SubcategoryModel), String> getSubcategory;
+  late final Command1<List<SubcategoryModel>, String> fetchAllSubcategories;
 
   ProductModel? _product;
 
@@ -151,7 +151,7 @@ class AddProductCartViewModel {
     }
   }
 
-  Future<Result<List<SubCategoryModel>>> _fetchAllSubcategories(
+  Future<Result<List<SubcategoryModel>>> _fetchAllSubcategories(
     String categoryId,
   ) async {
     final result = await _userCase.fetchAllSubcategories(categoryId);

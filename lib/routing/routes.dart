@@ -14,4 +14,5 @@ abstract final class Routes {
     'add-product-cart', // Relative route here!
   );
   static const scanner = Route('scanner', '/scanner');
+  static const searchCategory = Route('searchCategory', '/search-category');
 }

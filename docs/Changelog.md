@@ -2,7 +2,135 @@
 
 This is a list of changes made to the codebase since the last release.
 
-## ## 2025/07/08 save_product-03 - rudsonalves
+## 2025/07/09 add_search_ui - rudsonalves
+
+### Add shoppingId to last prices, rename subcategory, add search UI, update theme
+
+This commit introduces a new `shoppingId` field to the LastPrice feature and upgrades the database schema to version 3. It unifies all `sub_category` entities under `Subcategory`, refactoring imports and method signatures. It also implements a category-subcategory search interface and view model, enhances the selection field with a searchable bottom sheet, overhauls the theme color palettes, and adds a Makefile for generating PDF documentation.
+
+### Modified Files
+
+* **docs/images/Diagrama\_de\_Classes.drawio**
+
+  * Adjusted `<mxGraphModel>` dimensions (`dx`, `dy`) and grouping geometry.
+  * Updated edge and swimlane styles (fill/stroke colors) and added new point arrays for geometry.
+
+* **lib/data/repositories/category/category\_repository.dart**
+
+  * Updated imports and generics to use `SubcategoryModel` instead of `SubCategoryModel`.
+  * Renamed methods:
+
+    * `getSubCategory` → `getSubcategory`
+    * `fetchAllSubCategories` → `fetchSubcategoriesFrom`
+  * Added `search(String)` and `fetchAllSubcategories()` methods to support combined category-subcategory lookup.
+
+* **lib/data/repositories/category/i\_category\_repository.dart**
+
+  * Updated DTO and model import paths to `subcategory`.
+  * Renamed method signatures and return types to `SubcategoryModel`.
+  * Added `search(String)` and `fetchAllSubcategories()` to the interface.
+
+* **lib/data/services/database/database\_manager.dart**
+
+  * Switched database version reference to `SqlUpgrades.dbVersion` and imported `sql_upgrades.dart`.
+  * Updated index execution: replaced `lastPriceIndex` with `lastPriceProductIndex`.
+  * Enhanced `_onUpgrade` to apply versioned SQL scripts from `SqlUpgrades.upgrades`.
+
+* **lib/data/services/database/tables/sql\_configurations.dart**
+
+  * Commented out legacy `dbVersion` constant.
+  * Added new static category entry `"Molhos"`.
+
+* **lib/data/services/database/tables/sql\_tables.dart**
+
+  * Introduced `LastPriceColumns.shoppingId` and added `shopping_id` column to `lastPrices` table.
+  * Added `idx_last_price_shopping_id` index alongside the existing product-ID index.
+
+* **lib/domain/dto/last\_price/last\_price\_dto.dart**
+
+  * Added `shoppingId` field (`@JsonKey(name: 'shopping_id')`) in the DTO factory, serialization, and `create()` helper.
+
+* **lib/domain/models/last\_price/last\_price\_model.dart**
+
+  * Extended `LastPriceModel` constructors and factory methods to include `shoppingId`.
+  * Updated JSON mapping to handle the new `shopping_id` property.
+
+* **lib/domain/user\_cases/shopping\_cart\_user\_case.dart**
+
+  * Renamed all `SubCategoryModel` references to `SubcategoryModel`.
+  * Replaced calls to `fetchAllSubCategories` with `fetchSubcategoriesFrom`.
+  * Introduced `searchCategory(String)` forwarding to the repository’s `search`.
+
+* **lib/routing/router.dart** & **lib/routing/routes.dart**
+
+  * Imported `SearchCategoryView` and `SearchCategoryViewModel`.
+  * Registered new GoRoute at `Routes.searchCategory` (`/search-category`).
+
+* **lib/ui/core/themes/fonts.dart**
+
+  * Changed the display font from `'Marcellus'` to `'Gabriela'`.
+
+* **lib/ui/core/themes/theme.dart**
+
+  * Overhauled all color schemes (light, medium/high contrast, dark) with a new blue-based palette and updated container, surface, and inverse colors.
+
+* **lib/ui/core/ui/form\_fields/selection\_field.dart**
+
+  * Replaced popup-menu selection with a search-enabled `showModalBottomSheet` implementation.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Removed legacy `SelectionField` for subcategories; added an `InkWell` that opens the new search UI.
+  * Refactored product lookup to populate combined “Category » Subcategory” text via `CategorySubcategoryDto`.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\_model.dart**
+
+  * Updated command types to use `SubcategoryModel` and renamed `getSubCategory` → `getSubcategory`.
+
+* **lib/ui/view/cart\_shopping/cart\_shopping\_view\.dart**
+
+  * Initialized `viewModel` in `initState` and switched to `cartItemsNotifier`.
+  * Refactored list display using `Dismissible` cards with edit/remove actions.
+
+* **lib/ui/view/cart\_shopping/cart\_shopping\_view\_model.dart**
+
+  * Added `itemsList` getter and renamed `cartNotifier` → `cartItemsNotifier`.
+
+### New Files
+
+* **docs/Makefile**
+  Defines a `pdf` target for generating `compras.pdf` from Markdown sources.
+
+* **docs/compras.pdf**
+  Generated PDF documentation for the project.
+
+* **lib/data/services/database/tables/sql\_upgrades.dart**
+  Centralizes SQL upgrade scripts for database version 3.
+
+* **lib/domain/dto/category\_subcategory/category\_subcategory\_dto.dart**
+  DTO combining a `CategoryModel` and `SubcategoryModel` for unified display.
+
+* **lib/domain/dto/subcategory/subcategory\_dto.dart**
+  Freezed-based DTO replacing the removed `SubCategoryDto`.
+
+* **lib/domain/models/subcategory/subcategory\_model.dart**
+  Freezed-based model replacing the removed `SubCategoryModel`.
+
+* **lib/ui/view/search\_category/search\_category\_view\.dart**
+  UI component for searching and selecting a category/subcategory pair.
+
+* **lib/ui/view/search\_category/search\_category\_view\_model.dart**
+  View model exposing a `search` command to drive the search interface.
+
+* **lib/utils/extensions/int\_extensions.dart**
+  Adds `toCurrency()` and `toCurrencyWithSymbol()` extensions on `int`.
+
+### Conclusions
+
+All updates are complete and the system functionality remains intact.
+
+
+## 2025/07/08 save_product-03 - rudsonalves
 
 ### Add documentation structure and reorganize docs assets
 
