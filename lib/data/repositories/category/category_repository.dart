@@ -93,7 +93,7 @@ class CategoryRepository implements ICategoryRepository {
     String categoryId,
   ) async {
     if (_loadsCategoryIds.contains(categoryId)) {
-      return Result.success(_subCategoriesList(categoryId));
+      return Result.success(subCategoriesList(categoryId));
     }
 
     final result = await _dbService.fetchAll<SubcategoryModel>(
@@ -109,7 +109,7 @@ class CategoryRepository implements ICategoryRepository {
         for (var subCategory in value) {
           _subCategories[subCategory.id] = subCategory;
         }
-        return Result.success(_subCategoriesList(categoryId));
+        return Result.success(subCategoriesList(categoryId));
 
       case Failure(:final error):
         log('Error fetching subCategories: $error');
@@ -276,7 +276,7 @@ class CategoryRepository implements ICategoryRepository {
       for (final category in categories) {
         if (category.name.toLowerCase().contains(normalized)) {
           // fetch subcategories for this category
-          final subCategories = _subCategoriesList(category.id);
+          final subCategories = subCategoriesList(category.id);
           for (final subCategory in subCategories) {
             if (subCategory.categoryId == category.id) {
               results.add(
@@ -370,7 +370,7 @@ class CategoryRepository implements ICategoryRepository {
       await fetchSubcategoriesFrom(categoryId);
     }
 
-    for (final subCategory in _subCategoriesList(categoryId)) {
+    for (final subCategory in subCategoriesList(categoryId)) {
       if (subCategory.name == name) {
         return subCategory.id;
       }
@@ -379,17 +379,8 @@ class CategoryRepository implements ICategoryRepository {
     return null;
   }
 
-  /// Returns an unmodifiable list of subcategories for a given category ID.
-  ///
-  /// Filters the subcategories by the provided [categoryId] and returns
-  /// an unmodifiable list containing the subcategories that belong to
-  /// that category.
-  ///
-  /// [categoryId] is the ID of the category to filter subcategories by.
-  ///
-  /// Returns a [List<SubcategoryModel>] containing the subcategories associated
-  /// with the specified category ID.
-  List<SubcategoryModel> _subCategoriesList(String categoryId) =>
+  @override
+  List<SubcategoryModel> subCategoriesList(String categoryId) =>
       List.unmodifiable(
         _subCategories.values.where((sc) => sc.categoryId == categoryId),
       );

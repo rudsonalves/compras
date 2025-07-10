@@ -15,7 +15,7 @@ abstract class ProductDto with _$ProductDto {
   const factory ProductDto({
     required String name,
     String? description,
-    @JsonKey(name: 'bar_code') required String barCode,
+    @JsonKey(name: 'bar_code') String? barCode,
     @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
     @JsonKey(name: 'category_id') String? categoryId,
     @JsonKey(name: 'category_name') String? categoryName,
@@ -28,7 +28,7 @@ abstract class ProductDto with _$ProductDto {
   factory ProductDto.create({
     required String name,
     String? description,
-    required String barCode,
+    String? barCode,
     SaleBy saleBy = SaleBy.unit,
     String? categoryId,
     String? categoryName,

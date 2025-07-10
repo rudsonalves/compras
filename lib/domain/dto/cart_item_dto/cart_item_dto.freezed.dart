@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CartItemDto {
 
- String get shoppingId;@JsonKey(name: 'product_id') String? get productId; String get name; String? get description;@JsonKey(name: 'bar_code') String get barCode;@JsonKey(name: 'sale_by') SaleBy get saleBy;@JsonKey(name: 'category_id') String? get categoryId;@JsonKey(name: 'category') String? get categoryName;@JsonKey(name: 'sub_category_id') String? get subCategoryId;@JsonKey(name: 'sub_category') String? get subCategoryName; int get price; int get quantity;
+ String get shoppingId;@JsonKey(name: 'product_id') String? get productId; String get name; String? get description;@JsonKey(name: 'bar_code') String? get barCode;@JsonKey(name: 'sale_by') SaleBy get saleBy;@JsonKey(name: 'category_id') String? get categoryId;@JsonKey(name: 'category') String? get categoryName;@JsonKey(name: 'sub_category_id') String? get subCategoryId;@JsonKey(name: 'sub_category') String? get subCategoryName; int get price; int get quantity;
 /// Create a copy of CartItemDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +46,7 @@ abstract mixin class $CartItemDtoCopyWith<$Res>  {
   factory $CartItemDtoCopyWith(CartItemDto value, $Res Function(CartItemDto) _then) = _$CartItemDtoCopyWithImpl;
 @useResult
 $Res call({
- String shoppingId,@JsonKey(name: 'product_id') String? productId, String name, String? description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'sale_by') SaleBy saleBy,@JsonKey(name: 'category_id') String? categoryId,@JsonKey(name: 'category') String? categoryName,@JsonKey(name: 'sub_category_id') String? subCategoryId,@JsonKey(name: 'sub_category') String? subCategoryName, int price, int quantity
+ String shoppingId,@JsonKey(name: 'product_id') String? productId, String name, String? description,@JsonKey(name: 'bar_code') String? barCode,@JsonKey(name: 'sale_by') SaleBy saleBy,@JsonKey(name: 'category_id') String? categoryId,@JsonKey(name: 'category') String? categoryName,@JsonKey(name: 'sub_category_id') String? subCategoryId,@JsonKey(name: 'sub_category') String? subCategoryName, int price, int quantity
 });
 
 
@@ -63,14 +63,14 @@ class _$CartItemDtoCopyWithImpl<$Res>
 
 /// Create a copy of CartItemDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? shoppingId = null,Object? productId = freezed,Object? name = null,Object? description = freezed,Object? barCode = null,Object? saleBy = null,Object? categoryId = freezed,Object? categoryName = freezed,Object? subCategoryId = freezed,Object? subCategoryName = freezed,Object? price = null,Object? quantity = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? shoppingId = null,Object? productId = freezed,Object? name = null,Object? description = freezed,Object? barCode = freezed,Object? saleBy = null,Object? categoryId = freezed,Object? categoryName = freezed,Object? subCategoryId = freezed,Object? subCategoryName = freezed,Object? price = null,Object? quantity = null,}) {
   return _then(_self.copyWith(
 shoppingId: null == shoppingId ? _self.shoppingId : shoppingId // ignore: cast_nullable_to_non_nullable
 as String,productId: freezed == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
 as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,barCode: null == barCode ? _self.barCode : barCode // ignore: cast_nullable_to_non_nullable
-as String,saleBy: null == saleBy ? _self.saleBy : saleBy // ignore: cast_nullable_to_non_nullable
+as String?,barCode: freezed == barCode ? _self.barCode : barCode // ignore: cast_nullable_to_non_nullable
+as String?,saleBy: null == saleBy ? _self.saleBy : saleBy // ignore: cast_nullable_to_non_nullable
 as SaleBy,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as String?,categoryName: freezed == categoryName ? _self.categoryName : categoryName // ignore: cast_nullable_to_non_nullable
 as String?,subCategoryId: freezed == subCategoryId ? _self.subCategoryId : subCategoryId // ignore: cast_nullable_to_non_nullable
@@ -88,14 +88,14 @@ as int,
 
 
 class _CartItemDto implements CartItemDto {
-  const _CartItemDto({required this.shoppingId, @JsonKey(name: 'product_id') this.productId, required this.name, this.description, @JsonKey(name: 'bar_code') required this.barCode, @JsonKey(name: 'sale_by') this.saleBy = SaleBy.unit, @JsonKey(name: 'category_id') this.categoryId, @JsonKey(name: 'category') this.categoryName, @JsonKey(name: 'sub_category_id') this.subCategoryId, @JsonKey(name: 'sub_category') this.subCategoryName, this.price = 0, this.quantity = 1});
+  const _CartItemDto({required this.shoppingId, @JsonKey(name: 'product_id') this.productId, required this.name, this.description, @JsonKey(name: 'bar_code') this.barCode, @JsonKey(name: 'sale_by') this.saleBy = SaleBy.unit, @JsonKey(name: 'category_id') this.categoryId, @JsonKey(name: 'category') this.categoryName, @JsonKey(name: 'sub_category_id') this.subCategoryId, @JsonKey(name: 'sub_category') this.subCategoryName, this.price = 0, this.quantity = 1});
   
 
 @override final  String shoppingId;
 @override@JsonKey(name: 'product_id') final  String? productId;
 @override final  String name;
 @override final  String? description;
-@override@JsonKey(name: 'bar_code') final  String barCode;
+@override@JsonKey(name: 'bar_code') final  String? barCode;
 @override@JsonKey(name: 'sale_by') final  SaleBy saleBy;
 @override@JsonKey(name: 'category_id') final  String? categoryId;
 @override@JsonKey(name: 'category') final  String? categoryName;
@@ -134,7 +134,7 @@ abstract mixin class _$CartItemDtoCopyWith<$Res> implements $CartItemDtoCopyWith
   factory _$CartItemDtoCopyWith(_CartItemDto value, $Res Function(_CartItemDto) _then) = __$CartItemDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String shoppingId,@JsonKey(name: 'product_id') String? productId, String name, String? description,@JsonKey(name: 'bar_code') String barCode,@JsonKey(name: 'sale_by') SaleBy saleBy,@JsonKey(name: 'category_id') String? categoryId,@JsonKey(name: 'category') String? categoryName,@JsonKey(name: 'sub_category_id') String? subCategoryId,@JsonKey(name: 'sub_category') String? subCategoryName, int price, int quantity
+ String shoppingId,@JsonKey(name: 'product_id') String? productId, String name, String? description,@JsonKey(name: 'bar_code') String? barCode,@JsonKey(name: 'sale_by') SaleBy saleBy,@JsonKey(name: 'category_id') String? categoryId,@JsonKey(name: 'category') String? categoryName,@JsonKey(name: 'sub_category_id') String? subCategoryId,@JsonKey(name: 'sub_category') String? subCategoryName, int price, int quantity
 });
 
 
@@ -151,14 +151,14 @@ class __$CartItemDtoCopyWithImpl<$Res>
 
 /// Create a copy of CartItemDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? shoppingId = null,Object? productId = freezed,Object? name = null,Object? description = freezed,Object? barCode = null,Object? saleBy = null,Object? categoryId = freezed,Object? categoryName = freezed,Object? subCategoryId = freezed,Object? subCategoryName = freezed,Object? price = null,Object? quantity = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? shoppingId = null,Object? productId = freezed,Object? name = null,Object? description = freezed,Object? barCode = freezed,Object? saleBy = null,Object? categoryId = freezed,Object? categoryName = freezed,Object? subCategoryId = freezed,Object? subCategoryName = freezed,Object? price = null,Object? quantity = null,}) {
   return _then(_CartItemDto(
 shoppingId: null == shoppingId ? _self.shoppingId : shoppingId // ignore: cast_nullable_to_non_nullable
 as String,productId: freezed == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
 as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,barCode: null == barCode ? _self.barCode : barCode // ignore: cast_nullable_to_non_nullable
-as String,saleBy: null == saleBy ? _self.saleBy : saleBy // ignore: cast_nullable_to_non_nullable
+as String?,barCode: freezed == barCode ? _self.barCode : barCode // ignore: cast_nullable_to_non_nullable
+as String?,saleBy: null == saleBy ? _self.saleBy : saleBy // ignore: cast_nullable_to_non_nullable
 as SaleBy,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as String?,categoryName: freezed == categoryName ? _self.categoryName : categoryName // ignore: cast_nullable_to_non_nullable
 as String?,subCategoryId: freezed == subCategoryId ? _self.subCategoryId : subCategoryId // ignore: cast_nullable_to_non_nullable
