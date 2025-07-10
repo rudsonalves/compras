@@ -12,7 +12,7 @@ abstract class CartItemDto with _$CartItemDto {
     @JsonKey(name: 'product_id') String? productId,
     required String name,
     String? description,
-    @JsonKey(name: 'bar_code') required String barCode,
+    @JsonKey(name: 'bar_code') String? barCode,
     @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
     @JsonKey(name: 'category_id') String? categoryId,
     @JsonKey(name: 'category') String? categoryName,

@@ -11,7 +11,7 @@ _ProductModel _$ProductModelFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       name: json['name'] as String,
       description: json['description'] as String?,
-      barCode: json['bar_code'] as String,
+      barCode: json['bar_code'] as String?,
       saleBy:
           $enumDecodeNullable(_$SaleByEnumMap, json['sale_by']) ?? SaleBy.unit,
       categoryId: json['category_id'] as String?,

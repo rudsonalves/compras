@@ -154,4 +154,16 @@ abstract class ICategoryRepository {
   Future<Result<List<CategorySubcategoryDto>>> search(String query);
 
   Future<Result<void>> fetchAllSubcategories();
+
+  /// Returns an unmodifiable list of subcategories for a given category ID.
+  ///
+  /// Filters the subcategories by the provided [categoryId] and returns
+  /// an unmodifiable list containing the subcategories that belong to
+  /// that category.
+  ///
+  /// [categoryId] is the ID of the category to filter subcategories by.
+  ///
+  /// Returns a [List<SubcategoryModel>] containing the subcategories associated
+  /// with the specified category ID.
+  List<SubcategoryModel> subCategoriesList(String categoryId);
 }

@@ -53,6 +53,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   final _saleBy = ValueNotifier<SaleBy>(SaleBy.unit);
   String? _productId;
   String? _categoryId;
+  String? _categoryName;
   String? _subCategoryId;
   String? _subcatName;
   final _total = ValueNotifier<double>(0);
@@ -118,8 +119,18 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                 hintText: 'Digite ou leia o código de barras do produto',
                 controller: _barCodeController,
                 keyboardType: TextInputType.number,
+                prefixIcon: IconButton(
+                  icon: Icon(
+                    Symbols.search_rounded,
+                    color: colorScheme.tertiary,
+                  ),
+                  onPressed: _searchProduct,
+                ),
                 suffixIcon: IconButton(
-                  icon: const Icon(Symbols.barcode_scanner_rounded),
+                  icon: Icon(
+                    Symbols.barcode_scanner_rounded,
+                    color: colorScheme.tertiary,
+                  ),
                   onPressed: _barcodeScanner,
                 ),
               ),
@@ -128,6 +139,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                 labelText: 'Nome do Produto',
                 hintText: 'Digite o nome do produto',
                 controller: _nameController,
+                prefixIconData: Symbols.box_rounded,
                 validator: GenericValidations.name,
                 textCapitalization: TextCapitalization.words,
               ),
@@ -135,6 +147,9 @@ class _AddProductCartViewState extends State<AddProductCartView> {
               BasicFormField(
                 labelText: 'Descrição do Produto',
                 hintText: 'Digite a descrição do produto',
+                prefixIconData: Symbols.description_rounded,
+                minLines: 1,
+                maxLines: 3,
                 controller: _descriptionController,
                 textCapitalization: TextCapitalization.sentences,
               ),
@@ -145,7 +160,10 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                   child: BasicFormField(
                     labelText: 'Categoria',
                     hintText: 'Selecione uma categoria',
+                    minLines: 1,
+                    maxLines: 2,
                     controller: _categoryController,
+                    prefixIconData: Symbols.category_rounded,
                     readOnly: true,
                   ),
                 ),
@@ -195,10 +213,12 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                               prefixIcon: IconButton(
                                 onPressed: _addQuantity,
                                 icon: Icon(Symbols.add_rounded),
+                                color: colorScheme.tertiary,
                               ),
                               suffixIcon: IconButton(
                                 onPressed: _removeQuantity,
                                 icon: Icon(Symbols.remove_rounded),
+                                color: colorScheme.tertiary,
                               ),
                               validator: (_) => GenericValidations.notZero(
                                 _quantityController.numberValue,
@@ -271,6 +291,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
         result.category.name,
         result.subcategory.name,
       );
+      _categoryName = result.category.name;
       _subcatName = result.subcategory.name;
       _categoryId = result.category.id;
       _categoryController.text = categoryText;
@@ -318,7 +339,10 @@ class _AddProductCartViewState extends State<AddProductCartView> {
             _nameController.text = product.name;
             _descriptionController.text = product.description ?? '';
             _categoryController.text = categoryText;
+            _categoryName = product.categoryName;
             _subcatName = product.subCategoryName;
+            _categoryId = product.categoryId;
+            _subCategoryId = product.subCategoryId;
             _saleBy.value = product.saleBy;
           }
           break;
@@ -372,13 +396,14 @@ class _AddProductCartViewState extends State<AddProductCartView> {
         ? null
         : _descriptionController.text.trim();
 
+    final barcode = _barCodeController.text.trim();
     final cartItem = CartItemDto(
       shoppingId: widget.shopping.id,
       productId: _productId,
       name: _nameController.text,
       description: description,
-      barCode: _barCodeController.text,
-      categoryName: _categoryController.text,
+      barCode: barcode.isEmpty ? null : barcode,
+      categoryName: _categoryName,
       categoryId: _categoryId,
       subCategoryName: _subcatName,
       subCategoryId: _subCategoryId,
@@ -427,23 +452,29 @@ class _AddProductCartViewState extends State<AddProductCartView> {
       ],
     );
 
-    if (response == null || response == ThreeState.indeterminate) return;
-
-    try {
-      if (response == ThreeState.yes) {
-        if (!mounted) return;
-        final response = await context.push(Routes.scanner.path);
-        if (response == null) return;
-
-        _barCodeController.text = response as String;
-      }
-
-      if (_barCodeController.text.trim().isEmpty) return;
-
-      _viewModel.findProductByBarCode.execute(_barCodeController.text);
-    } catch (err) {
-      debugPrint(err.toString());
+    if (response == null ||
+        response == ThreeState.indeterminate ||
+        response != ThreeState.yes) {
+      return;
     }
+
+    if (response == ThreeState.yes) {
+      if (!mounted) return;
+      final response = await context.push(Routes.scanner.path);
+      if (response == null) return;
+
+      _barCodeController.text = response as String;
+    }
+
+    _searchProduct();
+  }
+
+  void _searchProduct() {
+    final barcode = _barCodeController.text.trim();
+    if (barcode.isEmpty) return;
+
+    _viewModel.findProductByBarCode.execute(barcode);
+    FocusScope.of(context).nextFocus();
   }
 
   void _addQuantity() {

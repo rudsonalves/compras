@@ -2,6 +2,90 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/10 refactor_and_bugfix - rudsonalves
+
+### Refactor subCategoriesList, nullability & UI enhancements
+
+This commit adds `/docs/notas` to `.gitignore`, refactors the private `_subCategoriesList` method into a public `subCategoriesList` with updated interface and internal calls, enriches SQL configuration with new category groups, enforces NOT NULL on product category/subcategory columns, and converts `barCode` fields to nullable across DTOs and models. It also enhances form defaults, adds prefix icons and search controls in the AddProductCart view, extracts a reusable `DismissibleCart` widget, and upgrades the SearchCategory UI with pre-selection and layout improvements.
+
+### Modified Files
+
+* **.gitignore**
+
+  * Added `/docs/notas` to ignore list.
+
+* **lib/data/repositories/category/category\_repository.dart**
+
+  * Replaced calls to `_subCategoriesList(...)` with `subCategoriesList(...)`.
+  * Renamed private `_subCategoriesList` to public `subCategoriesList` and annotated with `@override`.
+
+* **lib/data/repositories/category/i\_category\_repository.dart**
+
+  * Added `List<SubcategoryModel> subCategoriesList(String categoryId)` signature with documentation.
+
+* **lib/data/services/database/tables/sql\_configurations.dart**
+
+  * Inserted `'Grãos Integrais'` into the `Mercearia Geral` list.
+  * Appended new category groups: `Bebês`, `Orgânicos e Naturais`, `Diet & Saúde`, `Perfumaria e Cosméticos`, `Descartáveis e Utilidades`, `Farmácia e Saúde`, `Bebidas Especiais`, and `Mercearia Internacional / Étnica`.
+
+* **lib/data/services/database/tables/sql\_tables.dart**
+
+  * Changed `categoryId`, `categoryName`, `subCategoryId`, and `subCategoryName` columns in the `products` table to `TEXT NOT NULL`.
+
+* **lib/domain/dto/cart\_item\_dto/cart\_item\_dto.dart** & **.freezed.dart**
+
+  * Made `barCode` nullable (`String?`) instead of required.
+
+* **lib/domain/dto/product/product\_dto.dart**, **.freezed.dart**, **.g.dart**
+
+  * Made `barCode` nullable across DTO definitions and serialization logic.
+
+* **lib/domain/enums/enums.dart**
+
+  * Renamed `ShoppingType.supermarket` label from `'Supermercado'` to `'Mercado'`.
+
+* **lib/domain/models/product/product\_model.dart**, **.freezed.dart**, **.g.dart**
+
+  * Made `barCode` nullable in model definitions and JSON mapping.
+
+* **lib/domain/user\_cases/shopping\_cart\_user\_case.dart**
+
+  * Added `subCategoriesList(String)` delegate to forward to repository.
+
+* **lib/ui/core/ui/form\_fields/basic\_form\_field.dart**
+
+  * Set default `border` to `UnderlineInputBorder()`.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Introduced `_categoryName` state and `prefixIcon` for product name, description, and category fields.
+  * Added a search button for barcode lookup alongside scanner.
+  * Ensured category, subcategory and barcode values propagate correctly to `CartItemDto`.
+
+* **lib/ui/view/cart\_shopping/cart\_shopping\_view\.dart**
+
+  * Removed inline `Dismissible` logic; imported and utilized `DismissibleCart` widget.
+
+* **lib/ui/view/search\_category/search\_category\_view\.dart**
+
+  * Enhanced imports and layout with `ValueNotifier` for results and pre-selection toggling.
+  * Added back-navigation icon and "Pre-selecionar uma Categoria" button.
+
+* **lib/ui/view/search\_category/search\_category\_view\_model.dart**
+
+  * Exposed `categories`, `subCategories`, and `subCategoriesList` getters for the view.
+
+### New Files
+
+* **lib/ui/view/cart\_shopping/widgets/dismissible\_cart.dart**
+
+  * A reusable widget for swipe-to-edit/remove cart items.
+
+### Conclusions
+
+All changes are complete, the new `subCategoriesList` API is in place, the SQL schema and DTOs reflect desired constraints, and the UI components now include search and reusable patterns.
+
+
 ## 2025/07/09 add_search_ui - rudsonalves
 
 ### Add shoppingId to last prices, rename subcategory, add search UI, update theme

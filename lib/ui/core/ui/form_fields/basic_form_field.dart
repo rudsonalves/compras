@@ -39,7 +39,7 @@ class BasicFormField extends StatefulWidget {
     this.labelText,
     this.hintText,
     this.floatingLabelBehavior = FloatingLabelBehavior.always,
-    this.border,
+    this.border = const UnderlineInputBorder(),
     this.controller,
     this.textCapitalization = TextCapitalization.none,
     this.textInputAction = TextInputAction.next,
@@ -91,10 +91,8 @@ class _BasicFormFieldState extends State<BasicFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final Dimens dimens = Dimens.of(context);
+    final dimens = Dimens.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    // final border = widget.border;
-    //  ??
     final border =
         widget.border ??
         OutlineInputBorder(

@@ -9,7 +9,7 @@ part of 'product_dto.dart';
 _ProductDto _$ProductDtoFromJson(Map<String, dynamic> json) => _ProductDto(
   name: json['name'] as String,
   description: json['description'] as String?,
-  barCode: json['bar_code'] as String,
+  barCode: json['bar_code'] as String?,
   saleBy: $enumDecodeNullable(_$SaleByEnumMap, json['sale_by']) ?? SaleBy.unit,
   categoryId: json['category_id'] as String?,
   categoryName: json['category_name'] as String?,

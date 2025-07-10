@@ -40,6 +40,9 @@ class ShoppingCartUserCase {
 
   List<ItemModel> get itemsList => _cartItemsRepository.itemsList;
 
+  List<SubcategoryModel> subCategoriesList(String categoryId) =>
+      _categoryRepository.subCategoriesList(categoryId);
+
   Future<Result<List<CategorySubcategoryDto>>> searchCategory(
     String query,
   ) => _categoryRepository.search(query);
