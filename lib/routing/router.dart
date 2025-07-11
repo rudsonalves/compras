@@ -1,3 +1,7 @@
+import 'package:compras/data/repositories/list_item/i_list_item_repository.dart';
+import 'package:compras/domain/user_cases/add_item_list_user_case.dart';
+import 'package:compras/ui/view/cart_shopping/add_item_list/add_item_list_view.dart';
+import 'package:compras/ui/view/cart_shopping/add_item_list/add_item_list_view_model.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -9,8 +13,8 @@ import '/data/repositories/cart_items/i_cart_items_repository.dart';
 import '/data/repositories/last_price/i_last_price_repository.dart';
 import '/data/repositories/products/i_products_repository.dart';
 import '/domain/user_cases/shopping_cart_user_case.dart';
-import '/ui/view/cart_shopping/add_product_cart/add_product_cart_view.dart';
-import '/ui/view/cart_shopping/add_product_cart/add_product_cart_view_model.dart';
+import '../ui/view/cart_shopping/add_item_cart/add_item_cart_view.dart';
+import '../ui/view/cart_shopping/add_item_cart/add_item_cart_view_model.dart';
 import '/domain/models/shopping/shopping_model.dart';
 import '/ui/view/home/edit_shopping/edit_shopping_view.dart';
 import '/ui/view/home/edit_shopping/edit_shopping_view_model.dart';
@@ -83,9 +87,9 @@ GoRouter router() => GoRouter(
               builder: (ctx, state) {
                 final shopping = state.extra as ShoppingModel;
                 final userCase = ctx.read<ShoppingCartUserCase>();
-                return AddProductCartView(
+                return AddItemCartView(
                   shopping: shopping,
-                  viewModel: AddProductCartViewModel(userCase),
+                  viewModel: AddItemCartViewModel(userCase),
                 );
               },
             ),
@@ -107,6 +111,23 @@ GoRouter router() => GoRouter(
       path: Routes.scanner.path,
       name: Routes.scanner.name,
       builder: (ctx, _) => QrCodeScannerView(),
+    ),
+    GoRoute(
+      path: Routes.addItemList.path,
+      name: Routes.addItemList.name,
+      builder: (ctx, state) {
+        final shoppingId = state.extra as String?;
+
+        return AddItemListView(
+          shoppingId: shoppingId!,
+          viewModel: AddItemListViewModel(
+            AddItemListUserCase(
+              listItemRepository: ctx.read<IListItemRepository>(),
+              productsRepository: ctx.read<IProductsRepository>(),
+            ),
+          ),
+        );
+      },
     ),
   ],
 );

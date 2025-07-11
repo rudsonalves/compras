@@ -1,20 +1,19 @@
-import 'dart:developer';
-
 import '/domain/dto/cart_item_dto/cart_item_dto.dart';
 import '/domain/dto/product/product_dto.dart';
 import '/domain/models/category/category_model.dart';
 import '/domain/models/item/item_model.dart';
 import '/domain/models/product/product_model.dart';
-import '../../../../domain/models/subcategory/subcategory_model.dart';
+import '/domain/models/subcategory/subcategory_model.dart';
 import '/domain/user_cases/shopping_cart_user_case.dart';
 import '/utils/command.dart';
 import '/utils/result.dart';
 
-class AddProductCartViewModel {
+import 'dart:developer';
+
+class AddItemCartViewModel {
   final ShoppingCartUserCase _userCase;
 
-  AddProductCartViewModel(this._userCase) {
-    // load = Command0<void>(_userCase.load)..execute();
+  AddItemCartViewModel(this._userCase) {
     saving = Command1<void, CartItemDto>(_save);
     update = Command1<void, ItemModel>(_update);
     findProductByBarCode = Command1<ProductModel?, String>(

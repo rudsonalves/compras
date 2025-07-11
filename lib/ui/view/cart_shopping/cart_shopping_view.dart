@@ -1,7 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:material_symbols_icons/symbols.dart';
-
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/ui/dialogs/card_message.dart';
 import '/ui/view/cart_shopping/widgets/shopping_cart_title_row.dart';
@@ -12,6 +8,10 @@ import '/ui/view/cart_shopping/widgets/dismissible_cart.dart';
 import '/routing/routes.dart';
 import '/domain/models/shopping/shopping_model.dart';
 import 'cart_shopping_view_model.dart';
+
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 class CartShoppingView extends StatefulWidget {
   final ShoppingModel shopping;
@@ -111,7 +111,13 @@ class _CartShoppingViewState extends State<CartShoppingView> {
               return ListView.separated(
                 shrinkWrap: true,
                 itemCount: items.length,
-                separatorBuilder: (context, index) => Divider(),
+                separatorBuilder: (context, index) => const Row(
+                  children: [
+                    SizedBox(width: 100),
+                    Expanded(child: Divider()),
+                    SizedBox(width: 100),
+                  ],
+                ),
                 // const SizedBox(height: 12),
                 itemBuilder: (context, index) => DismissibleCart(
                   item: items[index],
@@ -130,10 +136,10 @@ class _CartShoppingViewState extends State<CartShoppingView> {
   }
 
   void _addChoppingList() {
-    // context.pushNamed(
-    //   Routes.addShoppingList.name,
-    //   extra: widget.shopping,
-    // );
+    context.pushNamed(
+      Routes.addItemList.name,
+      extra: widget.shopping.id,
+    );
   }
 
   Future<bool> _deleteItem(ItemModel item) async {

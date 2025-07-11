@@ -15,4 +15,5 @@ abstract final class Routes {
   );
   static const scanner = Route('scanner', '/scanner');
   static const searchCategory = Route('searchCategory', '/search-category');
+  static const addItemList = Route('addItemList', '/add-item-list');
 }

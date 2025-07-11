@@ -17,26 +17,25 @@ import '/domain/enums/enums.dart';
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/ui/editing_controllers/number_editing_controller.dart';
 import '/ui/core/ui/form_fields/basic_form_field.dart';
-import '/ui/core/ui/form_fields/enum_form_field.dart';
-import '/ui/view/cart_shopping/add_product_cart/add_product_cart_view_model.dart';
+import 'add_item_cart_view_model.dart';
 import '/utils/validates/generic_validations.dart';
 
-class AddProductCartView extends StatefulWidget {
-  final AddProductCartViewModel viewModel;
+class AddItemCartView extends StatefulWidget {
+  final AddItemCartViewModel viewModel;
   final ShoppingModel shopping;
 
-  const AddProductCartView({
+  const AddItemCartView({
     super.key,
     required this.viewModel,
     required this.shopping,
   });
 
   @override
-  State<AddProductCartView> createState() => _AddProductCartViewState();
+  State<AddItemCartView> createState() => _AddItemCartViewState();
 }
 
-class _AddProductCartViewState extends State<AddProductCartView> {
-  late final AddProductCartViewModel _viewModel;
+class _AddItemCartViewState extends State<AddItemCartView> {
+  late final AddItemCartViewModel _viewModel;
 
   final _formKey = GlobalKey<FormState>();
   final _barCodeController = TextEditingController();
@@ -57,6 +56,14 @@ class _AddProductCartViewState extends State<AddProductCartView> {
   String? _subCategoryId;
   String? _subcatName;
   final _total = ValueNotifier<double>(0);
+
+  static const WidgetStateProperty<Icon> thumbIcon =
+      WidgetStateProperty<Icon>.fromMap(
+        <WidgetStatesConstraint, Icon>{
+          WidgetState.selected: Icon(Icons.check),
+          WidgetState.any: Icon(Icons.close),
+        },
+      );
 
   @override
   void initState() {
@@ -171,74 +178,96 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                 ),
               ),
 
-              EnumFormField<SaleBy>(
-                title: 'Vendido por',
-                values: SaleBy.values,
-                initialValue: _saleBy.value,
-                labelBuilder: (value) => value.label,
-                layout: EnumFormLayout.row,
-                onChanged: _toggleSaleType,
-              ),
-
+              // EnumFormField<SaleBy>(
+              //   title: 'Vendido por',
+              //   values: SaleBy.values,
+              //   initialValue: _saleBy.value,
+              //   labelBuilder: (value) => value.label,
+              //   layout: EnumFormLayout.row,
+              //   onChanged: _toggleSaleType,
+              // ),
               ValueListenableBuilder(
                 valueListenable: _saleBy,
-                builder: (_, value, __) => Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: dimens.spacingHorizontal * 2,
+                builder: (_, value, __) => Column(
                   children: [
-                    Expanded(
-                      child: BasicFormField(
-                        labelText: value == SaleBy.unit
-                            ? 'Preço Unitário'
-                            : 'Preço por kg',
-                        prefixText: value == SaleBy.unit ? 'R\$' : 'R\$/kg',
-                        hintText: ' 0,00',
-                        focusNode: _priceFocusNode,
-                        controller: _priceController,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        validator: (_) => GenericValidations.notZero(
-                          _priceController.numberValue,
+                    Row(
+                      spacing: dimens.spacingHorizontal,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Switch(
+                          thumbIcon: thumbIcon,
+                          value: value == SaleBy.unit,
+                          onChanged: (saleByWeight) {
+                            _saleBy.value = saleByWeight
+                                ? SaleBy.unit
+                                : SaleBy.weight;
+                          },
                         ),
-                        onChanged: _calcTotalValue,
-                      ),
+                        Text(
+                          'Vendido por\n${value != SaleBy.unit ? 'Peso' : 'Unidade'}',
+                        ),
+                      ],
                     ),
 
-                    Expanded(
-                      child: value == SaleBy.unit
-                          ? BasicFormField(
-                              labelText: 'Quantidade',
-                              controller: _quantityController,
-                              keyboardType: TextInputType.number,
-                              // readOnly: true,
-                              textAlign: TextAlign.center,
-                              prefixIcon: IconButton(
-                                onPressed: _addQuantity,
-                                icon: Icon(Symbols.add_rounded),
-                                color: colorScheme.tertiary,
-                              ),
-                              suffixIcon: IconButton(
-                                onPressed: _removeQuantity,
-                                icon: Icon(Symbols.remove_rounded),
-                                color: colorScheme.tertiary,
-                              ),
-                              validator: (_) => GenericValidations.notZero(
-                                _quantityController.numberValue,
-                              ),
-                              onChanged: _calcTotalValue,
-                            )
-                          : BasicFormField(
-                              labelText: 'Peso (kg)',
-                              suffixText: 'kg',
-                              hintText: '0,000',
-                              textAlign: TextAlign.center,
-                              controller: _weightController,
-                              keyboardType: TextInputType.number,
-                              validator: (_) => GenericValidations.notZero(
-                                _weightController.numberValue,
-                              ),
-                              onChanged: _calcTotalValue,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: dimens.spacingHorizontal * 2,
+                      children: [
+                        Expanded(
+                          child: BasicFormField(
+                            labelText: value == SaleBy.unit
+                                ? 'Preço Unitário'
+                                : 'Preço por kg',
+                            prefixText: value == SaleBy.unit ? 'R\$' : 'R\$/kg',
+                            hintText: ' 0,00',
+                            focusNode: _priceFocusNode,
+                            controller: _priceController,
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.center,
+                            validator: (_) => GenericValidations.notZero(
+                              _priceController.numberValue,
                             ),
+                            onChanged: _calcTotalValue,
+                          ),
+                        ),
+
+                        Expanded(
+                          child: value == SaleBy.unit
+                              ? BasicFormField(
+                                  labelText: 'Quantidade',
+                                  controller: _quantityController,
+                                  keyboardType: TextInputType.number,
+                                  // readOnly: true,
+                                  textAlign: TextAlign.center,
+                                  prefixIcon: IconButton(
+                                    onPressed: _addQuantity,
+                                    icon: Icon(Symbols.add_rounded),
+                                    color: colorScheme.tertiary,
+                                  ),
+                                  suffixIcon: IconButton(
+                                    onPressed: _removeQuantity,
+                                    icon: Icon(Symbols.remove_rounded),
+                                    color: colorScheme.tertiary,
+                                  ),
+                                  validator: (_) => GenericValidations.notZero(
+                                    _quantityController.numberValue,
+                                  ),
+                                  onChanged: _calcTotalValue,
+                                )
+                              : BasicFormField(
+                                  labelText: 'Peso (kg)',
+                                  suffixText: 'kg',
+                                  hintText: '0,000',
+                                  textAlign: TextAlign.center,
+                                  controller: _weightController,
+                                  keyboardType: TextInputType.number,
+                                  validator: (_) => GenericValidations.notZero(
+                                    _weightController.numberValue,
+                                  ),
+                                  onChanged: _calcTotalValue,
+                                ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -383,10 +412,6 @@ class _AddProductCartViewState extends State<AddProductCartView> {
           break;
       }
     }
-  }
-
-  void _toggleSaleType(SaleBy? value) {
-    _saleBy.value = _saleBy.value == SaleBy.unit ? SaleBy.weight : SaleBy.unit;
   }
 
   void _saving() {

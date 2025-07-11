@@ -2,6 +2,57 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/11 implement_shopping_list-01 - rudsonalves
+
+### Rename add-product flow, add list-item use case and views
+
+This commit renames the existing "add product" screens to "add item cart", introduces a new `AddItemListUserCase` for managing list-based additions, updates routing to support the new flow, and adds dedicated views and view models for adding items to the shopping list by name, quantity, or weight.
+
+### Modified Files
+
+* **lib/routing/router.dart**
+
+  * Imported `AddItemListUserCase` and its view files.
+  * Updated route for `addProductCart` to `addItemCart`.
+  * Added new `GoRoute` for `addItemList`, mapping to `AddItemListView` and its view model.
+
+* **lib/routing/routes.dart**
+
+  * Added `Routes.addItemList` constant with path `/add-item-list`.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Renamed to `add_item_cart/add_item_cart_view.dart` and renamed widget from `AddProductCartView` to `AddItemCartView`.
+  * Adjusted class names, state class, and view model reference.
+  * Introduced `thumbIcon` property and replaced `EnumFormField` sale-type selection with a `Switch`.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\_model.dart**
+
+  * Renamed to `add_item_cart/add_item_cart_view_model.dart` and class from `AddProductCartViewModel` to `AddItemCartViewModel`.
+  * Reordered imports and relocated `dart:developer` import.
+
+* **lib/ui/view/cart\_shopping/cart\_shopping\_view\.dart**
+
+  * Cleaned import ordering and formatting.
+  * Updated `separatorBuilder` in `ListView.separated` to center dividers.
+  * Changed `_addChoppingList` to navigate to `Routes.addItemList` with `shopping.id`.
+
+### New Files
+
+* **lib/domain/user\_cases/add\_item\_list\_user\_case.dart**
+  Implements `AddItemListUserCase` using `IProductsRepository` and `IListItemRepository` to save, update, and delete list items.
+
+* **lib/ui/view/cart\_shopping/add\_item\_list/add\_item\_list\_view\.dart**
+  Stateful view for adding a new list item with name, quantity or weight selection UI and validation.
+
+* **lib/ui/view/cart\_shopping/add\_item\_list/add\_item\_list\_view\_model.dart**
+  View model wiring `Command1` actions from `AddItemListUserCase` for save and update operations.
+
+### Conclusions
+
+The add-item flow is fully integrated alongside the existing add-to-cart functionality; routing, view models, and UI components are updated and operational.
+
+
 ## 2025/07/11 implement_shopping_list - rudsonalves
 
 ### Add list item feature including DB table, repository, DTO & model
