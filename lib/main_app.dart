@@ -28,11 +28,26 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     final textTheme = createTextTheme(context, 'Roboto', 'Abyssinica SIL');
-    MaterialTheme theme = MaterialTheme(textTheme);
+    final colorScheme = Theme.of(context).colorScheme;
+    final theme = MaterialTheme(textTheme);
 
     return MaterialApp.router(
+      theme: theme.light().copyWith(
+        inputDecorationTheme: InputDecorationTheme(
+          hintStyle: TextStyle(
+            color: colorScheme.outline,
+          ),
+        ),
+      ),
+      darkTheme: theme.dark().copyWith(
+        inputDecorationTheme: InputDecorationTheme(
+          hintStyle: TextStyle(
+            color: colorScheme.outline,
+          ),
+        ),
+      ),
+      themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
-      theme: brightness == Brightness.light ? theme.light() : theme.dark(),
       routerConfig: _router,
     );
   }

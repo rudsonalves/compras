@@ -120,6 +120,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                 controller: _barCodeController,
                 keyboardType: TextInputType.number,
                 prefixIcon: IconButton(
+                  tooltip: 'Pesquisar pelo código de barras o produto',
                   icon: Icon(
                     Symbols.search_rounded,
                     color: colorScheme.tertiary,
@@ -127,6 +128,7 @@ class _AddProductCartViewState extends State<AddProductCartView> {
                   onPressed: _searchProduct,
                 ),
                 suffixIcon: IconButton(
+                  tooltip: 'Ler código de barras do produto',
                   icon: Icon(
                     Symbols.barcode_scanner_rounded,
                     color: colorScheme.tertiary,

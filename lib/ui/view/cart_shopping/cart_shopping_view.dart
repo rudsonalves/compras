@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import '/domain/models/item/item_model.dart';
 import '/ui/core/themes/dimens.dart';
+import '/ui/core/ui/dialogs/card_message.dart';
+import '/ui/view/cart_shopping/widgets/shopping_cart_title_row.dart';
+import '/domain/models/item/item_model.dart';
 import '/ui/core/ui/buttons/button_signature.dart';
 import '/ui/core/ui/dialogs/botton_sheet_message.dart.dart';
 import '/ui/view/cart_shopping/widgets/dismissible_cart.dart';
@@ -37,6 +39,7 @@ class _CartShoppingViewState extends State<CartShoppingView> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final dimens = Dimens.of(context);
 
     return Scaffold(
@@ -49,35 +52,88 @@ class _CartShoppingViewState extends State<CartShoppingView> {
           icon: Icon(Symbols.arrow_back_ios_new_rounded),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addProductCart,
-        child: Icon(Symbols.add_rounded),
+      floatingActionButton: OverflowBar(
+        alignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton(
+            heroTag: 'addShoppingList',
+            tooltip: 'Adicionar a lista de compras',
+            onPressed: _addChoppingList,
+            backgroundColor: colorScheme.onTertiary,
+            child: Icon(Symbols.shopping_cart_rounded),
+          ),
+          FloatingActionButton(
+            heroTag: 'addShoppingCart',
+            tooltip: 'Adicionar ao carrinho',
+            onPressed: _addProductCart,
+            backgroundColor: colorScheme.onPrimary,
+            child: Icon(Symbols.add_shopping_cart_rounded),
+          ),
+        ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(dimens.paddingScreenAll),
-        child: ListenableBuilder(
-          listenable: _viewModel.cartItemsNotifier,
-          builder: (context, _) {
-            final items = _viewModel.itemsList;
+      body: Column(
+        spacing: dimens.spacingVertical / 2,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+              left: dimens.paddingScreenAll,
+              right: dimens.paddingScreenAll,
+              top: dimens.paddingScreenAll,
+            ),
+            child: ShoppingCartTitleRow(),
+          ),
 
-            if (items.isEmpty) {
-              return Center(
-                child: Text('No items in the cart'),
+          ListenableBuilder(
+            listenable: _viewModel.cartItemsNotifier,
+            builder: (context, _) {
+              final items = _viewModel.itemsList;
+              if (items.isEmpty) {
+                return Expanded(
+                  child: SizedBox(
+                    child: Center(
+                      child: CardMessage(
+                        title: 'Nenhum item no carrinho',
+                        body: [
+                          'Adicione itens pressionando os botões flutuantes'
+                              ' abaixo:',
+                          '= **Verde:** adicionar à lista de compras',
+                          '+ **Azul:** adicionar ao carrinho',
+                          'Produtos na lista são destacados em verde, e os'
+                              ' no carrinho em azul.',
+                          'Para mover um item da lista para o carrinho,'
+                              ' basta tocar sobre ele na lista.',
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return ListView.separated(
+                shrinkWrap: true,
+                itemCount: items.length,
+                separatorBuilder: (context, index) => Divider(),
+                // const SizedBox(height: 12),
+                itemBuilder: (context, index) => DismissibleCart(
+                  item: items[index],
+                  editItem: _editItem,
+                  deleteItem: _deleteItem,
+                  cardColor: colorScheme.primaryContainer.withValues(
+                    alpha: 0.35,
+                  ),
+                ),
               );
-            }
-
-            return ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) => DismissibleCart(
-                item: items[index],
-                editItem: _editItem,
-                deleteItem: _deleteItem,
-              ),
-            );
-          },
-        ),
+            },
+          ),
+        ],
       ),
     );
+  }
+
+  void _addChoppingList() {
+    // context.pushNamed(
+    //   Routes.addShoppingList.name,
+    //   extra: widget.shopping,
+    // );
   }
 
   Future<bool> _deleteItem(ItemModel item) async {
