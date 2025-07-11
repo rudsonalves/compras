@@ -22,3 +22,4 @@ Em versões posteriores, o sistema será ampliado para:
 * Gerar recomendações de melhores locais de compra com base em índices de preço e perfil de consumo.
 * Calcular índices de inflação dos preços dos produtos ao longo do tempo.
 * Cruzar dados de diferentes consumidores em diversas regiões para análises comparativas.
+* Adicionar exportação de comprar para planilhas xml ou csv.

@@ -2,6 +2,73 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/11 refactor_shopping_cart - rudsonalves
+
+### Refactor theme settings and add shopping cart UI enhancements
+
+This commit updates the application’s theming system, introduces new reusable UI components, and refactors the shopping cart screens for a clearer, more consistent user experience. It enhances input styling, enriches text parsing, and restructures the cart view with dedicated header and message widgets.
+
+### Modified Files
+
+* **docs/introduction.md**
+
+  * Added documentation entry for exporting purchase data to XML or CSV spreadsheets.
+
+* **lib/main\_app.dart**
+
+  * Extracted `colorScheme` from `Theme.of(context)`.
+  * Applied `InputDecorationTheme` with `hintStyle` based on `colorScheme.outline` to both light and dark themes.
+  * Set `darkTheme` and enforced `ThemeMode.dark`; removed conditional theme logic.
+
+* **lib/ui/core/themes/fonts.dart**
+
+  * Introduced new `bodyGreateTextStyle` getter with 16 px on mobile and 18 px on desktop.
+  * Reordered and adjusted font-size getters: `bodyLargeTextStyle` and `bodyExtraLargeTextStyle`.
+
+* **lib/ui/core/themes/theme.dart**
+
+  * Bulk updated color values across all `ColorScheme` definitions.
+
+    * Refined `primaryContainer`, `secondary`, `tertiary`, `error`, `outline`, `inverseSurface`, and fixed/dim variant colors in light, high-contrast, and dark themes for visual consistency.
+
+* **lib/ui/core/ui/texts/parse\_rich\_text.dart**
+
+  * Extended regex to recognize `+` and `=` markers.
+  * Added icon cases for `+` (blue dot) and `=` (green dot).
+  * Centered icon alignment and refactored switch logic.
+
+* **lib/ui/view/cart\_shopping/add\_product\_cart/add\_product\_cart\_view\.dart**
+
+  * Added tooltips to barcode input buttons: “Search by product barcode” and “Scan product barcode”.
+
+* **lib/ui/view/cart\_shopping/cart\_shopping\_view\.dart**
+
+  * Replaced single FAB with an `OverflowBar` hosting two FABs: one for adding to shopping list, one for adding to cart (each with themed colors and tooltips).
+  * Introduced `ShoppingCartTitleRow` at the top of the list.
+  * Enhanced empty-state UI by displaying a `CardMessage` with usage instructions.
+  * Switched from `ListView.builder` to `ListView.separated` and passed `cardColor` to `DismissibleCart`.
+  * Imported new widgets and stubbed `_addChoppingList()` method.
+
+* **lib/ui/view/cart\_shopping/widgets/dismissible\_cart.dart**
+
+  * Corrected enum import path and added `Dimens` import.
+  * Added optional `cardColor` parameter and applied rounded shape.
+  * Replaced `ListTile` with a custom `Row` layout using padding, spacing, and alignment.
+  * Extracted price and quantity formatting into private `_priceString` and `_valueString` methods.
+
+### New Files
+
+* **lib/ui/core/ui/dialogs/card\_message.dart**
+  Added `CardMessage` widget to display a titled card with a list of rich-text body messages, supporting theming and spacing.
+
+* **lib/ui/view/cart\_shopping/widgets/shopping\_cart\_title\_row\.dart**
+  Added `ShoppingCartTitleRow` widget to render column headers (`Item`, `Qt`, `Preço`) using the new `bodyGreateTextStyle`.
+
+### Conclusions
+
+All changes are complete and the application’s UI and theming system remain fully functional.
+
+
 ## 2025/07/10 refactor_and_bugfix - rudsonalves
 
 ### Refactor subCategoriesList, nullability & UI enhancements

@@ -16,6 +16,9 @@ abstract final class AppFontsStyle {
   /// Font size for body text
   TextStyle get bodyTextStyle;
 
+  /// Font size for great body text
+  TextStyle get bodyGreateTextStyle;
+
   /// Font size for small text
   TextStyle get bodySmallTextStyle;
 
@@ -57,12 +60,16 @@ final class _FontsThemeStyleMobile extends AppFontsStyle {
       const TextStyle(fontFamily: FontsTheme.body, fontSize: 14.0);
 
   @override
-  TextStyle get bodyExtraLargeTextStyle =>
-      const TextStyle(fontFamily: FontsTheme.body, fontSize: 22.0);
+  TextStyle get bodyGreateTextStyle =>
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 16.0);
 
   @override
   TextStyle get bodyLargeTextStyle =>
       const TextStyle(fontFamily: FontsTheme.body, fontSize: 18.0);
+
+  @override
+  TextStyle get bodyExtraLargeTextStyle =>
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 22.0);
 
   @override
   TextStyle get displayTextStyle =>
@@ -86,8 +93,12 @@ final class _FontsThemeStyleDesktop extends AppFontsStyle {
       const TextStyle(fontFamily: FontsTheme.body, fontSize: 16.0);
 
   @override
-  TextStyle get bodyLargeTextStyle =>
+  TextStyle get bodyGreateTextStyle =>
       const TextStyle(fontFamily: FontsTheme.body, fontSize: 18.0);
+
+  @override
+  TextStyle get bodyLargeTextStyle =>
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 20.0);
 
   @override
   TextStyle get bodyExtraLargeTextStyle =>

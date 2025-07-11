@@ -11,7 +11,7 @@ Widget parseRichText(BuildContext context, String text) {
   final regex = RegExp(r'\*\*(.*?)\*\*|\*(.*?)\*|(.+?)');
 
   if (text.isEmpty) return const Text('');
-  final processText = text.startsWith(RegExp(r'^[\-><]'))
+  final processText = text.startsWith(RegExp(r'^[\-\+=><]'))
       ? text.substring(1).trim()
       : text.trim();
 
@@ -57,25 +57,50 @@ Widget parseRichText(BuildContext context, String text) {
   );
 
   Widget? icon;
-  final trimText = text.trim();
-  if (trimText.isNotEmpty) {
-    switch (trimText[0]) {
-      case '-':
-        icon = const Icon(Symbols.check_rounded, color: Colors.green, size: 18);
-        break;
-      case '>':
-        icon = const Icon(Symbols.east_rounded, color: Colors.green, size: 18);
-        break;
-      case '<':
-        icon = const Icon(Symbols.west_rounded, color: Colors.red, size: 18);
-        break;
-    }
+  switch (text.trim()[0]) {
+    case '-':
+      icon = const Icon(
+        Symbols.check_rounded,
+        color: Colors.green,
+        size: 18,
+      );
+      break;
+    case '+':
+      icon = const Icon(
+        Symbols.brightness_1,
+        color: Colors.blue,
+        size: 12,
+        fill: 1,
+      );
+      break;
+    case '=':
+      icon = const Icon(
+        Symbols.brightness_1,
+        color: Colors.green,
+        size: 12,
+        fill: 1,
+      );
+      break;
+    case '>':
+      icon = const Icon(
+        Symbols.east_rounded,
+        color: Colors.green,
+        size: 18,
+      );
+      break;
+    case '<':
+      icon = const Icon(
+        Symbols.west_rounded,
+        color: Colors.red,
+        size: 18,
+      );
+      break;
   }
 
   return (icon != null)
       ? Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(padding: const EdgeInsets.only(right: 6), child: icon),
             Expanded(child: ritchText),
