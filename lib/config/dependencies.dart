@@ -1,5 +1,5 @@
-import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart' show SingleChildWidget;
+import 'package:compras/data/repositories/list_item/i_list_item_repository.dart';
+import 'package:compras/data/repositories/list_item/list_item_repository.dart';
 
 import '/data/repositories/category/category_repository.dart';
 import '/data/repositories/category/i_category_repository.dart';
@@ -13,6 +13,9 @@ import '/data/repositories/products/products_repository.dart';
 import '/data/services/database/database_service.dart';
 import '/data/repositories/shopping/shopping_repository.dart';
 import '/data/services/database/database_manager.dart';
+
+import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart' show SingleChildWidget;
 
 Future<List<SingleChildWidget>> dependencies() async {
   final dbManager = DatabaseManager();
@@ -42,6 +45,9 @@ Future<List<SingleChildWidget>> dependencies() async {
     ),
     Provider<ICategoryRepository>(
       create: (_) => categoryRepository,
+    ),
+    ChangeNotifierProvider<IListItemRepository>(
+      create: (_) => ListItemRepository(dbService),
     ),
   ];
 }

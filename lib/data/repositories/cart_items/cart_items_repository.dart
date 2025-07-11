@@ -105,8 +105,8 @@ class CartItemsRepository extends ChangeNotifier
     );
 
     switch (result) {
-      case Success(value: final item):
-        for (var item in item) {
+      case Success(value: final items):
+        for (var item in items) {
           _items[item.productId] = item;
         }
         notifyListeners();

@@ -1,14 +1,14 @@
 import 'dart:developer';
 
-import 'package:compras/data/services/database/tables/sql_upgrades.dart';
+import '/data/services/database/tables/sql_upgrades.dart';
+import '/domain/models/category/category_model.dart';
+import '/domain/models/subcategory/subcategory_model.dart';
+import '/data/services/database/tables/sql_configurations.dart';
+import '/data/services/database/tables/sql_tables.dart';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
-
-import '/domain/models/category/category_model.dart';
-import '../../../domain/models/subcategory/subcategory_model.dart';
-import '/data/services/database/tables/sql_configurations.dart';
-import '/data/services/database/tables/sql_tables.dart';
 
 class DatabaseManager {
   DatabaseManager();
@@ -54,12 +54,14 @@ class DatabaseManager {
     batch.execute(SqlTables.lastPrices);
     batch.execute(SqlTables.categories);
     batch.execute(SqlTables.subCategories);
+    batch.execute(SqlTables.listItems);
     // Indexes
     batch.execute(SqlTables.productNameIndex);
     batch.execute(SqlTables.productBarCodeIndex);
     batch.execute(SqlTables.lastPriceProductIndex);
     batch.execute(SqlTables.categoriesIndex);
     batch.execute(SqlTables.subCategoriesIndex);
+    batch.execute(SqlTables.listItemsNameIndex);
 
     await batch.commit();
 
@@ -70,10 +72,15 @@ class DatabaseManager {
     if (oldVersion < SqlUpgrades.dbVersion) {
       log('Upgrading database to version ${SqlUpgrades.dbVersion}');
 
-      for (int i = oldVersion + 1; i <= SqlUpgrades.dbVersion; i++) {
-        final sqlUpgrade = SqlUpgrades.upgrades[i];
-        if (sqlUpgrade != null) {
-          db.execute(sqlUpgrade);
+      for (
+        int version = oldVersion + 1;
+        version <= SqlUpgrades.dbVersion;
+        version++
+      ) {
+        final sqlUpgrade = SqlUpgrades.upgrades[version];
+        if (sqlUpgrade == null) continue;
+        for (final sql in sqlUpgrade) {
+          db.execute(sql);
         }
       }
 

@@ -1,5 +1,4 @@
-import 'package:compras/domain/models/item/item_model.dart';
-
+import '/domain/models/item/item_model.dart';
 import '/data/repositories/cart_items/i_cart_items_repository.dart';
 import '/domain/user_cases/shopping_cart_user_case.dart';
 import '/utils/command.dart';

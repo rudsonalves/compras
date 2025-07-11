@@ -2,6 +2,68 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/11 implement_shopping_list - rudsonalves
+
+### Add list item feature including DB table, repository, DTO & model
+
+This commit implements the new list item domain and persistence layer, extending the database schema, data access, and dependency injection setup. It adds the `IListItemRepository` interface and its `ListItemRepository` implementation, along with `ListItemDto` and `ListItemModel` classes for data transfer and representation. The `DatabaseManager` and SQL table definitions are updated to include the `list_items` table and corresponding index, and the database upgrade logic is extended to apply these changes.
+
+### Modified Files
+
+* **docs/images/Diagrama\_de\_Classes.drawio**
+
+  * Updated Draw\.io file version attributes to `27.0.9` for compatibility.
+
+* **lib/config/dependencies.dart**
+
+  * Reordered imports for clarity.
+  * Registered `ListItemRepository` as a `ChangeNotifierProvider<IListItemRepository>` in the DI setup.
+
+* **lib/data/repositories/cart\_items/cart\_items\_repository.dart**
+
+  * Renamed the loop variable in the `Success` case from `item` to `items` to avoid shadowing and improve readability.
+
+* **lib/data/services/database/database\_manager.dart**
+
+  * Reordered and normalized import paths.
+  * Executed `SqlTables.listItems` and `SqlTables.listItemsNameIndex` in the initial schema creation.
+  * Extended the upgrade loop to apply multiple SQL statements per version.
+
+* **lib/data/services/database/tables/sql\_tables.dart**
+
+  * Added `Tables.listItems` constant and `ListItemsColumns` definitions.
+  * Defined `CREATE TABLE` SQL for `list_items` and an index on the `name` column.
+  * Removed outdated comments related to other tables for brevity.
+
+* **lib/data/services/database/tables/sql\_upgrades.dart**
+
+  * Bumped `dbVersion` from `3` to `4`.
+  * Converted `upgrades` map values to `List<String>` to support multiple statements.
+  * Added upgrade scripts to create the `list_items` table and its index in version `4`.
+
+* **lib/ui/view/cart\_shopping/cart\_shopping\_view\_model.dart**
+
+  * Adjusted the import path for `item_model.dart` to use a relative path for consistency.
+
+### New Files
+
+* **lib/data/repositories/list\_item/i\_list\_item\_repository.dart**
+  Abstract interface extending `ChangeNotifier` defining CRUD operations for list items.
+
+* **lib/data/repositories/list\_item/list\_item\_repository.dart**
+  Concrete `ChangeNotifier` implementation of `IListItemRepository`, managing in-memory cache and database interactions via `DatabaseService`.
+
+* **lib/domain/dto/list\_item/list\_item\_dto.dart**
+  Freezed-based DTO with JSON serialization for list items, including factory constructors for creation and JSON mapping.
+
+* **lib/domain/models/list\_item/list\_item\_model.dart**
+  Freezed-based domain model mirroring `ListItemDto`, with JSON serialization and conversion from DTO functionality.
+
+### Conclusions
+
+The list item feature is fully integrated, with database schema and migrations updated, repository interfaces and implementations added, and DI registration configured. All changes are complete and the application is functional.
+
+
 ## 2025/07/11 refactor_shopping_cart - rudsonalves
 
 ### Refactor theme settings and add shopping cart UI enhancements

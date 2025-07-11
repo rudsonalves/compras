@@ -7,6 +7,18 @@ final class Tables {
   static const String lastPrice = 'last_price';
   static const String categories = 'categories';
   static const String subCategories = 'sub_categories';
+  static const String listItems = 'list_items';
+}
+
+final class ListItemsColumns {
+  ListItemsColumns._();
+
+  static const String id = 'id';
+  static const String shoppingId = 'shopping_id';
+  static const String productId = 'product_id';
+  static const String name = 'name';
+  static const String quantity = 'quantity';
+  static const String createdAt = 'created_at';
 }
 
 final class CatsColumns {
@@ -78,11 +90,21 @@ final class LastPriceColumns {
 final class SqlTables {
   SqlTables._();
 
-  // Shopping table
-  // Contains shopping details like id, name, description, type, total price,
-  // created and updated timestamps.
-  // The table is used to manage shopping lists or carts.
-  // Each shopping entry is uniquely identified by its id.
+  static const String listItems =
+      '''
+      CREATE TABLE IF NOT EXISTS ${Tables.listItems} (
+        ${ListItemsColumns.id} TEXT NOT NULL PRIMARY KEY,
+        ${ListItemsColumns.shoppingId} TEXT NOT NULL,
+        ${ListItemsColumns.productId} TEXT,
+        ${ListItemsColumns.name} TEXT NOT NULL,
+        ${ListItemsColumns.quantity} INTEGER DEFAULT 1,
+        ${ListItemsColumns.createdAt} TEXT NOT NULL
+      )''';
+
+  static const String listItemsNameIndex = '''
+    CREATE INDEX IF NOT EXISTS idx_list_items_name 
+      ON ${Tables.listItems} (${ListItemsColumns.name})''';
+
   static const String shopping =
       '''
       CREATE TABLE IF NOT EXISTS ${Tables.shopping} (
@@ -95,21 +117,6 @@ final class SqlTables {
         ${ShoppingColumns.updatedAt} TEXT NOT NULL
       )''';
 
-  // Products table
-  // Contains product details like id, name, description, bar code, sale type,
-  // category and sub-category information, and timestamps for creation and
-  // update.
-  // The table is used to manage products available for shopping.
-  // Each product is uniquely identified by its id and bar code.
-  // Foreign keys link products to categories and sub-categories.
-  // Indexes are created for product name and bar code for faster search.
-  // Sale type is represented by an enum, with a default value of "unit".
-  // The table allows for products to be categorized and sub-categorized,
-  // enabling better organization and retrieval of products.
-  // The `createdAt` and `updatedAt` fields are used to track when the
-  // product was added or last modified, respectively.
-  // The `categoryId` and `subCategoryId` fields are nullable, allowing products
-  // to exist without being assigned to a category or sub-category.
   static const String products =
       '''
       CREATE TABLE IF NOT EXISTS ${Tables.products} (
@@ -140,21 +147,6 @@ final class SqlTables {
     CREATE INDEX IF NOT EXISTS idx_products_bar_code 
       ON ${Tables.products} (${ProductColumns.barCode})''';
 
-  // Items table
-  // Contains items in a shopping cart, linking to products and shopping
-  // entries.
-  // Each item is uniquely identified by a combination of shopping ID and
-  // product ID.
-  // The table includes details like item name, sale type, unit price, quantity,
-  // price variation, and creation timestamp.
-  // Foreign keys link items to shopping entries and products.
-  // The `saleBy` field indicates how the item is sold (e.g., by unit or
-  // weight), with a default value of 1 (unit).
-  // The `unitPrice` field represents the price per unit of the item.
-  // The `quantity` field indicates how many units of the item are in the cart,
-  // with a default value of 1.
-  // The `priceVariation` field allows for tracking price changes over time,
-  // with a default value of 0.0.
   static const String items =
       '''
       CREATE TABLE IF NOT EXISTS ${Tables.items} (
@@ -175,14 +167,6 @@ final class SqlTables {
           ON DELETE CASCADE
       )''';
 
-  // Last Prices table
-  // Contains the last recorded prices for products.
-  // Each entry is uniquely identified by an ID and linked to a product by its
-  // product ID.
-  // The table includes fields for the sale type, last unit price, and creation
-  // timestamp.
-  // The `saleBy` field indicates how the product is sold (e.g., by unit or
-  // weight), with a default value of 1 (unit).
   static const String lastPrices =
       '''
       CREATE TABLE IF NOT EXISTS ${Tables.lastPrice} (
@@ -205,17 +189,6 @@ final class SqlTables {
     CREATE INDEX IF NOT EXISTS idx_last_price_shopping_id 
       ON ${Tables.lastPrice} (${LastPriceColumns.shoppingId})''';
 
-  // Categories and Sub-Categories tables
-  // These tables manage product categories and sub-categories.
-  // Categories table contains unique categories, each identified by an ID and
-  // name.
-  // Sub-Categories table contains sub-categories linked to categories by
-  // category ID.
-  // Each sub-category is uniquely identified by its ID and has a name.
-  // Foreign keys ensure that sub-categories cannot exist without their parent
-  // category.
-  // Indexes are created for category and sub-category names to speed up
-  // searches.
   static const String categories =
       '''
       CREATE TABLE IF NOT EXISTS ${Tables.categories} (
