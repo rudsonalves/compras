@@ -23,6 +23,7 @@ abstract class ListItemModel with _$ListItemModel {
     required String name,
     bool isUnit = true,
     int quantity = 1,
+    DateTime? createdAt,
   }) => ListItemModel(
     id: id,
     shoppingId: shoppingId,
@@ -30,7 +31,7 @@ abstract class ListItemModel with _$ListItemModel {
     name: name,
     isUnit: isUnit,
     quantity: quantity,
-    createdAt: DateTime.now(),
+    createdAt: createdAt ?? DateTime.now(),
   );
 
   factory ListItemModel.fromJson(Map<String, dynamic> json) =>
@@ -43,6 +44,6 @@ abstract class ListItemModel with _$ListItemModel {
     name: dto.name,
     isUnit: dto.isUnit,
     quantity: dto.quantity,
-    createdAt: dto.createdAt,
+    createdAt: dto.createdAt ?? DateTime.now(),
   );
 }

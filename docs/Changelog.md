@@ -2,6 +2,59 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/12 implement_shopping_list-04 - rudsonalves
+
+### Allow createdAt override and refine shopping cart/list flows
+
+This commit makes `createdAt` optional in list item and product constructors—defaulting to `DateTime.now()` if not provided—and enhances the shopping cart use case by injecting and initializing the `IListItemRepository` with proper error handling and logging. The router is updated to supply the new repository, and view code is refactored to unify save handlers (`_onSave`), listen for completion (`_onSaved`), and provide user feedback via navigation or SnackBar. The list item view model now logs successes and failures of save/update operations.
+
+### Modified Files
+
+* **lib/domain/dto/list\_item/list\_item\_dto.dart**
+
+  * Added optional `DateTime? createdAt` parameter to `ListItemDto.create` and default to `DateTime.now()` when null.
+
+* **lib/domain/models/list\_item/list\_item\_model.dart**
+
+  * Added optional `DateTime? createdAt` parameter to `ListItemModel.create` and default to `DateTime.now()` when null.
+  * Ensured `fromDto` fallback to now if `dto.createdAt` is null.
+
+* **lib/domain/models/product/product\_model.dart**
+
+  * Defaulted `createdAt` to `DateTime.now()` if `dto.createdAt` is null in `ProductModel.fromDto`.
+
+* **lib/domain/user\_cases/shopping\_cart\_user\_case.dart**
+
+  * Injected `IListItemRepository` and stored as `_listItemRepository`.
+  * Initialized list items in `load()`, wrapped all initializations in `try/catch`, and logged errors and stack traces.
+
+* **lib/routing/router.dart**
+
+  * Supplied `listItemRepository: ctx.read<IListItemRepository>()` when creating `ShoppingCartUserCase`.
+
+* **lib/ui/view/cart\_shopping/add\_item\_cart/add\_item\_cart\_view\.dart**
+
+  * Renamed save handler from `_saving` to `_onSave` and updated the save button’s `onPressed`.
+
+* **lib/ui/view/cart\_shopping/add\_item\_list/add\_item\_list\_view\.dart**
+
+  * Renamed `_saleByWeight` to `_isUnit` `ValueNotifier<bool>`.
+  * Updated `ValueListenableBuilder` and form logic to use `isUnit` for quantity vs weight.
+  * Replaced `_saving` with `_onSave`, added `_onSaved` listener to pop on success or show SnackBar on failure.
+
+* **lib/ui/view/cart\_shopping/add\_item\_list/add\_item\_list\_view\_model.dart**
+
+  * Changed `save` and `update` commands to call `_save`/`_update` helpers that log `Success` and `Failure` cases.
+
+* **lib/ui/view/home/add\_shopping/add\_shopping\_view\.dart**
+
+  * Simplified the save success case to `Navigator.pop(context)` without debug printing.
+
+### Conclusions
+
+All changes are complete and ensure customizable timestamps, robust initialization, and clear user feedback in shopping cart and list-item workflows.
+
+
 ## 2025/07/12 implement_shopping_list-03 - rudsonalves
 
 ### Add is\_unit support, remove description fields, refactor shopping views

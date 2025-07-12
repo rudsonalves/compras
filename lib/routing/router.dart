@@ -59,6 +59,7 @@ GoRouter router() => GoRouter(
           cartItemsRepository: ctx.read<ICartItemsRepository>(),
           lastPriceRepository: ctx.read<ILastPriceRepository>(),
           categoryRepository: ctx.read<ICategoryRepository>(),
+          listItemRepository: ctx.read<IListItemRepository>(),
         );
 
         return Provider<ShoppingCartUserCase>.value(

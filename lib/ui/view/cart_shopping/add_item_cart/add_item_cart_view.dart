@@ -285,7 +285,7 @@ class _AddItemCartViewState extends State<AddItemCartView> {
                     iconData: Symbols.add_shopping_cart_rounded,
                     isRunning:
                         _viewModel.saving.running || _viewModel.update.running,
-                    onPressed: _saving,
+                    onPressed: _onSave,
                   );
                 },
               ),
@@ -399,7 +399,7 @@ class _AddItemCartViewState extends State<AddItemCartView> {
     }
   }
 
-  void _saving() {
+  void _onSave() {
     if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
       return;
     }

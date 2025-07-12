@@ -186,8 +186,7 @@ class _AddShoppingViewState extends State<AddShoppingView> {
         : _viewModel.saving.result!;
 
     switch (result) {
-      case Success(value: final shopping):
-        debugPrint(shopping.toString());
+      case Success():
         Navigator.pop(context);
         break;
 

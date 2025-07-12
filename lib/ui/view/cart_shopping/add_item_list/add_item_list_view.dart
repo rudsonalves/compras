@@ -1,3 +1,6 @@
+import '/domain/dto/list_item/list_item_dto.dart';
+import '/ui/core/ui/dialogs/app_snack_bar.dart';
+import '/utils/result.dart';
 import '/ui/core/ui/buttons/big_button.dart';
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/ui/editing_controllers/number_editing_controller.dart';
@@ -30,7 +33,7 @@ class _AddItemListViewState extends State<AddItemListView> {
   final _quantityController = NumberEditingController(decimalDigits: 0);
   final _weightController = NumberEditingController(decimalDigits: 3);
 
-  final _saleByWeight = ValueNotifier<bool>(false);
+  final _isUnit = ValueNotifier<bool>(true);
 
   static const WidgetStateProperty<Icon> thumbIcon =
       WidgetStateProperty<Icon>.fromMap(
@@ -43,6 +46,7 @@ class _AddItemListViewState extends State<AddItemListView> {
   @override
   void initState() {
     _viewModel = widget.viewModel;
+    _viewModel.save.addListener(_onSaved);
 
     _quantityController.numberValue = 1;
 
@@ -51,10 +55,12 @@ class _AddItemListViewState extends State<AddItemListView> {
 
   @override
   void dispose() {
+    _viewModel.save.removeListener(_onSaved);
+
     _nameController.dispose();
     _quantityController.dispose();
     _weightController.dispose();
-    _saleByWeight.dispose();
+    _isUnit.dispose();
 
     super.dispose();
   }
@@ -90,21 +96,21 @@ class _AddItemListViewState extends State<AddItemListView> {
                 textCapitalization: TextCapitalization.words,
               ),
               ValueListenableBuilder(
-                valueListenable: _saleByWeight,
-                builder: (_, byWeight, __) => Row(
+                valueListenable: _isUnit,
+                builder: (_, isUnit, __) => Row(
                   spacing: dimens.spacingHorizontal,
                   children: [
                     Switch(
                       thumbIcon: thumbIcon,
-                      value: byWeight,
+                      value: isUnit,
                       onChanged: (value) {
-                        _saleByWeight.value = value;
+                        _isUnit.value = value;
                       },
                     ),
-                    Text('Vendido por\n${byWeight ? 'Peso' : 'Unidade'}'),
+                    Text('Vendido por\n${isUnit ? 'Unidade' : 'Peso'}'),
                     SizedBox(width: dimens.spacingHorizontal),
                     Expanded(
-                      child: !byWeight
+                      child: isUnit
                           ? BasicFormField(
                               labelText: 'Quantidade',
                               controller: _quantityController,
@@ -152,7 +158,7 @@ class _AddItemListViewState extends State<AddItemListView> {
                     iconData: Symbols.add_shopping_cart_rounded,
                     isRunning:
                         _viewModel.save.running || _viewModel.update.running,
-                    onPressed: _saving,
+                    onPressed: _onSave,
                   );
                 },
               ),
@@ -174,20 +180,41 @@ class _AddItemListViewState extends State<AddItemListView> {
     _quantityController.numberValue = value - 1;
   }
 
-  void _saving() {
+  void _onSave() {
     if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
       return;
     }
 
-    // final dto = ListItemDto(
-    //   shoppingId: widget.shoppingId,
-    //   name: _nameController.text,
-    //   // saleBy: _saleByWeight.value ? SaleBy.weight : SaleBy.unit,
-    //   quantity: _saleByWeight.value
-    //       ? (_weightController.numberValue * 1000).round()
-    //       : (_quantityController.numberValue).round(),
-    // );
+    final dto = ListItemDto.create(
+      shoppingId: widget.shoppingId,
+      name: _nameController.text,
+      isUnit: _isUnit.value,
+      quantity: _isUnit.value
+          ? (_quantityController.numberValue).round()
+          : (_weightController.numberValue * 1000).round(),
+    );
 
-    // _viewModel.save.execute(dto);
+    _viewModel.save.execute(dto);
+  }
+
+  void _onSaved() {
+    if (_viewModel.save.running) return;
+
+    final result = _viewModel.save.result!;
+
+    switch (result) {
+      case Success():
+        Navigator.pop(context);
+        break;
+
+      case Failure():
+        AppSnackBar.showBottom(
+          context,
+          message:
+              'Ocorreu um erro ao adicionar o item à lista. '
+              'Favor tentar novamente.',
+        );
+        break;
+    }
   }
 }

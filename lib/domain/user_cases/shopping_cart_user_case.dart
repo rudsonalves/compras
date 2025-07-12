@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:compras/data/repositories/list_item/i_list_item_repository.dart';
+
 import '/domain/dto/category_subcategory/category_subcategory_dto.dart';
 import '/domain/dto/product/product_dto.dart';
 import '/domain/models/category/category_model.dart';
@@ -19,6 +21,7 @@ class ShoppingCartUserCase {
   final ICartItemsRepository _cartItemsRepository;
   final ILastPriceRepository _lastPriceRepository;
   final ICategoryRepository _categoryRepository;
+  final IListItemRepository _listItemRepository;
 
   ShoppingCartUserCase({
     required ShoppingModel shopping,
@@ -26,11 +29,13 @@ class ShoppingCartUserCase {
     required ICartItemsRepository cartItemsRepository,
     required ILastPriceRepository lastPriceRepository,
     required ICategoryRepository categoryRepository,
+    required IListItemRepository listItemRepository,
   }) : _shopping = shopping,
        _productsRepository = productsRepository,
        _cartItemsRepository = cartItemsRepository,
        _lastPriceRepository = lastPriceRepository,
-       _categoryRepository = categoryRepository;
+       _categoryRepository = categoryRepository,
+       _listItemRepository = listItemRepository;
 
   ICartItemsRepository get cartItemsRepository => _cartItemsRepository;
 
@@ -48,22 +53,25 @@ class ShoppingCartUserCase {
   ) => _categoryRepository.search(query);
 
   Future<Result<void>> load() async {
-    final productsResult = await _productsRepository.initialize();
-    if (productsResult.isFailure) return Result.failure(productsResult.error!);
+    try {
+      final productsResult = await _productsRepository.initialize();
+      if (productsResult.isFailure) throw productsResult.error!;
 
-    final cartresult = await _cartItemsRepository.initialize(_shopping.id);
-    if (cartresult.isFailure) return Result.failure(cartresult.error!);
+      final cartresult = await _cartItemsRepository.initialize(_shopping.id);
+      if (cartresult.isFailure) throw cartresult.error!;
 
-    final lastResult = await _lastPriceRepository.initialize();
-    if (lastResult.isFailure) return Result.failure(lastResult.error!);
+      final lastResult = await _lastPriceRepository.initialize();
+      if (lastResult.isFailure) throw lastResult.error!;
 
-    switch (lastResult) {
-      case Success():
-        log('Last price loaded successfully');
-        return Result.success(null);
-      case Failure(:final error):
-        log('Error loading last price: $error');
-        return Result.failure(error);
+      final listItemResult = await _listItemRepository.initialize(_shopping.id);
+      if (listItemResult.isFailure) throw listItemResult.error!;
+
+      log('Last price loaded successfully');
+      return Result.success(null);
+    } on Exception catch (err, stack) {
+      log('Error loading shopping cart: $err');
+      log(stack.toString());
+      return Result.failure(err);
     }
   }
 

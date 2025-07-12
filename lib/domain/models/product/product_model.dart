@@ -56,7 +56,7 @@ abstract class ProductModel with _$ProductModel {
     categoryName: dto.categoryName,
     subCategoryId: dto.subCategoryId,
     subCategoryName: dto.subCategoryName,
-    createdAt: dto.createdAt,
+    createdAt: dto.createdAt ?? DateTime.now(),
     updatedAt: DateTime.now(),
   );
 

@@ -20,13 +20,14 @@ abstract class ListItemDto with _$ListItemDto {
     required String name,
     bool isUnit = true,
     int quantity = 1,
+    DateTime? createdAt,
   }) => ListItemDto(
     shoppingId: shoppingId,
     productId: productId,
     name: name,
     isUnit: isUnit,
     quantity: quantity,
-    createdAt: DateTime.now(),
+    createdAt: createdAt ?? DateTime.now(),
   );
 
   factory ListItemDto.fromJson(Map<String, dynamic> json) =>
