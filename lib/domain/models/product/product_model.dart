@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '/domain/enums/enums.dart';
 import '/domain/dto/product/product_dto.dart';
 
 part 'product_model.freezed.dart';
@@ -15,7 +14,7 @@ abstract class ProductModel with _$ProductModel {
     required String name,
     String? description,
     @JsonKey(name: 'bar_code') String? barCode,
-    @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
+    @Default(true) @JsonKey(name: 'is_unit') bool isUnit,
     @JsonKey(name: 'category_id') String? categoryId,
     @JsonKey(name: 'category_name') String? categoryName,
     @JsonKey(name: 'sub_category_id') String? subCategoryId,
@@ -29,7 +28,7 @@ abstract class ProductModel with _$ProductModel {
     required String name,
     String? description,
     String? barCode,
-    SaleBy saleBy = SaleBy.unit,
+    bool isUnit = true,
     String? categoryId,
     String? categoryName,
     String? subCategoryId,
@@ -41,7 +40,7 @@ abstract class ProductModel with _$ProductModel {
       name: name,
       description: description,
       barCode: barCode,
-      saleBy: saleBy,
+      isUnit: isUnit,
       categoryId: categoryId,
       categoryName: categoryName,
       subCategoryId: subCategoryId,
@@ -56,7 +55,7 @@ abstract class ProductModel with _$ProductModel {
     name: dto.name,
     description: dto.description,
     barCode: dto.barCode,
-    saleBy: dto.saleBy,
+    isUnit: dto.isUnit,
     categoryId: dto.categoryId,
     categoryName: dto.categoryName,
     subCategoryId: dto.subCategoryId,

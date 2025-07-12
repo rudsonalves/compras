@@ -12,8 +12,7 @@ _ProductModel _$ProductModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       description: json['description'] as String?,
       barCode: json['bar_code'] as String?,
-      saleBy:
-          $enumDecodeNullable(_$SaleByEnumMap, json['sale_by']) ?? SaleBy.unit,
+      isUnit: json['is_unit'] as bool? ?? true,
       categoryId: json['category_id'] as String?,
       categoryName: json['category_name'] as String?,
       subCategoryId: json['sub_category_id'] as String?,
@@ -32,7 +31,7 @@ Map<String, dynamic> _$ProductModelToJson(_ProductModel instance) =>
       'name': instance.name,
       'description': instance.description,
       'bar_code': instance.barCode,
-      'sale_by': _$SaleByEnumMap[instance.saleBy]!,
+      'is_unit': instance.isUnit,
       'category_id': instance.categoryId,
       'category_name': instance.categoryName,
       'sub_category_id': instance.subCategoryId,
@@ -40,5 +39,3 @@ Map<String, dynamic> _$ProductModelToJson(_ProductModel instance) =>
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
     };
-
-const _$SaleByEnumMap = {SaleBy.unit: 'unit', SaleBy.weight: 'weight'};

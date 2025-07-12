@@ -55,7 +55,7 @@ final class ProductColumns {
   static const String name = 'name';
   static const String description = 'description';
   static const String barCode = 'bar_code';
-  static const String saleBy = 'sale_by';
+  static const String isUnit = 'is_unit';
   static const String categoryId = 'category_id';
   static const String categoryName = 'category_name';
   static const String subCategoryId = 'sub_category_id';
@@ -69,7 +69,7 @@ final class ItemColumns {
   static const String shoppingId = 'shopping_id';
   static const String productId = 'product_id';
   static const String name = 'name';
-  static const String saleBy = 'sale_by';
+  static const String isUnit = 'is_unit';
   static const String unitPrince = 'unit_price';
   static const String quantity = 'quantity';
   static const String priceVariation = 'price_variation';
@@ -82,7 +82,7 @@ final class LastPriceColumns {
   static const String id = 'id';
   static const String shoppingId = 'shopping_id';
   static const String productId = 'product_id';
-  static const String saleBy = 'sale_by';
+  static const String isUnit = 'is_unit';
   static const String lastUnitPrice = 'last_unit_price';
   static const String createdAt = 'created_at';
 }
@@ -124,7 +124,7 @@ final class SqlTables {
         ${ProductColumns.name} TEXT NOT NULL,
         ${ProductColumns.description} TEXT,
         ${ProductColumns.barCode} TEXT UNIQUE,
-        ${ItemColumns.saleBy} INTEGER DEFAULT "unit" NOT NULL,
+        ${ItemColumns.isUnit} TEXT DEFAULT "true" NOT NULL,
         ${ProductColumns.categoryId} TEXT NOT NULL,
         ${ProductColumns.categoryName} TEXT NOT NULL,
         ${ProductColumns.subCategoryId} TEXT NOT NULL,
@@ -153,7 +153,7 @@ final class SqlTables {
         ${ItemColumns.shoppingId} TEXT NOT NULL,
         ${ItemColumns.productId} TEXT NOT NULL,
         ${ItemColumns.name} TEXT NOT NULL,
-        ${ItemColumns.saleBy} INTEGER DEFAULT 1 NOT NULL,
+        ${ItemColumns.isUnit} TEXT DEFAULT "true" NOT NULL,
         ${ItemColumns.unitPrince} INTEGER NOT NULL,
         ${ItemColumns.quantity} INTEGER DEFAULT 1 NOT NULL,
         ${ItemColumns.priceVariation} REAL DEFAULT 0.0 NOT NULL,
@@ -173,7 +173,7 @@ final class SqlTables {
         ${LastPriceColumns.id} TEXT NOT NULL PRIMARY KEY,
         ${LastPriceColumns.shoppingId} TEXT NOT NULL,
         ${LastPriceColumns.productId} TEXT NOT NULL,
-        ${LastPriceColumns.saleBy} INTEGER DEFAULT 1 NOT NULL,
+        ${LastPriceColumns.isUnit} TEXT DEFAULT "true" NOT NULL,
         ${LastPriceColumns.lastUnitPrice} INTEGER NOT NULL,
         ${LastPriceColumns.createdAt} TEXT NOT NULL,
         FOREIGN KEY (${LastPriceColumns.productId}) 

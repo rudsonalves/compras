@@ -49,7 +49,7 @@ class _AddItemCartViewState extends State<AddItemCartView> {
   final _subCategoryFocusNode = FocusNode();
   final _priceFocusNode = FocusNode();
 
-  final _saleBy = ValueNotifier<SaleBy>(SaleBy.unit);
+  final _isUnit = ValueNotifier<bool>(true);
   String? _productId;
   String? _categoryId;
   String? _categoryName;
@@ -71,7 +71,7 @@ class _AddItemCartViewState extends State<AddItemCartView> {
     _viewModel.findProductByBarCode.addListener(_findProduct);
     _viewModel.saving.addListener(_saved);
 
-    _saleBy.addListener(() => _calcTotal());
+    _isUnit.addListener(() => _calcTotal());
 
     _quantityController.numberValue = 1;
 
@@ -82,7 +82,7 @@ class _AddItemCartViewState extends State<AddItemCartView> {
   void dispose() {
     _viewModel.findProductByBarCode.removeListener(_findProduct);
     _viewModel.saving.removeListener(_saved);
-    _saleBy.removeListener(() => _calcTotal());
+    _isUnit.removeListener(() => _calcTotal());
 
     _barCodeController.dispose();
     _nameController.dispose();
@@ -90,7 +90,7 @@ class _AddItemCartViewState extends State<AddItemCartView> {
     _priceController.dispose();
     _quantityController.dispose();
     _weightController.dispose();
-    _saleBy.dispose();
+    _isUnit.dispose();
 
     _subCategoryFocusNode.dispose();
     _priceFocusNode.dispose();
@@ -187,8 +187,8 @@ class _AddItemCartViewState extends State<AddItemCartView> {
               //   onChanged: _toggleSaleType,
               // ),
               ValueListenableBuilder(
-                valueListenable: _saleBy,
-                builder: (_, value, __) => Column(
+                valueListenable: _isUnit,
+                builder: (_, isUnit, __) => Column(
                   children: [
                     Row(
                       spacing: dimens.spacingHorizontal,
@@ -196,15 +196,13 @@ class _AddItemCartViewState extends State<AddItemCartView> {
                       children: [
                         Switch(
                           thumbIcon: thumbIcon,
-                          value: value == SaleBy.unit,
-                          onChanged: (saleByWeight) {
-                            _saleBy.value = saleByWeight
-                                ? SaleBy.unit
-                                : SaleBy.weight;
+                          value: isUnit,
+                          onChanged: (value) {
+                            _isUnit.value = !value;
                           },
                         ),
                         Text(
-                          'Vendido por\n${value != SaleBy.unit ? 'Peso' : 'Unidade'}',
+                          'Vendido por\n${isUnit ? 'Unidade' : 'Peso'}',
                         ),
                       ],
                     ),
@@ -215,10 +213,10 @@ class _AddItemCartViewState extends State<AddItemCartView> {
                       children: [
                         Expanded(
                           child: BasicFormField(
-                            labelText: value == SaleBy.unit
+                            labelText: isUnit
                                 ? 'Preço Unitário'
                                 : 'Preço por kg',
-                            prefixText: value == SaleBy.unit ? 'R\$' : 'R\$/kg',
+                            prefixText: isUnit ? 'R\$' : 'R\$/kg',
                             hintText: ' 0,00',
                             focusNode: _priceFocusNode,
                             controller: _priceController,
@@ -232,7 +230,7 @@ class _AddItemCartViewState extends State<AddItemCartView> {
                         ),
 
                         Expanded(
-                          child: value == SaleBy.unit
+                          child: isUnit
                               ? BasicFormField(
                                   labelText: 'Quantidade',
                                   controller: _quantityController,
@@ -336,7 +334,7 @@ class _AddItemCartViewState extends State<AddItemCartView> {
     final price = _priceController.numberValue;
     final weight = _weightController.numberValue;
     final quantity = _quantityController.numberValue;
-    _total.value = price * (_saleBy.value == SaleBy.unit ? quantity : weight);
+    _total.value = price * (_isUnit.value ? quantity : weight);
   }
 
   void _findProduct() {
@@ -374,7 +372,7 @@ class _AddItemCartViewState extends State<AddItemCartView> {
             _subcatName = product.subCategoryName;
             _categoryId = product.categoryId;
             _subCategoryId = product.subCategoryId;
-            _saleBy.value = product.saleBy;
+            _isUnit.value = product.isUnit;
           }
           break;
         case Failure(:final error):
@@ -434,9 +432,9 @@ class _AddItemCartViewState extends State<AddItemCartView> {
       categoryId: _categoryId,
       subCategoryName: _subcatName,
       subCategoryId: _subCategoryId,
-      saleBy: _saleBy.value,
+      isUnit: _isUnit.value,
       price: (_priceController.numberValue * 100).round(),
-      quantity: _saleBy.value == SaleBy.unit
+      quantity: _isUnit.value
           ? (_quantityController.numberValue).round()
           : (_weightController.numberValue * 1000).round(),
     );

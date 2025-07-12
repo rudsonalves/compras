@@ -12,14 +12,6 @@ enum ShoppingType {
   const ShoppingType(this.label, this.iconData);
 }
 
-enum SaleBy {
-  unit('Unidade'),
-  weight('Peso');
-
-  final String label;
-  const SaleBy(this.label);
-}
-
 enum ThreeState {
   yes,
   no,

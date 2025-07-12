@@ -2,6 +2,67 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/11 implement_shopping_list-02 - rudsonalves
+
+### Replace SaleBy enum with isUnit boolean and add conversion support
+
+This commit replaces the `SaleBy` enum with a simple `isUnit` boolean flag throughout the domain, DTOs, models, UI, and database schemas. It also extends `DatabaseService` to convert between boolean values and string storage (`"true"`/`"false"`) when persisting and fetching records.
+
+### Modified Files
+
+* **lib/data/services/database/database\_service.dart**
+
+  * Added `_convertBoolToString` and `_convertStringToBool` helpers for boolean serialization.
+  * Wrapped all `fetch`, `fetchAll`, `insert`, and `update` operations with appropriate conversions.
+
+* **lib/data/services/database/tables/sql\_tables.dart**
+
+  * Renamed `sale_by` column identifiers to `is_unit` in `ProductColumns`, `ItemColumns`, and `LastPriceColumns`.
+  * Updated `CREATE TABLE` definitions to use `is_unit TEXT DEFAULT "true" NOT NULL`.
+
+* **lib/domain/enums/enums.dart**
+
+  * Removed the `SaleBy` enum entirely.
+
+* **lib/domain/dto/cart\_item\_dto/cart\_item\_dto.dart** and generated files
+
+  * Changed `saleBy` field to `isUnit` boolean with `@JsonKey(name: 'is_unit')`.
+  * Adjusted default value and copyWith, equality, and serialization logic.
+
+* **lib/domain/dto/last\_price/last\_price\_dto.dart** and generated files
+
+  * Replaced `saleBy` with `isUnit` and updated JSON mappings.
+
+* **lib/domain/dto/product/product\_dto.dart** and generated files
+
+  * Replaced `saleBy` with `isUnit` boolean and updated mappings.
+
+* **lib/domain/models/item/item\_model.dart** and generated files
+
+  * Replaced `SaleBy saleBy` with `bool isUnit`.
+
+* **lib/domain/models/last\_price/last\_price\_model.dart** and generated files
+
+  * Updated model to use `isUnit` boolean.
+
+* **lib/domain/models/product/product\_model.dart** and generated files
+
+  * Replaced `saleBy` with `isUnit` boolean.
+
+* **lib/ui/view/cart\_shopping/add\_item\_cart/add\_item\_cart\_view\.dart**
+
+  * Renamed notifier from `ValueNotifier<SaleBy>` to `ValueNotifier<bool> _isUnit`.
+  * Updated switch, labels, and total calculation logic to depend on `_isUnit`.
+
+* **lib/ui/view/cart\_shopping/widgets/dismissible\_cart.dart**
+
+  * Updated `_valueString` and `_priceString` helpers to take `bool isUnit`.
+
+### Conclusions
+
+The `SaleBy` enum has been removed in favor of a boolean `isUnit`, and the database service now transparently handles boolean persistence. All functionalities remain consistent and tested.
+
+
 ## 2025/07/11 implement_shopping_list-01 - rudsonalves
 
 ### Rename add-product flow, add list-item use case and views

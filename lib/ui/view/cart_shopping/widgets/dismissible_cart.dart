@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/symbols.dart';
-
-import '/domain/enums/enums.dart';
 import '/ui/core/themes/dimens.dart';
 import '/domain/models/item/item_model.dart';
 import '/ui/core/themes/fonts.dart';
 import '/ui/core/ui/dismissibles/dismissible_container.dart';
 import '/utils/extensions/int_extensions.dart';
+
+import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 class DismissibleCart extends StatelessWidget {
   final ItemModel item;
@@ -31,9 +30,9 @@ class DismissibleCart extends StatelessWidget {
     final String price = _priceString(
       item.unitPrince,
       item.quantity,
-      item.saleBy,
+      item.isUnit,
     );
-    final String quantity = _valueString(item.quantity, item.saleBy);
+    final String quantity = _valueString(item.quantity, item.isUnit);
 
     return Dismissible(
       key: UniqueKey(),
@@ -88,8 +87,8 @@ class DismissibleCart extends StatelessWidget {
     );
   }
 
-  String _valueString(int quantity, SaleBy saleBy) {
-    if (saleBy == SaleBy.unit) {
+  String _valueString(int quantity, bool isUnit) {
+    if (isUnit) {
       return quantity.toString();
     } else {
       if (quantity < 1000) {
@@ -102,8 +101,8 @@ class DismissibleCart extends StatelessWidget {
     }
   }
 
-  String _priceString(int price, int quantity, SaleBy saleBy) {
-    if (saleBy == SaleBy.unit) {
+  String _priceString(int price, int quantity, bool isUnit) {
+    if (isUnit) {
       return (price * quantity).toCurrency();
     } else {
       return (price * quantity / 1000).round().toCurrency();

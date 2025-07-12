@@ -1,7 +1,6 @@
-import 'package:compras/domain/dto/cart_item_dto/cart_item_dto.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import '/domain/dto/cart_item_dto/cart_item_dto.dart';
 
-import '/domain/enums/enums.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'item_model.freezed.dart';
 part 'item_model.g.dart';
@@ -12,7 +11,7 @@ abstract class ItemModel with _$ItemModel {
     @JsonKey(name: 'shopping_id') required String shoppingId,
     @JsonKey(name: 'product_id') required String productId,
     required String name,
-    @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
+    @Default(true) @JsonKey(name: 'sale_by') bool isUnit,
     @JsonKey(name: 'unit_price') required int unitPrince,
     @Default(1) int quantity,
     @Default(0) @JsonKey(name: 'price_variation') double priceVariation,
@@ -23,7 +22,7 @@ abstract class ItemModel with _$ItemModel {
     required String shoppingId,
     required String productId,
     required String name,
-    SaleBy saleBy = SaleBy.unit,
+    bool isUnit = true,
     required int unitPrince,
     int quantity = 1,
     double priceVariation = 0,
@@ -31,7 +30,7 @@ abstract class ItemModel with _$ItemModel {
     shoppingId: shoppingId,
     productId: productId,
     name: name,
-    saleBy: saleBy,
+    isUnit: isUnit,
     unitPrince: unitPrince,
     quantity: quantity,
     priceVariation: priceVariation,
@@ -46,7 +45,7 @@ abstract class ItemModel with _$ItemModel {
       shoppingId: dto.shoppingId,
       productId: productId ?? dto.productId!,
       name: dto.name,
-      saleBy: dto.saleBy,
+      isUnit: dto.isUnit,
       unitPrince: dto.price,
       quantity: dto.quantity,
       priceVariation: 0.0,

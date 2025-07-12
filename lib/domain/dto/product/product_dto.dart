@@ -1,9 +1,8 @@
-import 'package:compras/domain/dto/cart_item_dto/cart_item_dto.dart';
+import '/domain/dto/cart_item_dto/cart_item_dto.dart';
+import '/domain/models/product/product_model.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '/domain/models/product/product_model.dart';
-import '/domain/enums/enums.dart';
 
 part 'product_dto.freezed.dart';
 part 'product_dto.g.dart';
@@ -16,7 +15,7 @@ abstract class ProductDto with _$ProductDto {
     required String name,
     String? description,
     @JsonKey(name: 'bar_code') String? barCode,
-    @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
+    @Default(true) @JsonKey(name: 'is_unit') bool isUnit,
     @JsonKey(name: 'category_id') String? categoryId,
     @JsonKey(name: 'category_name') String? categoryName,
     @JsonKey(name: 'sub_category_id') String? subCategoryId,
@@ -29,7 +28,7 @@ abstract class ProductDto with _$ProductDto {
     required String name,
     String? description,
     String? barCode,
-    SaleBy saleBy = SaleBy.unit,
+    bool isUnit = true,
     String? categoryId,
     String? categoryName,
     String? subCategoryId,
@@ -40,7 +39,7 @@ abstract class ProductDto with _$ProductDto {
       name: name,
       description: description,
       barCode: barCode,
-      saleBy: saleBy,
+      isUnit: isUnit,
       categoryId: categoryId,
       categoryName: categoryName,
       subCategoryId: subCategoryId,
@@ -57,7 +56,7 @@ abstract class ProductDto with _$ProductDto {
     return name == other.name &&
         description == other.description &&
         barCode == other.barCode &&
-        saleBy == other.saleBy &&
+        isUnit == other.isUnit &&
         categoryId == other.categoryId &&
         categoryName == other.categoryName &&
         subCategoryId == other.subCategoryId &&
@@ -70,7 +69,7 @@ abstract class ProductDto with _$ProductDto {
       name: dto.name,
       description: dto.description,
       barCode: dto.barCode,
-      saleBy: dto.saleBy,
+      isUnit: dto.isUnit,
       categoryId: dto.categoryId,
       categoryName: dto.categoryName,
       subCategoryId: dto.subCategoryId,

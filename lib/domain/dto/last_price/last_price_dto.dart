@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '/domain/enums/enums.dart';
-
 part 'last_price_dto.freezed.dart';
 part 'last_price_dto.g.dart';
 
@@ -12,7 +10,7 @@ abstract class LastPriceDto with _$LastPriceDto {
   const factory LastPriceDto({
     @JsonKey(name: 'shopping_id') required String shoppingId,
     @JsonKey(name: 'product_id') required String productId,
-    @JsonKey(name: 'sale_by') required SaleBy saleBy,
+    @Default(true) @JsonKey(name: 'is_unit') bool isUnit,
     @JsonKey(name: 'last_unit_price') required int lastUnitPrice,
     @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _LastPriceDto;
@@ -20,14 +18,14 @@ abstract class LastPriceDto with _$LastPriceDto {
   factory LastPriceDto.create({
     required String shoppingId,
     required String productId,
-    SaleBy saleBy = SaleBy.unit,
+    bool isUnit = true,
     required int lastPrice,
   }) {
     final now = DateTime.now();
     return LastPriceDto(
       shoppingId: shoppingId,
       productId: productId,
-      saleBy: saleBy,
+      isUnit: isUnit,
       lastUnitPrice: lastPrice,
       createdAt: now,
     );

@@ -42,7 +42,9 @@ class DatabaseService {
 
       if (results.isEmpty) throw RecordNotFoundException('with id $id');
 
-      return Result.success(fromMap(results.first));
+      final convMap = _convertStringToBool(results.first);
+
+      return Result.success(fromMap(convMap));
     } on Exception catch (err, stack) {
       log(
         'DatabeseService.fetch: $err',
@@ -90,7 +92,9 @@ class DatabaseService {
         throw RecordNotFoundException('with filter $filter');
       }
 
-      return Result.success(fromMap(results.first));
+      final convMap = _convertStringToBool(results.first);
+
+      return Result.success(fromMap(convMap));
     } on Exception catch (err, stack) {
       log(
         'DatabeseService.fetch: $err',
@@ -131,6 +135,7 @@ class DatabaseService {
       if (filter != null) {
         final where = filter.keys.map((key) => '$key = ?').join(' AND ');
         final whereArgs = filter.values.toList();
+
         results = await _database.query(
           table,
           where: where,
@@ -143,7 +148,13 @@ class DatabaseService {
         results = await _database.query(table);
       }
 
-      final List<T> items = results.map(fromMap).toList();
+      final List<Map<String, dynamic>> convResults = results
+          .map(
+            (map) => _convertStringToBool(map),
+          )
+          .toList();
+
+      final List<T> items = convResults.map(fromMap).toList();
       return Result.success(items);
     } on Exception catch (err, stack) {
       log(
@@ -177,7 +188,9 @@ class DatabaseService {
       final newData = Map<String, dynamic>.from(map);
       newData['id'] = id;
 
-      await _database.insert(table, newData);
+      final convMap = _convertBoolToString(newData);
+
+      await _database.insert(table, convMap);
       return Result.success(id);
     } on Exception catch (err, stack) {
       log(
@@ -187,6 +200,24 @@ class DatabaseService {
       );
       return Result.failure(err);
     }
+  }
+
+  Map<String, dynamic> _convertBoolToString(Map<String, dynamic> map) {
+    return map.map((key, value) {
+      if (value is bool) {
+        return MapEntry(key, value ? 'true' : 'false');
+      }
+      return MapEntry(key, value);
+    });
+  }
+
+  Map<String, dynamic> _convertStringToBool(Map<String, dynamic> map) {
+    return map.map((key, value) {
+      if (value is String && (value == 'true' || value == 'false')) {
+        return MapEntry(key, value == 'true');
+      }
+      return MapEntry(key, value);
+    });
   }
 
   /// Inserts or updates a record in the specified table.
@@ -205,9 +236,11 @@ class DatabaseService {
     Map<String, dynamic> map,
   ) async {
     try {
+      final convMap = _convertBoolToString(map);
+
       await _database.insert(
         table,
-        map,
+        convMap,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
       return Result.success(null);
@@ -239,9 +272,11 @@ class DatabaseService {
       final id = map['id'] as String?;
       if (id == null) throw Exception('ID must not be null for update');
 
+      final convMap = _convertBoolToString(map);
+
       final int count = await _database.update(
         table,
-        map,
+        convMap,
         where: 'id = ?',
         whereArgs: [id],
       );
@@ -279,9 +314,11 @@ class DatabaseService {
       final filterWhere = filter.keys.map((key) => '$key = ?').join(' AND ');
       final filterArgs = filter.values.toList();
 
+      final convMap = _convertBoolToString(map);
+
       final int count = await _database.update(
         table,
-        map,
+        convMap,
         where: filterWhere,
         whereArgs: filterArgs,
       );

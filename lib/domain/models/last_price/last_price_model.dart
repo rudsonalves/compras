@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '/domain/enums/enums.dart';
 import '/domain/dto/last_price/last_price_dto.dart';
 
 part 'last_price_model.freezed.dart';
@@ -15,7 +14,7 @@ abstract class LastPriceModel with _$LastPriceModel {
     @JsonKey(name: 'shopping_id') required String shoppingId,
     @JsonKey(name: 'product_id') required String productId,
     @JsonKey(name: 'last_unit_price') required int lastUnitPrice,
-    @JsonKey(name: 'sale_by') required SaleBy saleBy,
+    @Default(true) @JsonKey(name: 'is_unit') bool isUnit,
     @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _LastPriceModel;
 
@@ -23,7 +22,7 @@ abstract class LastPriceModel with _$LastPriceModel {
     required String id,
     required String shoppingId,
     required String productId,
-    required SaleBy saleBy,
+    bool isUnit = true,
     required int lastUnitPrice,
   }) {
     final now = DateTime.now();
@@ -31,7 +30,7 @@ abstract class LastPriceModel with _$LastPriceModel {
       id: id,
       shoppingId: shoppingId,
       productId: productId,
-      saleBy: saleBy,
+      isUnit: isUnit,
       lastUnitPrice: lastUnitPrice,
       createdAt: now,
     );
@@ -42,7 +41,7 @@ abstract class LastPriceModel with _$LastPriceModel {
         id: id,
         shoppingId: lastPriceDto.shoppingId,
         productId: lastPriceDto.productId,
-        saleBy: lastPriceDto.saleBy,
+        isUnit: lastPriceDto.isUnit,
         lastUnitPrice: lastPriceDto.lastUnitPrice,
         createdAt: lastPriceDto.createdAt,
       );

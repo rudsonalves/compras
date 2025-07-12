@@ -1,9 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '/domain/enums/enums.dart';
-
 part 'cart_item_dto.freezed.dart';
-// part 'cart_item_dto.g.dart';
 
 @freezed
 abstract class CartItemDto with _$CartItemDto {
@@ -13,7 +10,7 @@ abstract class CartItemDto with _$CartItemDto {
     required String name,
     String? description,
     @JsonKey(name: 'bar_code') String? barCode,
-    @Default(SaleBy.unit) @JsonKey(name: 'sale_by') SaleBy saleBy,
+    @Default(true) @JsonKey(name: 'is_unit') bool isUnit,
     @JsonKey(name: 'category_id') String? categoryId,
     @JsonKey(name: 'category') String? categoryName,
     @JsonKey(name: 'sub_category_id') String? subCategoryId,
