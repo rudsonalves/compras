@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ShoppingModel {
 
- String get id; String get name; String get description; ShoppingType get type;@JsonKey(name: 'total_price') int get totalPrice;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt;
+ String get id; String get name; String? get description; ShoppingType get type;@JsonKey(name: 'total_price') int get totalPrice;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt;
 /// Create a copy of ShoppingModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $ShoppingModelCopyWith<$Res>  {
   factory $ShoppingModelCopyWith(ShoppingModel value, $Res Function(ShoppingModel) _then) = _$ShoppingModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String description, ShoppingType type,@JsonKey(name: 'total_price') int totalPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ String id, String name, String? description, ShoppingType type,@JsonKey(name: 'total_price') int totalPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 
@@ -66,12 +66,12 @@ class _$ShoppingModelCopyWithImpl<$Res>
 
 /// Create a copy of ShoppingModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? description = null,Object? type = null,Object? totalPrice = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? description = freezed,Object? type = null,Object? totalPrice = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as ShoppingType,totalPrice: null == totalPrice ? _self.totalPrice : totalPrice // ignore: cast_nullable_to_non_nullable
 as int,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -86,12 +86,12 @@ as DateTime?,
 @JsonSerializable()
 
 class _ShoppingModel extends ShoppingModel {
-  const _ShoppingModel({required this.id, required this.name, required this.description, required this.type, @JsonKey(name: 'total_price') this.totalPrice = 0, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt}): super._();
+  const _ShoppingModel({required this.id, required this.name, this.description, required this.type, @JsonKey(name: 'total_price') this.totalPrice = 0, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt}): super._();
   factory _ShoppingModel.fromJson(Map<String, dynamic> json) => _$ShoppingModelFromJson(json);
 
 @override final  String id;
 @override final  String name;
-@override final  String description;
+@override final  String? description;
 @override final  ShoppingType type;
 @override@JsonKey(name: 'total_price') final  int totalPrice;
 @override@JsonKey(name: 'created_at') final  DateTime? createdAt;
@@ -130,7 +130,7 @@ abstract mixin class _$ShoppingModelCopyWith<$Res> implements $ShoppingModelCopy
   factory _$ShoppingModelCopyWith(_ShoppingModel value, $Res Function(_ShoppingModel) _then) = __$ShoppingModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String description, ShoppingType type,@JsonKey(name: 'total_price') int totalPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ String id, String name, String? description, ShoppingType type,@JsonKey(name: 'total_price') int totalPrice,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 
@@ -147,12 +147,12 @@ class __$ShoppingModelCopyWithImpl<$Res>
 
 /// Create a copy of ShoppingModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? description = null,Object? type = null,Object? totalPrice = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? description = freezed,Object? type = null,Object? totalPrice = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_ShoppingModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as ShoppingType,totalPrice: null == totalPrice ? _self.totalPrice : totalPrice // ignore: cast_nullable_to_non_nullable
 as int,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable

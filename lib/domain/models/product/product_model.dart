@@ -12,7 +12,6 @@ abstract class ProductModel with _$ProductModel {
   const factory ProductModel({
     required String id,
     required String name,
-    String? description,
     @JsonKey(name: 'bar_code') String? barCode,
     @Default(true) @JsonKey(name: 'is_unit') bool isUnit,
     @JsonKey(name: 'category_id') String? categoryId,
@@ -26,7 +25,6 @@ abstract class ProductModel with _$ProductModel {
   factory ProductModel.create({
     required String id,
     required String name,
-    String? description,
     String? barCode,
     bool isUnit = true,
     String? categoryId,
@@ -38,7 +36,6 @@ abstract class ProductModel with _$ProductModel {
     return ProductModel(
       id: id,
       name: name,
-      description: description,
       barCode: barCode,
       isUnit: isUnit,
       categoryId: categoryId,
@@ -53,7 +50,6 @@ abstract class ProductModel with _$ProductModel {
   factory ProductModel.fromDto(String id, ProductDto dto) => ProductModel(
     id: id,
     name: dto.name,
-    description: dto.description,
     barCode: dto.barCode,
     isUnit: dto.isUnit,
     categoryId: dto.categoryId,

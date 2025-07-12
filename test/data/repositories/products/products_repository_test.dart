@@ -42,7 +42,7 @@ void main() {
   test('Insert Shopping', () async {
     final dto = ProductDto.create(
       name: 'Teste Shopping',
-      description: 'Descrição teste',
+      // description: 'Descrição teste',
       barCode: DateTime.now().microsecondsSinceEpoch.toString(),
     );
 
@@ -58,7 +58,7 @@ void main() {
     for (var i = 0; i < 10; i++) {
       final dto = ProductDto.create(
         name: 'Teste Shopping $i',
-        description: 'Descrição teste $i',
+        // description: 'Descrição teste $i',
         barCode: DateTime.now().microsecondsSinceEpoch.toString(),
       );
 
@@ -85,7 +85,7 @@ void main() {
     final inserted = await repo.insert(
       ProductDto.create(
         name: 'Teste Fetch',
-        description: 'Fetch Test',
+        // description: 'Fetch Test',
         barCode: DateTime.now().microsecondsSinceEpoch.toString(),
       ),
     );
@@ -113,7 +113,7 @@ void main() {
     final inserted = await repo.insert(
       ProductDto.create(
         name: 'Teste Delete',
-        description: 'Delete Test',
+        // description: 'Delete Test',
         barCode: DateTime.now().microsecondsSinceEpoch.toString(),
       ),
     );

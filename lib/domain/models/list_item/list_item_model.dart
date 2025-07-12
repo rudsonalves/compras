@@ -10,6 +10,7 @@ abstract class ListItemModel with _$ListItemModel {
     required String id,
     @JsonKey(name: 'shopping_id') required String shoppingId,
     @JsonKey(name: 'product_id') String? productId,
+    @Default(true) @JsonKey(name: 'is_unit') bool isUnit,
     required String name,
     @Default(1) int quantity,
     @JsonKey(name: 'created_at') DateTime? createdAt,
@@ -20,12 +21,14 @@ abstract class ListItemModel with _$ListItemModel {
     required String shoppingId,
     String? productId,
     required String name,
+    bool isUnit = true,
     int quantity = 1,
   }) => ListItemModel(
     id: id,
     shoppingId: shoppingId,
     productId: productId,
     name: name,
+    isUnit: isUnit,
     quantity: quantity,
     createdAt: DateTime.now(),
   );
@@ -38,6 +41,7 @@ abstract class ListItemModel with _$ListItemModel {
     shoppingId: dto.shoppingId,
     productId: dto.productId,
     name: dto.name,
+    isUnit: dto.isUnit,
     quantity: dto.quantity,
     createdAt: dto.createdAt,
   );

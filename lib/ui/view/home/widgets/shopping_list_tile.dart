@@ -45,7 +45,7 @@ class ShoppingListTile extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(shopping.description),
+            if (shopping.description != null) Text(shopping.description!),
             Text(shopping.createdAt!.toBrDateTime()),
           ],
         ),

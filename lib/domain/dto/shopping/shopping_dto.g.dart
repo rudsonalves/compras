@@ -8,7 +8,7 @@ part of 'shopping_dto.dart';
 
 _ShoppingDto _$ShoppingDtoFromJson(Map<String, dynamic> json) => _ShoppingDto(
   name: json['name'] as String,
-  description: json['description'] as String,
+  description: json['description'] as String?,
   type: $enumDecode(_$ShoppingTypeEnumMap, json['type']),
   totalPrice: (json['total_price'] as num?)?.toInt() ?? 0,
   createdAt: json['created_at'] == null

@@ -2,6 +2,87 @@
 
 This is a list of changes made to the codebase since the last release.
 
+## 2025/07/12 implement_shopping_list-03 - rudsonalves
+
+### Add is\_unit support, remove description fields, refactor shopping views
+
+This commit adds an `is_unit` flag to list and product entities, updates database schemas and DTO/model classes accordingly, and removes all `description` fields from product and cart item structures. Views, routing, and tests are refactored to accommodate optional shopping descriptions and improved cart actions with extended FABs.
+
+### Modified Files
+
+* **lib/data/services/database/tables/sql\_tables.dart**
+
+  * Added `is_unit` column to `list_items` table with default `true`.
+  * Removed `description` column from `products` table definition.
+  * Introduced `ListItemsColumns.isUnit` constant.
+
+* **lib/domain/dto/cart\_item\_dto/cart\_item\_dto.dart**
+
+  * Removed `description` field and related JSON mapping.
+
+* **lib/domain/dto/list\_item/list\_item\_dto.dart**
+
+  * Added `isUnit` boolean (default `true`) with JSON key `is_unit`.
+
+* **lib/domain/dto/product/product\_dto.dart**
+
+  * Removed `description` field from factory and comparison methods.
+
+* **lib/domain/dto/shopping/shopping\_dto.dart**
+
+  * Changed `description` from required to nullable.
+
+* **lib/domain/models/list\_item/list\_item\_model.dart**
+
+  * Added `isUnit` property with default `true` and mapping in factory.
+
+* **lib/domain/models/product/product\_model.dart**
+
+  * Removed `description` field from model factory and mapping.
+
+* **lib/domain/models/shopping/shopping\_model.dart**
+
+  * Changed `description` from required to nullable.
+
+* **lib/routing/router.dart**
+
+  * Renamed `EditShoppingView`/ViewModel to `AddShoppingView`/ViewModel and updated imports and route builder.
+
+* **lib/ui/view/cart\_shopping/add\_item\_cart/add\_item\_cart\_view\.dart**
+
+  * Removed product description input and controller from form and disposal.
+
+* **lib/ui/view/cart\_shopping/cart\_shopping\_view\.dart**
+
+  * Refactored `floatingActionButton` into `_floatingActionButtons` method.
+  * Replaced standard FABs with `FloatingActionButton.extended` for list and cart actions.
+
+* **lib/ui/view/home/add\_shopping/add\_shopping\_view\.dart**
+
+  * Renamed view from Edit to Add.
+  * Made shopping description optional, commented out mandatory validator, and handled nullable description input/state.
+
+* **lib/ui/view/home/add\_shopping/add\_shopping\_view\_model.dart**
+
+  * Renamed view model from `EditShoppingViewModel` to `AddShoppingViewModel`.
+
+* **lib/ui/view/home/widgets/shopping\_list\_tile.dart**
+
+  * Conditionally render description only when not null.
+
+* **test/data/repositories/products/products\_repository\_test.dart**
+
+  * Commented out hard-coded `description` values in tests.
+
+### Code Generation Updates
+
+* Regenerated Freezed and JSON serialization files (`*.freezed.dart`, `*.g.dart`) to apply above DTO and model changes.
+
+### Conclusions
+
+All changes are complete and application now supports unit-based items with optional descriptions, with updated schemas, models, views, and tests.
+
+
 ## 2025/07/11 implement_shopping_list-02 - rudsonalves
 
 ### Replace SaleBy enum with isUnit boolean and add conversion support

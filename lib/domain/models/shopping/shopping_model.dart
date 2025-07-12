@@ -13,7 +13,7 @@ abstract class ShoppingModel with _$ShoppingModel {
   const factory ShoppingModel({
     required String id,
     required String name,
-    required String description,
+    String? description,
     required ShoppingType type,
     @Default(0) @JsonKey(name: 'total_price') int totalPrice,
     @JsonKey(name: 'created_at') DateTime? createdAt,
@@ -24,7 +24,7 @@ abstract class ShoppingModel with _$ShoppingModel {
   factory ShoppingModel.create({
     required String id,
     required String name,
-    required String description,
+    String? description,
     required ShoppingType type,
     int totalPrice = 0,
   }) {

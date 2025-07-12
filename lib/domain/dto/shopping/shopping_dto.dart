@@ -8,7 +8,7 @@ part 'shopping_dto.g.dart';
 abstract class ShoppingDto with _$ShoppingDto {
   const factory ShoppingDto({
     required String name,
-    required String description,
+    String? description,
     required ShoppingType type,
     @Default(0) @JsonKey(name: 'total_price') int totalPrice,
     @JsonKey(name: 'created_at') DateTime? createdAt,
@@ -17,7 +17,7 @@ abstract class ShoppingDto with _$ShoppingDto {
 
   factory ShoppingDto.create({
     required String name,
-    required String description,
+    String? description,
     required ShoppingType type,
     int totalPrice = 0,
   }) {

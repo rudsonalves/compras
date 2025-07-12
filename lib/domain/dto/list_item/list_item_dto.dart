@@ -9,6 +9,7 @@ abstract class ListItemDto with _$ListItemDto {
     @JsonKey(name: 'shopping_id') required String shoppingId,
     @JsonKey(name: 'product_id') String? productId,
     required String name,
+    @Default(true) @JsonKey(name: 'is_unit') bool isUnit,
     @Default(1) int quantity,
     @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _ListItemDto;
@@ -17,11 +18,13 @@ abstract class ListItemDto with _$ListItemDto {
     required String shoppingId,
     String? productId,
     required String name,
+    bool isUnit = true,
     int quantity = 1,
   }) => ListItemDto(
     shoppingId: shoppingId,
     productId: productId,
     name: name,
+    isUnit: isUnit,
     quantity: quantity,
     createdAt: DateTime.now(),
   );

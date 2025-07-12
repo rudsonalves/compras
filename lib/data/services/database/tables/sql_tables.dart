@@ -17,6 +17,7 @@ final class ListItemsColumns {
   static const String shoppingId = 'shopping_id';
   static const String productId = 'product_id';
   static const String name = 'name';
+  static const String isUnit = 'is_unit';
   static const String quantity = 'quantity';
   static const String createdAt = 'created_at';
 }
@@ -53,7 +54,6 @@ final class ProductColumns {
 
   static const String id = 'id';
   static const String name = 'name';
-  static const String description = 'description';
   static const String barCode = 'bar_code';
   static const String isUnit = 'is_unit';
   static const String categoryId = 'category_id';
@@ -97,6 +97,7 @@ final class SqlTables {
         ${ListItemsColumns.shoppingId} TEXT NOT NULL,
         ${ListItemsColumns.productId} TEXT,
         ${ListItemsColumns.name} TEXT NOT NULL,
+        ${ListItemsColumns.isUnit} TEXT DEFAULT "true" NOT NULL,
         ${ListItemsColumns.quantity} INTEGER DEFAULT 1,
         ${ListItemsColumns.createdAt} TEXT NOT NULL
       )''';
@@ -122,7 +123,6 @@ final class SqlTables {
       CREATE TABLE IF NOT EXISTS ${Tables.products} (
         ${ProductColumns.id} TEXT NOT NULL PRIMARY KEY,
         ${ProductColumns.name} TEXT NOT NULL,
-        ${ProductColumns.description} TEXT,
         ${ProductColumns.barCode} TEXT UNIQUE,
         ${ItemColumns.isUnit} TEXT DEFAULT "true" NOT NULL,
         ${ProductColumns.categoryId} TEXT NOT NULL,

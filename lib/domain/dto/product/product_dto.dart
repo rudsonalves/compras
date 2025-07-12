@@ -13,7 +13,6 @@ abstract class ProductDto with _$ProductDto {
 
   const factory ProductDto({
     required String name,
-    String? description,
     @JsonKey(name: 'bar_code') String? barCode,
     @Default(true) @JsonKey(name: 'is_unit') bool isUnit,
     @JsonKey(name: 'category_id') String? categoryId,
@@ -26,7 +25,6 @@ abstract class ProductDto with _$ProductDto {
 
   factory ProductDto.create({
     required String name,
-    String? description,
     String? barCode,
     bool isUnit = true,
     String? categoryId,
@@ -37,7 +35,6 @@ abstract class ProductDto with _$ProductDto {
     final now = DateTime.now();
     return ProductDto(
       name: name,
-      description: description,
       barCode: barCode,
       isUnit: isUnit,
       categoryId: categoryId,
@@ -54,7 +51,6 @@ abstract class ProductDto with _$ProductDto {
 
   bool isEqualProductModel(ProductModel other) {
     return name == other.name &&
-        description == other.description &&
         barCode == other.barCode &&
         isUnit == other.isUnit &&
         categoryId == other.categoryId &&
@@ -67,7 +63,6 @@ abstract class ProductDto with _$ProductDto {
     final now = DateTime.now();
     return ProductDto(
       name: dto.name,
-      description: dto.description,
       barCode: dto.barCode,
       isUnit: dto.isUnit,
       categoryId: dto.categoryId,

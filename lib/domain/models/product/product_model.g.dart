@@ -10,7 +10,6 @@ _ProductModel _$ProductModelFromJson(Map<String, dynamic> json) =>
     _ProductModel(
       id: json['id'] as String,
       name: json['name'] as String,
-      description: json['description'] as String?,
       barCode: json['bar_code'] as String?,
       isUnit: json['is_unit'] as bool? ?? true,
       categoryId: json['category_id'] as String?,
@@ -29,7 +28,6 @@ Map<String, dynamic> _$ProductModelToJson(_ProductModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'description': instance.description,
       'bar_code': instance.barCode,
       'is_unit': instance.isUnit,
       'category_id': instance.categoryId,

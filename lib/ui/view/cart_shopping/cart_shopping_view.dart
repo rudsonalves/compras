@@ -52,25 +52,7 @@ class _CartShoppingViewState extends State<CartShoppingView> {
           icon: Icon(Symbols.arrow_back_ios_new_rounded),
         ),
       ),
-      floatingActionButton: OverflowBar(
-        alignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          FloatingActionButton(
-            heroTag: 'addShoppingList',
-            tooltip: 'Adicionar a lista de compras',
-            onPressed: _addChoppingList,
-            backgroundColor: colorScheme.onTertiary,
-            child: Icon(Symbols.shopping_cart_rounded),
-          ),
-          FloatingActionButton(
-            heroTag: 'addShoppingCart',
-            tooltip: 'Adicionar ao carrinho',
-            onPressed: _addProductCart,
-            backgroundColor: colorScheme.onPrimary,
-            child: Icon(Symbols.add_shopping_cart_rounded),
-          ),
-        ],
-      ),
+      floatingActionButton: _floatingActionButtons(colorScheme),
       body: Column(
         spacing: dimens.spacingVertical / 2,
         children: [
@@ -132,6 +114,30 @@ class _CartShoppingViewState extends State<CartShoppingView> {
           ),
         ],
       ),
+    );
+  }
+
+  OverflowBar _floatingActionButtons(ColorScheme colorScheme) {
+    return OverflowBar(
+      alignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        FloatingActionButton.extended(
+          heroTag: 'addShoppingList',
+          tooltip: 'Adicionar a lista de compras',
+          label: const Text('Lista'),
+          onPressed: _addChoppingList,
+          backgroundColor: colorScheme.onTertiary,
+          icon: Icon(Symbols.add_shopping_cart_rounded),
+        ),
+        FloatingActionButton.extended(
+          heroTag: 'addShoppingCart',
+          tooltip: 'Adicionar ao carrinho',
+          onPressed: _addProductCart,
+          backgroundColor: colorScheme.onPrimary,
+          label: const Text('Carrinho'),
+          icon: Icon(Symbols.add_shopping_cart_rounded),
+        ),
+      ],
     );
   }
 

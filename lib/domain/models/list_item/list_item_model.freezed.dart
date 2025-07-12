@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ListItemModel {
 
- String get id;@JsonKey(name: 'shopping_id') String get shoppingId;@JsonKey(name: 'product_id') String? get productId; String get name; int get quantity;@JsonKey(name: 'created_at') DateTime? get createdAt;
+ String get id;@JsonKey(name: 'shopping_id') String get shoppingId;@JsonKey(name: 'product_id') String? get productId;@JsonKey(name: 'is_unit') bool get isUnit; String get name; int get quantity;@JsonKey(name: 'created_at') DateTime? get createdAt;
 /// Create a copy of ListItemModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $ListItemModelCopyWith<ListItemModel> get copyWith => _$ListItemModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.shoppingId, shoppingId) || other.shoppingId == shoppingId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.name, name) || other.name == name)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.shoppingId, shoppingId) || other.shoppingId == shoppingId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.isUnit, isUnit) || other.isUnit == isUnit)&&(identical(other.name, name) || other.name == name)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,shoppingId,productId,name,quantity,createdAt);
+int get hashCode => Object.hash(runtimeType,id,shoppingId,productId,isUnit,name,quantity,createdAt);
 
 @override
 String toString() {
-  return 'ListItemModel(id: $id, shoppingId: $shoppingId, productId: $productId, name: $name, quantity: $quantity, createdAt: $createdAt)';
+  return 'ListItemModel(id: $id, shoppingId: $shoppingId, productId: $productId, isUnit: $isUnit, name: $name, quantity: $quantity, createdAt: $createdAt)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $ListItemModelCopyWith<$Res>  {
   factory $ListItemModelCopyWith(ListItemModel value, $Res Function(ListItemModel) _then) = _$ListItemModelCopyWithImpl;
 @useResult
 $Res call({
- String id,@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String? productId, String name, int quantity,@JsonKey(name: 'created_at') DateTime? createdAt
+ String id,@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String? productId,@JsonKey(name: 'is_unit') bool isUnit, String name, int quantity,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -66,12 +66,13 @@ class _$ListItemModelCopyWithImpl<$Res>
 
 /// Create a copy of ListItemModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? shoppingId = null,Object? productId = freezed,Object? name = null,Object? quantity = null,Object? createdAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? shoppingId = null,Object? productId = freezed,Object? isUnit = null,Object? name = null,Object? quantity = null,Object? createdAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,shoppingId: null == shoppingId ? _self.shoppingId : shoppingId // ignore: cast_nullable_to_non_nullable
 as String,productId: freezed == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
-as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,isUnit: null == isUnit ? _self.isUnit : isUnit // ignore: cast_nullable_to_non_nullable
+as bool,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as int,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
@@ -85,12 +86,13 @@ as DateTime?,
 @JsonSerializable()
 
 class _ListItemModel implements ListItemModel {
-  const _ListItemModel({required this.id, @JsonKey(name: 'shopping_id') required this.shoppingId, @JsonKey(name: 'product_id') this.productId, required this.name, this.quantity = 1, @JsonKey(name: 'created_at') this.createdAt});
+  const _ListItemModel({required this.id, @JsonKey(name: 'shopping_id') required this.shoppingId, @JsonKey(name: 'product_id') this.productId, @JsonKey(name: 'is_unit') this.isUnit = true, required this.name, this.quantity = 1, @JsonKey(name: 'created_at') this.createdAt});
   factory _ListItemModel.fromJson(Map<String, dynamic> json) => _$ListItemModelFromJson(json);
 
 @override final  String id;
 @override@JsonKey(name: 'shopping_id') final  String shoppingId;
 @override@JsonKey(name: 'product_id') final  String? productId;
+@override@JsonKey(name: 'is_unit') final  bool isUnit;
 @override final  String name;
 @override@JsonKey() final  int quantity;
 @override@JsonKey(name: 'created_at') final  DateTime? createdAt;
@@ -108,16 +110,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.shoppingId, shoppingId) || other.shoppingId == shoppingId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.name, name) || other.name == name)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.shoppingId, shoppingId) || other.shoppingId == shoppingId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.isUnit, isUnit) || other.isUnit == isUnit)&&(identical(other.name, name) || other.name == name)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,shoppingId,productId,name,quantity,createdAt);
+int get hashCode => Object.hash(runtimeType,id,shoppingId,productId,isUnit,name,quantity,createdAt);
 
 @override
 String toString() {
-  return 'ListItemModel(id: $id, shoppingId: $shoppingId, productId: $productId, name: $name, quantity: $quantity, createdAt: $createdAt)';
+  return 'ListItemModel(id: $id, shoppingId: $shoppingId, productId: $productId, isUnit: $isUnit, name: $name, quantity: $quantity, createdAt: $createdAt)';
 }
 
 
@@ -128,7 +130,7 @@ abstract mixin class _$ListItemModelCopyWith<$Res> implements $ListItemModelCopy
   factory _$ListItemModelCopyWith(_ListItemModel value, $Res Function(_ListItemModel) _then) = __$ListItemModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id,@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String? productId, String name, int quantity,@JsonKey(name: 'created_at') DateTime? createdAt
+ String id,@JsonKey(name: 'shopping_id') String shoppingId,@JsonKey(name: 'product_id') String? productId,@JsonKey(name: 'is_unit') bool isUnit, String name, int quantity,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -145,12 +147,13 @@ class __$ListItemModelCopyWithImpl<$Res>
 
 /// Create a copy of ListItemModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? shoppingId = null,Object? productId = freezed,Object? name = null,Object? quantity = null,Object? createdAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? shoppingId = null,Object? productId = freezed,Object? isUnit = null,Object? name = null,Object? quantity = null,Object? createdAt = freezed,}) {
   return _then(_ListItemModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,shoppingId: null == shoppingId ? _self.shoppingId : shoppingId // ignore: cast_nullable_to_non_nullable
 as String,productId: freezed == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
-as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,isUnit: null == isUnit ? _self.isUnit : isUnit // ignore: cast_nullable_to_non_nullable
+as bool,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as int,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,

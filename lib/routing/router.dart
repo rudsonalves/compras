@@ -16,8 +16,8 @@ import '/domain/user_cases/shopping_cart_user_case.dart';
 import '../ui/view/cart_shopping/add_item_cart/add_item_cart_view.dart';
 import '../ui/view/cart_shopping/add_item_cart/add_item_cart_view_model.dart';
 import '/domain/models/shopping/shopping_model.dart';
-import '/ui/view/home/edit_shopping/edit_shopping_view.dart';
-import '/ui/view/home/edit_shopping/edit_shopping_view_model.dart';
+import '../ui/view/home/add_shopping/add_shopping_view.dart';
+import '../ui/view/home/add_shopping/add_shopping_view_model.dart';
 import '/ui/view/cart_shopping/cart_shopping_view.dart';
 import '/ui/view/cart_shopping/cart_shopping_view_model.dart';
 import '/data/repositories/shopping/i_shopping_repository.dart';
@@ -41,9 +41,9 @@ GoRouter router() => GoRouter(
       name: Routes.editShopping.name,
       builder: (ctx, state) {
         final shopping = state.extra as ShoppingModel?;
-        return EditShoppingView(
+        return AddShoppingView(
           shopping: shopping,
-          viewModel: EditShoppingViewModel(
+          viewModel: AddShoppingViewModel(
             shoppingRepository: ctx.read<IShoppingRepository>(),
           ),
         );

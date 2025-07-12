@@ -1,35 +1,35 @@
-import 'package:compras/utils/extensions/date_time_extensions.dart';
-import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/symbols.dart';
-
+import '/utils/extensions/date_time_extensions.dart';
 import '/domain/models/shopping/shopping_model.dart';
 import '/ui/core/ui/dialogs/app_snack_bar.dart';
 import '/utils/result.dart';
 import '/domain/dto/shopping/shopping_dto.dart';
 import '/ui/core/ui/buttons/big_button.dart';
-import 'edit_shopping_view_model.dart';
+import 'add_shopping_view_model.dart';
 import '/utils/validates/generic_validations.dart';
 import '/domain/enums/enums.dart';
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/ui/form_fields/basic_form_field.dart';
 import '/ui/core/ui/form_fields/enum_form_field.dart';
 
-class EditShoppingView extends StatefulWidget {
-  final EditShoppingViewModel viewModel;
+import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
+
+class AddShoppingView extends StatefulWidget {
+  final AddShoppingViewModel viewModel;
   final ShoppingModel? shopping;
 
-  const EditShoppingView({
+  const AddShoppingView({
     super.key,
     this.shopping,
     required this.viewModel,
   });
 
   @override
-  State<EditShoppingView> createState() => _EditShoppingViewState();
+  State<AddShoppingView> createState() => _AddShoppingViewState();
 }
 
-class _EditShoppingViewState extends State<EditShoppingView> {
-  late final EditShoppingViewModel _viewModel;
+class _AddShoppingViewState extends State<AddShoppingView> {
+  late final AddShoppingViewModel _viewModel;
 
   final _formKey = GlobalKey<FormState>();
   final _namecontroller = TextEditingController();
@@ -102,7 +102,7 @@ class _EditShoppingViewState extends State<EditShoppingView> {
               BasicFormField(
                 labelText: 'Descrição',
                 controller: _descriptionController,
-                validator: GenericValidations.notEmpty,
+                // validator: GenericValidations.notEmpty,
                 textCapitalization: TextCapitalization.sentences,
                 suffixIcon: IconButton(
                   onPressed: () => _addDateIn(_descriptionController),
@@ -159,9 +159,13 @@ class _EditShoppingViewState extends State<EditShoppingView> {
       return;
     }
 
+    final description = _descriptionController.text.trim().isEmpty
+        ? null
+        : _descriptionController.text.trim();
+
     final dto = ShoppingDto.create(
       name: _namecontroller.text,
-      description: _descriptionController.text,
+      description: description,
       type: _type,
     );
 
@@ -206,7 +210,7 @@ class _EditShoppingViewState extends State<EditShoppingView> {
     final shopping = widget.shopping!;
 
     _namecontroller.text = shopping.name;
-    _descriptionController.text = shopping.description;
+    _descriptionController.text = shopping.description ?? '';
     _type = shopping.type;
     _shoppingId = shopping.id;
 

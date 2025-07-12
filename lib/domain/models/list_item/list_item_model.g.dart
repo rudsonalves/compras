@@ -11,6 +11,7 @@ _ListItemModel _$ListItemModelFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       shoppingId: json['shopping_id'] as String,
       productId: json['product_id'] as String?,
+      isUnit: json['is_unit'] as bool? ?? true,
       name: json['name'] as String,
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
       createdAt: json['created_at'] == null
@@ -23,6 +24,7 @@ Map<String, dynamic> _$ListItemModelToJson(_ListItemModel instance) =>
       'id': instance.id,
       'shopping_id': instance.shoppingId,
       'product_id': instance.productId,
+      'is_unit': instance.isUnit,
       'name': instance.name,
       'quantity': instance.quantity,
       'created_at': instance.createdAt?.toIso8601String(),

@@ -40,7 +40,6 @@ class _AddItemCartViewState extends State<AddItemCartView> {
   final _formKey = GlobalKey<FormState>();
   final _barCodeController = TextEditingController();
   final _nameController = TextEditingController();
-  final _descriptionController = TextEditingController();
   final _priceController = NumberEditingController();
   final _quantityController = NumberEditingController(decimalDigits: 0);
   final _weightController = NumberEditingController(decimalDigits: 3);
@@ -86,7 +85,6 @@ class _AddItemCartViewState extends State<AddItemCartView> {
 
     _barCodeController.dispose();
     _nameController.dispose();
-    _descriptionController.dispose();
     _priceController.dispose();
     _quantityController.dispose();
     _weightController.dispose();
@@ -151,16 +149,6 @@ class _AddItemCartViewState extends State<AddItemCartView> {
                 prefixIconData: Symbols.box_rounded,
                 validator: GenericValidations.name,
                 textCapitalization: TextCapitalization.words,
-              ),
-
-              BasicFormField(
-                labelText: 'Descrição do Produto',
-                hintText: 'Digite a descrição do produto',
-                prefixIconData: Symbols.description_rounded,
-                minLines: 1,
-                maxLines: 3,
-                controller: _descriptionController,
-                textCapitalization: TextCapitalization.sentences,
               ),
 
               InkWell(
@@ -366,7 +354,6 @@ class _AddItemCartViewState extends State<AddItemCartView> {
                 : '';
             _productId = product.id;
             _nameController.text = product.name;
-            _descriptionController.text = product.description ?? '';
             _categoryController.text = categoryText;
             _categoryName = product.categoryName;
             _subcatName = product.subCategoryName;
@@ -417,16 +404,11 @@ class _AddItemCartViewState extends State<AddItemCartView> {
       return;
     }
 
-    final description = _descriptionController.text.trim().isEmpty
-        ? null
-        : _descriptionController.text.trim();
-
     final barcode = _barCodeController.text.trim();
     final cartItem = CartItemDto(
       shoppingId: widget.shopping.id,
       productId: _productId,
       name: _nameController.text,
-      description: description,
       barCode: barcode.isEmpty ? null : barcode,
       categoryName: _categoryName,
       categoryId: _categoryId,
